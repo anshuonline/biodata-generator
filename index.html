@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Biodata Generator</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background-color: #f4f4f9;
+            color: #333333;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            line-height: 1.6;
+        }
+        
+        /* ---------------- FORM STYLES ---------------- */
+        .app-container {
+            width: 100%;
+            max-width: 850px;
+            background-color: #ffffff;
+            padding: 40px 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-top: 6px solid #0056b3;
+            box-sizing: border-box;
+            border-radius: 8px;
+        }
+        .app-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .app-header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #111;
+        }
+        .app-header p {
+            color: #666;
+        }
+        .form-section {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            border: 1px solid #eee;
+        }
+        .form-section h3 {
+            margin-top: 0; margin-bottom: 20px;
+            color: #333;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px; font-size: 16px; text-transform: uppercase;
+        }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 13px; color: #444; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 4px;
+            font-size: 14px; font-family: inherit; box-sizing: border-box; transition: border-color 0.3s;
+        }
+        .form-group input:focus, .form-group textarea:focus { border-color: #0056b3; outline: none; }
+        .form-row { display: flex; gap: 15px; }
+        .form-col { flex: 1; }
+        @media (max-width: 600px) { .form-row { flex-direction: column; gap: 0; } }
+        .btn-generate { background-color: #0056b3; width: 100%; font-size: 18px; padding: 15px; margin-top: 10px; color:#fff; border:none; cursor:pointer; font-weight:bold; text-transform:uppercase; border-radius:4px;}
+        .btn-generate:hover { background-color: #004494; }
+
+        /* Theme Selector */
+        .theme-selector { display: flex; gap: 15px; margin-bottom: 20px; }
+        .theme-card {
+            flex: 1; border: 2px solid #ddd; border-radius: 6px; padding: 15px; text-align: center;
+            cursor: pointer; transition: all 0.2s; background: #fff;
+        }
+        .theme-card:hover { border-color: #0056b3; }
+        .theme-card input { display: none; }
+        .theme-card h4 { margin: 0 0 5px 0; color: #111; }
+        .theme-card p { margin: 0; font-size: 12px; color: #666; }
+        .theme-card.selected { border-color: #0056b3; background-color: #f0f7ff; }
+
+        /* ---------------- PREVIEW CONTAINER ---------------- */
+        .preview-container {
+            width: 100%; max-width: 850px;
+            background-color: #ffffff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            position: relative;
+        }
+        .btn-container { text-align: center; padding: 30px; display: flex; justify-content: center; gap: 15px; background: #f9f9f9; border-top: 1px solid #eee; }
+        .btn { background-color: #222; color: #fff; border: none; padding: 12px 25px; font-size: 15px; cursor: pointer; text-transform: uppercase; font-weight: 600; border-radius: 4px; }
+        .btn:hover { background-color: #444; }
+        .btn-outline { background-color: transparent; color: #222; border: 2px solid #222; }
+        .btn-outline:hover { background-color: #e0e0e0; }
+
+        /* ---------------- THEME 1: CLASSIC ---------------- */
+        .theme-classic { padding: 50px 60px; border-top: 6px solid #222; }
+        .theme-classic h1 { text-align: center; text-transform: uppercase; font-size: 32px; letter-spacing: 4px; margin: 0 0 40px 0; border-bottom: 2px solid #eee; padding-bottom: 20px; }
+        .theme-classic table { width: 100%; border-collapse: collapse; margin-bottom: 35px; }
+        .theme-classic th, .theme-classic td { padding: 12px 10px; text-align: left; font-size: 15px; border-bottom: 1px solid #eee; }
+        .theme-classic th { width: 35%; font-weight: 600; color: #555; text-transform: uppercase; font-size: 13px; }
+        .theme-classic .sec-title { font-weight: 700; font-size: 18px; margin: 20px 0 15px 0; text-transform: uppercase; border-left: 4px solid #222; padding-left: 10px; }
+        .theme-classic p { font-size: 15px; margin-bottom: 30px; }
+
+        /* ---------------- THEME 2: MODERN (Two-Column) ---------------- */
+        .theme-modern { display: flex; min-height: 297mm; } /* approx A4 height */
+        .theme-modern .sidebar { width: 35%; background-color: #2c3e50; color: #fff; padding: 40px 30px; }
+        .theme-modern .main { width: 65%; padding: 40px 40px; background: #fff; }
+        .theme-modern h1 { font-size: 32px; text-transform: uppercase; margin: 0 0 10px 0; color: #2c3e50; }
+        .theme-modern .tagline { font-size: 16px; color: #7f8c8d; margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 20px; }
+        .theme-modern .sec-title-main { font-size: 18px; color: #2c3e50; text-transform: uppercase; font-weight: 700; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .theme-modern .sec-title-side { font-size: 16px; color: #ecf0f1; text-transform: uppercase; font-weight: 700; margin-bottom: 15px; border-bottom: 1px solid #34495e; padding-bottom: 5px; margin-top: 30px; }
+        .theme-modern .info-group { margin-bottom: 15px; }
+        .theme-modern .info-label { font-size: 11px; text-transform: uppercase; color: #bdc3c7; font-weight: 600; margin-bottom: 2px; }
+        .theme-modern .info-val { font-size: 14px; }
+        .theme-modern .main-group { margin-bottom: 20px; }
+        .theme-modern .main-group h4 { margin: 0 0 5px 0; font-size: 16px; color: #333; }
+        .theme-modern .main-group p { margin: 0; font-size: 14px; color: #555; }
+        .theme-modern table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .theme-modern th, .theme-modern td { padding: 8px 0; border-bottom: 1px solid #eee; font-size: 14px; text-align: left; }
+        .theme-modern th { color: #7f8c8d; font-weight: normal; }
+
+        /* ---------------- THEME 3: MINIMAL ---------------- */
+        .theme-minimal { padding: 60px 70px; background: #fff; }
+        .theme-minimal h1 { font-size: 36px; font-weight: 300; margin: 0 0 5px 0; letter-spacing: 2px; text-align: center; }
+        .theme-minimal .header-contact { text-align: center; font-size: 13px; color: #777; margin-bottom: 50px; }
+        .theme-minimal .sec-title { font-size: 14px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; color: #999; margin: 30px 0 15px 0; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .theme-minimal .grid-row { display: flex; margin-bottom: 12px; }
+        .theme-minimal .grid-label { width: 30%; font-weight: 600; font-size: 14px; color: #333; }
+        .theme-minimal .grid-val { width: 70%; font-size: 14px; color: #555; }
+        
+        /* ---------------- PRINT STYLES ---------------- */
+        @page { size: A4; margin: 0; } /* Let CSS handle margins to allow full-bleed modern sidebar */
+        @media print {
+            * { color: #000000 !important; border-color: #000000 !important; }
+            .theme-modern .sidebar { background-color: transparent !important; }
+            body { padding: 0; background-color: #ffffff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .preview-container { box-shadow: none; border-top: none; max-width: 100%; }
+            .no-print, .app-container { display: none !important; }
+            
+            /* Tweak sizes for print to fit one page */
+            .theme-classic { padding: 15mm; border-top:none; }
+            .theme-classic h1 { font-size: 24px; margin-bottom: 15px; padding-bottom: 10px; }
+            .theme-classic table { margin-bottom: 15px; }
+            .theme-classic th, .theme-classic td { padding: 6px; font-size: 12px; }
+            .theme-classic .sec-title { font-size: 14px; margin: 10px 0; padding-left: 6px; border-left-width: 3px; }
+            
+            .theme-modern { min-height: auto; }
+            .theme-modern .sidebar { padding: 15mm 10mm; }
+            .theme-modern .main { padding: 15mm 15mm; }
+            .theme-modern h1 { font-size: 24px; }
+            .theme-modern .sec-title-main { font-size: 15px; margin-bottom:10px; }
+            .theme-modern .sec-title-side { font-size: 14px; margin-top:20px; margin-bottom:10px; }
+            .theme-modern .info-val { font-size: 12px; }
+            .theme-modern th, .theme-modern td { font-size: 12px; padding: 5px 0; }
+
+            .theme-minimal { padding: 15mm 20mm; }
+            .theme-minimal h1 { font-size: 28px; }
+            .theme-minimal .sec-title { margin: 20px 0 10px 0; font-size: 12px; }
+            .theme-minimal .grid-label, .theme-minimal .grid-val { font-size: 12px; margin-bottom: 6px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- FORM VIEW -->
+    <div class="app-container" id="formView">
+        <div class="app-header">
+            <h1>Biodata Generator</h1>
+            <p>Select a design and fill out your details to instantly generate a professional biodata.</p>
+        </div>
+
+        <form id="biodataForm" onsubmit="generateBiodata(event)">
+            
+            <!-- THEME SELECTION -->
+            <div class="form-section">
+                <h3>1. Choose Design Layout</h3>
+                <div class="theme-selector" id="themeGroup">
+                    <label class="theme-card selected" onclick="selectTheme(this, 'classic')">
+                        <input type="radio" name="theme" value="classic" checked>
+                        <h4>Classic</h4>
+                        <p>Formal, table-based.</p>
+                    </label>
+                    <label class="theme-card" onclick="selectTheme(this, 'modern')">
+                        <input type="radio" name="theme" value="modern">
+                        <h4>Modern</h4>
+                        <p>Two-column sidebar.</p>
+                    </label>
+                    <label class="theme-card" onclick="selectTheme(this, 'minimal')">
+                        <input type="radio" name="theme" value="minimal">
+                        <h4>Minimal</h4>
+                        <p>Clean, grid-based.</p>
+                    </label>
+                </div>
+            </div>
+
+            <!-- PERSONAL INFO -->
+            <div class="form-section">
+                <h3>2. Personal Information</h3>
+                <div class="form-row">
+                    <div class="form-col"><div class="form-group"><label>Full Name</label><input type="text" id="in-name" required placeholder="e.g. Rahul Sharma"></div></div>
+                    <div class="form-col"><div class="form-group"><label>Date of Birth</label><input type="text" id="in-dob" placeholder="e.g. 21-05-2006"></div></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-col"><div class="form-group"><label>Father's Name</label><input type="text" id="in-fatherName"></div></div>
+                    <div class="form-col"><div class="form-group"><label>Mother's Name</label><input type="text" id="in-motherName"></div></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <select id="in-gender"><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select>
+                        </div>
+                    </div>
+                    <div class="form-col"><div class="form-group"><label>Blood Group</label><input type="text" id="in-bloodGroup" placeholder="e.g. O+"></div></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-col"><div class="form-group"><label>Category / Caste</label><input type="text" id="in-caste" placeholder="e.g. Unreserved"></div></div>
+                    <div class="form-col"><div class="form-group"><label>Languages</label><input type="text" id="in-languages" placeholder="e.g. Bengali, Hindi"></div></div>
+                </div>
+            </div>
+
+            <!-- CONTACT INFO -->
+            <div class="form-section">
+                <h3>3. Contact Information</h3>
+                <div class="form-row">
+                    <div class="form-col"><div class="form-group"><label>Mobile Number</label><input type="text" id="in-mobile" required></div></div>
+                    <div class="form-col"><div class="form-group"><label>Email Address</label><input type="email" id="in-email"></div></div>
+                </div>
+                <div class="form-group"><label>Full Address</label><textarea id="in-address" rows="2"></textarea></div>
+            </div>
+
+            <!-- EDUCATION & CAREER -->
+            <div class="form-section">
+                <h3>4. Education & Career</h3>
+                <div class="form-row">
+                    <div class="form-col"><div class="form-group"><label>Highest Qualification</label><input type="text" id="in-qualification" placeholder="e.g. Class XII Passed"></div></div>
+                    <div class="form-col"><div class="form-group"><label>Passing Year</label><input type="text" id="in-passingYear"></div></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-col"><div class="form-group"><label>Total Marks</label><input type="text" id="in-totalMarks"></div></div>
+                    <div class="form-col"><div class="form-group"><label>Percentage & Grade</label><input type="text" id="in-percentage"></div></div>
+                </div>
+                <div class="form-group"><label>Subjects</label><input type="text" id="in-subjects"></div>
+                <div class="form-group"><label>Board / University</label><input type="text" id="in-boardName"></div>
+                
+                <div class="form-group" style="margin-top:20px"><label>Past Experience</label><input type="text" id="in-experience"></div>
+                <div class="form-group"><label>Career Objective</label><textarea id="in-careerObjective" rows="2"></textarea></div>
+            </div>
+
+            <div style="display: flex; gap: 15px;">
+                <button type="button" class="btn-generate" style="background-color: #f1f3f5; color: #333; border: 1px solid #ccc;" onclick="fillDemoData()">Fill Demo Data</button>
+                <button type="submit" class="btn-generate">Generate Biodata</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- PREVIEW VIEW -->
+    <div class="preview-container" id="previewView" style="display: none;">
+        <div id="biodata-content"></div>
+        <div class="btn-container no-print">
+            <button class="btn btn-outline" onclick="editBiodata()">Edit Details</button>
+            <button class="btn" onclick="window.print()">Download as PDF / Print</button>
+        </div>
+    </div>
+
+    <script>
+        function fillDemoData() {
+            document.getElementById('in-name').value = 'John Doe';
+            document.getElementById('in-dob').value = '15-08-1998';
+            document.getElementById('in-fatherName').value = 'Robert Doe';
+            document.getElementById('in-motherName').value = 'Mary Doe';
+            document.getElementById('in-gender').value = 'Male';
+            document.getElementById('in-bloodGroup').value = 'O+';
+            document.getElementById('in-caste').value = 'General';
+            document.getElementById('in-languages').value = 'English, Spanish';
+            document.getElementById('in-mobile').value = '9876543210';
+            document.getElementById('in-email').value = 'johndoe@example.com';
+            document.getElementById('in-address').value = '123 Main Street, Springfield, IL, 62701';
+            document.getElementById('in-qualification').value = 'Bachelor of Arts';
+            document.getElementById('in-passingYear').value = '2020';
+            document.getElementById('in-totalMarks').value = '1600 / 2000';
+            document.getElementById('in-percentage').value = '80.00%';
+            document.getElementById('in-subjects').value = 'English, History, Political Science, Economics';
+            document.getElementById('in-boardName').value = 'Springfield University';
+            document.getElementById('in-experience').value = '2 Years Experience as a Customer Success Specialist';
+            document.getElementById('in-careerObjective').value = 'To secure a position in a dynamic organization where I can utilize my communication skills and practical experience to contribute effectively to the team and grow professionally.';
+        }
+
+        function selectTheme(element, theme) {
+            // UI Toggle
+            document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+            // Set radio checked
+            element.querySelector('input').checked = true;
+        }
+
+        function getVal(id) {
+            return document.getElementById(id).value || '-';
+        }
+
+        function generateBiodata(event) {
+            event.preventDefault();
+            
+            const data = {
+                name: getVal('in-name'), dob: getVal('in-dob'), fatherName: getVal('in-fatherName'), motherName: getVal('in-motherName'),
+                gender: getVal('in-gender'), bloodGroup: getVal('in-bloodGroup'), caste: getVal('in-caste'), languages: getVal('in-languages'),
+                mobile: getVal('in-mobile'), email: getVal('in-email'), address: getVal('in-address'),
+                qualification: getVal('in-qualification'), passingYear: getVal('in-passingYear'), totalMarks: getVal('in-totalMarks'), percentage: getVal('in-percentage'),
+                subjects: getVal('in-subjects'), boardName: getVal('in-boardName'),
+                experience: getVal('in-experience'), careerObjective: getVal('in-careerObjective')
+            };
+
+            const theme = document.querySelector('input[name="theme"]:checked').value;
+            let html = '';
+
+            if (theme === 'classic') html = renderClassic(data);
+            else if (theme === 'modern') html = renderModern(data);
+            else if (theme === 'minimal') html = renderMinimal(data);
+
+            document.getElementById('biodata-content').innerHTML = html;
+            document.getElementById('formView').style.display = 'none';
+            document.getElementById('previewView').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        function editBiodata() {
+            document.getElementById('previewView').style.display = 'none';
+            document.getElementById('formView').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        // --- THEME TEMPLATES ---
+
+        function renderClassic(d) {
+            return `
+            <div class="theme-classic">
+                <h1>Biodata</h1>
+                
+                <div class="sec-title">Personal Information</div>
+                <table>
+                    <tr><th>Name</th><td>${d.name}</td></tr>
+                    <tr><th>Father's Name</th><td>${d.fatherName}</td></tr>
+                    <tr><th>Mother's Name</th><td>${d.motherName}</td></tr>
+                    <tr><th>Date of Birth</th><td>${d.dob}</td></tr>
+                    <tr><th>Gender</th><td>${d.gender}</td></tr>
+                    <tr><th>Blood Group</th><td>${d.bloodGroup}</td></tr>
+                    <tr><th>Caste</th><td>${d.caste}</td></tr>
+                    <tr><th>Languages</th><td>${d.languages}</td></tr>
+                </table>
+
+                <div class="sec-title">Contact Information</div>
+                <table>
+                    <tr><th>Mobile</th><td>${d.mobile}</td></tr>
+                    <tr><th>Email</th><td>${d.email}</td></tr>
+                    <tr><th>Address</th><td>${d.address}</td></tr>
+                </table>
+
+                <div class="sec-title">Educational Qualification</div>
+                <table>
+                    <tr><th>Qualification</th><td>${d.qualification}</td></tr>
+                    <tr><th>Passing Year</th><td>${d.passingYear}</td></tr>
+                    <tr><th>Total Marks</th><td>${d.totalMarks}</td></tr>
+                    <tr><th>Percentage & Grade</th><td>${d.percentage}</td></tr>
+                    <tr><th>Subjects</th><td>${d.subjects}</td></tr>
+                    <tr><th>Board / University</th><td>${d.boardName}</td></tr>
+                </table>
+
+                <div class="sec-title">Experience & Objective</div>
+                <table>
+                    <tr><th>Experience</th><td>${d.experience}</td></tr>
+                </table>
+                <p style="white-space: pre-line; margin-top:10px;">${d.careerObjective}</p>
+            </div>`;
+        }
+
+        function renderModern(d) {
+            return `
+            <div class="theme-modern">
+                <div class="sidebar">
+                    <div class="sec-title-side" style="margin-top:0;">Contact Info</div>
+                    <div class="info-group"><div class="info-label">Mobile</div><div class="info-val">${d.mobile}</div></div>
+                    <div class="info-group"><div class="info-label">Email</div><div class="info-val">${d.email}</div></div>
+                    <div class="info-group"><div class="info-label">Address</div><div class="info-val" style="white-space: pre-line;">${d.address}</div></div>
+                    
+                    <div class="sec-title-side">Personal Details</div>
+                    <div class="info-group"><div class="info-label">Date of Birth</div><div class="info-val">${d.dob}</div></div>
+                    <div class="info-group"><div class="info-label">Father's Name</div><div class="info-val">${d.fatherName}</div></div>
+                    <div class="info-group"><div class="info-label">Mother's Name</div><div class="info-val">${d.motherName}</div></div>
+                    <div class="info-group"><div class="info-label">Gender / Blood</div><div class="info-val">${d.gender} / ${d.bloodGroup}</div></div>
+                    <div class="info-group"><div class="info-label">Caste</div><div class="info-val">${d.caste}</div></div>
+                    <div class="info-group"><div class="info-label">Languages</div><div class="info-val">${d.languages}</div></div>
+                </div>
+                <div class="main">
+                    <h1>${d.name}</h1>
+                    <div class="tagline">${d.careerObjective}</div>
+                    
+                    <div class="sec-title-main">Education</div>
+                    <div class="main-group">
+                        <h4>${d.qualification}</h4>
+                        <p>${d.boardName} | Passed: ${d.passingYear}</p>
+                        <table>
+                            <tr><th>Total Marks</th><td>${d.totalMarks}</td></tr>
+                            <tr><th>Percentage</th><td>${d.percentage}</td></tr>
+                            <tr><th>Subjects</th><td>${d.subjects}</td></tr>
+                        </table>
+                    </div>
+                    
+                    <div class="sec-title-main" style="margin-top:40px;">Work Experience</div>
+                    <div class="main-group">
+                        <p>${d.experience}</p>
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        function renderMinimal(d) {
+            return `
+            <div class="theme-minimal">
+                <h1>${d.name.toUpperCase()}</h1>
+                <div class="header-contact">${d.mobile} | ${d.email}<br>${d.address}</div>
+                
+                ${d.careerObjective !== '-' ? `<div class="sec-title">Objective</div><p style="font-size:14px;color:#555;margin-bottom:30px;">${d.careerObjective}</p>` : ''}
+                
+                <div class="sec-title">Personal Information</div>
+                <div class="grid-row"><div class="grid-label">Date of Birth</div><div class="grid-val">${d.dob}</div></div>
+                <div class="grid-row"><div class="grid-label">Parents</div><div class="grid-val">${d.fatherName} & ${d.motherName}</div></div>
+                <div class="grid-row"><div class="grid-label">Gender / Blood</div><div class="grid-val">${d.gender} / ${d.bloodGroup}</div></div>
+                <div class="grid-row"><div class="grid-label">Languages</div><div class="grid-val">${d.languages}</div></div>
+                <div class="grid-row"><div class="grid-label">Category</div><div class="grid-val">${d.caste}</div></div>
+
+                <div class="sec-title">Education</div>
+                <div class="grid-row"><div class="grid-label">Qualification</div><div class="grid-val"><b>${d.qualification}</b> (${d.passingYear})</div></div>
+                <div class="grid-row"><div class="grid-label">Board / Univ</div><div class="grid-val">${d.boardName}</div></div>
+                <div class="grid-row"><div class="grid-label">Performance</div><div class="grid-val">${d.percentage} (Marks: ${d.totalMarks})</div></div>
+                <div class="grid-row"><div class="grid-label">Subjects</div><div class="grid-val">${d.subjects}</div></div>
+
+                <div class="sec-title">Experience</div>
+                <div class="grid-row"><div class="grid-label">Past Work</div><div class="grid-val">${d.experience}</div></div>
+            </div>`;
+        }
+    </script>
+</body>
+</html>
