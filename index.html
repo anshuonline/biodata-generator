@@ -220,8 +220,14 @@
                     <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Father's Name</label><input type="text" id="in-father" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white"></div>
                     <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Mother's Name</label><input type="text" id="in-mother" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white"></div>
                     <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Blood Group</label><input type="text" id="in-blood" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" placeholder="O+"></div>
-                    <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Category / Caste</label><input type="text" id="in-caste" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white"></div>
-                    <div class="sm:col-span-2"><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Languages</label><input type="text" id="in-languages" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" placeholder="English, Hindi, Bengali"></div>
+                    <div class="sm:col-span-2">
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Languages & Proficiency</label>
+                            <p class="text-[10px] text-blue-600 dark:text-blue-400 font-bold hidden sm:block">Pro Tip: Mention your fluency level.</p>
+                        </div>
+                        <div id="langContainer" class="space-y-2 mb-2"></div>
+                        <button type="button" onclick="addLanguage()" class="px-3 py-1 text-xs font-bold accent-text border border-dashed accent-border rounded-lg hover:accent-bg-light transition-colors">+ Add Language</button>
+                    </div>
                 </div>
             </div>
 
@@ -413,13 +419,17 @@
         </div>
     </div>
 
-    <!-- ==================== PREVIEW VIEW ==================== -->
     <div id="previewWrapper" class="w-full flex-col items-center hidden">
-        <div class="w-full max-w-[210mm] flex justify-between items-center mb-4 no-print">
+        <div class="w-full max-w-[210mm] flex justify-between items-center mb-4 no-print flex-wrap gap-4">
             <button onclick="editBiodata()" class="px-5 py-2.5 bg-white border-2 border-gray-900 text-gray-900 font-bold rounded-lg hover:bg-gray-50 transition flex items-center gap-2 text-sm">
                 <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/></svg>
                 Edit
             </button>
+            <div class="flex items-center gap-2 bg-white dark:bg-gray-800 px-4 py-2 rounded-lg border-2 border-gray-900 dark:border-gray-600 shadow-sm">
+                <label class="text-xs font-bold text-gray-700 dark:text-gray-300">Font Size</label>
+                <input type="range" id="fontScale" min="80" max="130" value="100" class="w-20 sm:w-24 accent-blue-600 cursor-pointer" oninput="updateFontSize(this.value)">
+                <span id="fontScaleVal" class="text-xs font-bold text-gray-600 dark:text-gray-400 w-8">100%</span>
+            </div>
             <div class="flex gap-3">
                 <button onclick="window.print()" class="px-5 py-2.5 bg-gray-200 text-gray-800 font-bold rounded-lg hover:bg-gray-300 transition text-sm">Print</button>
                 <button onclick="downloadPDF()" class="px-5 py-2.5 accent-bg text-white font-bold rounded-lg hover:opacity-90 transition shadow-lg text-sm flex items-center gap-2">
@@ -837,7 +847,27 @@
         }
 
         // ====== DYNAMIC ENTRIES ======
-        let eduCount = 0, expCount = 0, refCount = 0;
+        let eduCount = 0; let expCount = 0; let refCount = 0; let langCount = 0;
+        
+        function addLanguage(data = {}) {
+            langCount++;
+            const id = `lang-${langCount}`;
+            const div = document.createElement('div');
+            div.className = "flex gap-2 items-center";
+            div.id = id;
+            div.innerHTML = `
+                <input type="text" class="lang-name form-input flex-1 p-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white text-sm" placeholder="e.g. English" value="${data.name || ''}" oninput="saveToStorage()">
+                <select class="lang-prof form-input w-1/3 sm:w-1/4 p-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white text-sm" onchange="saveToStorage()">
+                    <option value="" disabled ${!data.prof ? 'selected' : ''}>Proficiency...</option>
+                    <option value="Native" ${data.prof === 'Native' ? 'selected' : ''}>Native</option>
+                    <option value="Fluent" ${data.prof === 'Fluent' ? 'selected' : ''}>Fluent</option>
+                    <option value="Conversational" ${data.prof === 'Conversational' ? 'selected' : ''}>Conversational</option>
+                    <option value="Basic" ${data.prof === 'Basic' ? 'selected' : ''}>Basic</option>
+                </select>
+                <button type="button" onclick="document.getElementById('${id}').remove(); saveToStorage()" class="text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 p-2 rounded-lg font-bold text-lg leading-none">&times;</button>
+            `;
+            document.getElementById('langContainer').appendChild(div);
+        }
 
         function addEducation(data = {}) {
             eduCount++;
@@ -907,6 +937,12 @@
                 if (el.id) data[el.id] = el.type === 'checkbox' ? el.checked : el.value; 
             });
             data.skills = skillsArray;
+            const langEntries = [];
+            document.querySelectorAll('#langContainer > div').forEach(d => {
+                langEntries.push({ name: d.querySelector('.lang-name').value, prof: d.querySelector('.lang-prof').value });
+            });
+            data.langEntries = langEntries;
+
             data.photoDataUrl = photoDataUrl;
             data.sigDataUrl = sigDataUrl;
             data.isDark = isDark;
@@ -946,11 +982,43 @@
                 if (data.font) { document.getElementById('fontSelect').value = data.font; setFont(data.font); }
                 if (data.accent) setAccent(data.accent, data.accentLight, data.accentDark);
                 if (data.declaration) document.getElementById('in-declaration').checked = true;
+                if (data.langEntries && data.langEntries.length > 0) data.langEntries.forEach(e => addLanguage(e));
+                else addLanguage();
                 if (data.eduEntries && data.eduEntries.length > 0) data.eduEntries.forEach(e => addEducation(e));
                 else addEducation();
                 if (data.expEntries) data.expEntries.forEach(e => addExperience(e));
                 if (data.refEntries) data.refEntries.forEach(e => addReference(e));
-            } catch(e) { addEducation(); }
+
+                if (data.fontScale) {
+                    const fsInput = document.getElementById('fontScale');
+                    if (fsInput) fsInput.value = data.fontScale;
+                    updateFontSize(data.fontScale);
+                }
+            } catch(e) { addEducation(); addLanguage(); }
+        }
+
+        function updateFontSize(percent) {
+            document.getElementById('fontScaleVal').innerText = percent + '%';
+            const scale = percent / 100;
+            let styleEl = document.getElementById('dynamic-font-style');
+            if (!styleEl) {
+                styleEl = document.createElement('style');
+                styleEl.id = 'dynamic-font-style';
+                document.head.appendChild(styleEl);
+            }
+            styleEl.innerHTML = `
+                #biodataPaper { font-size: calc(13px * ${scale}) !important; }
+                #biodataPaper h1 { font-size: calc(32px * ${scale}) !important; }
+                #biodataPaper h3 { font-size: calc(15px * ${scale}) !important; }
+                #biodataPaper h4 { font-size: calc(13px * ${scale}) !important; }
+                #biodataPaper .text-\\[10px\\] { font-size: calc(10px * ${scale}) !important; }
+                #biodataPaper .text-\\[11px\\] { font-size: calc(11px * ${scale}) !important; }
+                #biodataPaper .text-\\[12px\\] { font-size: calc(12px * ${scale}) !important; }
+                #biodataPaper .text-\\[13px\\] { font-size: calc(13px * ${scale}) !important; }
+                #biodataPaper .text-\\[15px\\] { font-size: calc(15px * ${scale}) !important; }
+            `;
+            // Trigger save only if event originated from input (not load)
+            if (event && event.type === 'input') saveToStorage();
         }
 
         // ====== ONBOARDING TOUR (Driver.js) ======
@@ -1027,13 +1095,25 @@
                 { label: 'Gender', val: document.getElementById('in-gender').value },
                 { label: 'Blood Group', val: document.getElementById('in-blood').value },
                 { label: 'Category', val: document.getElementById('in-caste').value },
-                { label: 'Languages', val: document.getElementById('in-languages').value },
             ];
             personalFields.forEach(f => {
                 if (f.val && f.val.trim()) {
                     personalList.innerHTML += `<div><span class="block text-[10px] font-bold text-gray-400 uppercase">${f.label}</span><span class="font-semibold text-[12px]">${f.val}</span></div>`;
                 }
             });
+
+            let langText = '';
+            document.querySelectorAll('#langContainer > div').forEach(d => {
+                const name = d.querySelector('.lang-name')?.value;
+                const prof = d.querySelector('.lang-prof')?.value;
+                if (name && name.trim()) {
+                    langText += `${name} <span class="text-gray-500 font-normal">(${prof || 'Basic'})</span>, `;
+                }
+            });
+            if (langText) {
+                langText = langText.slice(0, -2);
+                personalList.innerHTML += `<div><span class="block text-[10px] font-bold text-gray-400 uppercase">Languages</span><span class="font-semibold text-[12px]">${langText}</span></div>`;
+            }
 
             // Address
             const addr = document.getElementById('in-address').value;
@@ -1178,7 +1258,6 @@
             document.getElementById('in-gender').value = 'Male';
             document.getElementById('in-blood').value = 'O+';
             document.getElementById('in-caste').value = 'General';
-            document.getElementById('in-languages').value = 'English, Spanish, French';
             document.getElementById('in-mobile').value = '9876543210';
             document.getElementById('in-email').value = 'johndoe@example.com';
             document.getElementById('in-linkedin').value = 'linkedin.com/in/johndoe';
@@ -1188,6 +1267,11 @@
             document.getElementById('in-certs').value = 'AWS Certified Developer Associate\nComplete Web Development Bootcamp 2024';
             document.getElementById('in-hobbies').value = 'Open Source Contributing, Photography, Chess';
             document.getElementById('in-declaration').checked = true;
+
+            // Clear and add languages
+            document.getElementById('langContainer').innerHTML = ''; langCount = 0;
+            addLanguage({ name: 'English', prof: 'Fluent' });
+            addLanguage({ name: 'Spanish', prof: 'Conversational' });
 
             // Clear and add demo education
             document.getElementById('eduContainer').innerHTML = ''; eduCount = 0;
