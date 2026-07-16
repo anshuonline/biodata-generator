@@ -336,9 +336,22 @@
                     <button type="button" onclick="addHobby('✈️ Traveling')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">✈️ Traveling</button>
                     <button type="button" onclick="addHobby('📸 Photography')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">📸 Photography</button>
                     <button type="button" onclick="addHobby('♟️ Chess')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">♟️ Chess</button>
-                    <button type="button" onclick="addHobby('🎸 Playing Guitar')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">🎸 Guitar</button>
-                    <button type="button" onclick="addHobby('✍️ Blogging')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">✍️ Blogging</button>
-                    <button type="button" onclick="addHobby('🏃‍♂️ Marathon Running')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">🏃‍♂️ Running</button>
+                    <button type="button" onclick="addHobby('🎸 Guitar')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">🎸 Guitar</button>
+                    
+                    <span id="more-hobbies" class="hidden flex flex-wrap gap-2">
+                        <button type="button" onclick="addHobby('✍️ Blogging')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">✍️ Blogging</button>
+                        <button type="button" onclick="addHobby('🏃‍♂️ Running')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">🏃‍♂️ Running</button>
+                        <button type="button" onclick="addHobby('🎨 Digital Art')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">🎨 Digital Art</button>
+                        <button type="button" onclick="addHobby('🍳 Cooking')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">🍳 Cooking</button>
+                        <button type="button" onclick="addHobby('🏋️‍♂️ Fitness')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">🏋️‍♂️ Fitness</button>
+                        <button type="button" onclick="addHobby('⛰️ Hiking')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">⛰️ Hiking</button>
+                        <button type="button" onclick="addHobby('🎤 Public Speaking')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">🎤 Public Speaking</button>
+                        <button type="button" onclick="addHobby('🧩 Puzzle Solving')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">🧩 Puzzle Solving</button>
+                        <button type="button" onclick="addHobby('🌱 Gardening')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">🌱 Gardening</button>
+                        <button type="button" onclick="addHobby('🎬 Video Editing')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">🎬 Video Editing</button>
+                    </span>
+                    
+                    <button type="button" id="btn-more-hobbies" onclick="toggleMoreHobbies()" class="px-2.5 py-1 text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 rounded-full hover:bg-blue-100 transition">More...</button>
                 </div>
             </div>
 
@@ -676,6 +689,18 @@
                 el.value = hobby;
             }
             saveToStorage();
+        }
+
+        function toggleMoreHobbies() {
+            const more = document.getElementById('more-hobbies');
+            const btn = document.getElementById('btn-more-hobbies');
+            if (more.classList.contains('hidden')) {
+                more.classList.remove('hidden');
+                btn.innerText = 'Less...';
+            } else {
+                more.classList.add('hidden');
+                btn.innerText = 'More...';
+            }
         }
 
         // ====== CV EXTRACT (PDF PARSER) ======
