@@ -792,11 +792,7 @@
 
         function loadFromStorage() {
             const raw = localStorage.getItem('biodataFormData');
-            if (!raw) { 
-                addEducation(); 
-                setTimeout(() => startTour(false), 500); // Start tour for new users
-                return; 
-            }
+            if (!raw) { addEducation(); return; }
             try {
                 const data = JSON.parse(raw);
                 document.querySelectorAll('.form-input').forEach(el => { if (el.id && data[el.id] !== undefined) el.value = data[el.id]; });
@@ -1049,7 +1045,10 @@
         }
 
         // ====== INIT ======
-        loadFromStorage();
+        window.onload = () => {
+            loadFromStorage();
+            setTimeout(() => startTour(false), 800);
+        };
     </script>
 </body>
 </html>
