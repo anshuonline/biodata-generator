@@ -3,442 +3,733 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Biodata Generator</title>
+    <title>Pro Biodata Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        outfit: ['Outfit', 'sans-serif'],
+                        playfair: ['Playfair Display', 'serif'],
+                        grotesk: ['Space Grotesk', 'sans-serif'],
+                        noto: ['Noto Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        :root {
+            --accent: #2563eb;
+            --accent-light: #dbeafe;
+            --accent-dark: #1e40af;
+            --font-family: 'Outfit', sans-serif;
+        }
+        body { font-family: var(--font-family); }
+        .accent-border { border-color: var(--accent) !important; }
+        .accent-bg { background-color: var(--accent) !important; }
+        .accent-bg-light { background-color: var(--accent-light) !important; }
+        .accent-text { color: var(--accent) !important; }
+        .accent-border-left { border-left: 4px solid var(--accent) !important; }
 
-        body {
-            font-family: 'Inter', 'Segoe UI', sans-serif;
-            background-color: #f4f4f9;
-            color: #333333;
-            margin: 0;
-            padding: 40px 20px;
-            display: flex;
-            justify-content: center;
-            line-height: 1.6;
-        }
-        
-        /* ---------------- FORM STYLES ---------------- */
-        .app-container {
-            width: 100%;
-            max-width: 850px;
-            background-color: #ffffff;
-            padding: 40px 50px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            border-top: 6px solid #0056b3;
-            box-sizing: border-box;
-            border-radius: 8px;
-        }
-        .app-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .app-header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-            color: #111;
-        }
-        .app-header p {
-            color: #666;
-        }
-        .form-section {
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-radius: 6px;
-            margin-bottom: 25px;
-            border: 1px solid #eee;
-        }
-        .form-section h3 {
-            margin-top: 0; margin-bottom: 20px;
-            color: #333;
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 10px; font-size: 16px; text-transform: uppercase;
-        }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 13px; color: #444; }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 4px;
-            font-size: 14px; font-family: inherit; box-sizing: border-box; transition: border-color 0.3s;
-        }
-        .form-group input:focus, .form-group textarea:focus { border-color: #0056b3; outline: none; }
-        .form-row { display: flex; gap: 15px; }
-        .form-col { flex: 1; }
-        @media (max-width: 600px) { .form-row { flex-direction: column; gap: 0; } }
-        .btn-generate { background-color: #0056b3; width: 100%; font-size: 18px; padding: 15px; margin-top: 10px; color:#fff; border:none; cursor:pointer; font-weight:bold; text-transform:uppercase; border-radius:4px;}
-        .btn-generate:hover { background-color: #004494; }
+        /* Swatch radio hide */
+        .swatch-radio:checked + .swatch-circle { ring: 3px; transform: scale(1.2); box-shadow: 0 0 0 3px var(--accent); }
 
-        /* Theme Selector */
-        .theme-selector { display: flex; gap: 15px; margin-bottom: 20px; }
-        .theme-card {
-            flex: 1; border: 2px solid #ddd; border-radius: 6px; padding: 15px; text-align: center;
-            cursor: pointer; transition: all 0.2s; background: #fff;
-        }
-        .theme-card:hover { border-color: #0056b3; }
-        .theme-card input { display: none; }
-        .theme-card h4 { margin: 0 0 5px 0; color: #111; }
-        .theme-card p { margin: 0; font-size: 12px; color: #666; }
-        .theme-card.selected { border-color: #0056b3; background-color: #f0f7ff; }
+        /* Smooth transitions for dark mode */
+        .transition-theme { transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
 
-        /* ---------------- PREVIEW CONTAINER ---------------- */
-        .preview-container {
-            width: 100%; max-width: 850px;
-            background-color: #ffffff;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            box-sizing: border-box;
-            position: relative;
-        }
-        .btn-container { text-align: center; padding: 30px; display: flex; justify-content: center; gap: 15px; background: #f9f9f9; border-top: 1px solid #eee; }
-        .btn { background-color: #222; color: #fff; border: none; padding: 12px 25px; font-size: 15px; cursor: pointer; text-transform: uppercase; font-weight: 600; border-radius: 4px; }
-        .btn:hover { background-color: #444; }
-        .btn-outline { background-color: transparent; color: #222; border: 2px solid #222; }
-        .btn-outline:hover { background-color: #e0e0e0; }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
 
-        /* ---------------- THEME 1: CLASSIC ---------------- */
-        .theme-classic { padding: 50px 60px; border-top: 6px solid #222; }
-        .theme-classic h1 { text-align: center; text-transform: uppercase; font-size: 32px; letter-spacing: 4px; margin: 0 0 40px 0; border-bottom: 2px solid #eee; padding-bottom: 20px; }
-        .theme-classic table { width: 100%; border-collapse: collapse; margin-bottom: 35px; }
-        .theme-classic th, .theme-classic td { padding: 12px 10px; text-align: left; font-size: 15px; border-bottom: 1px solid #eee; }
-        .theme-classic th { width: 35%; font-weight: 600; color: #555; text-transform: uppercase; font-size: 13px; }
-        .theme-classic .sec-title { font-weight: 700; font-size: 18px; margin: 20px 0 15px 0; text-transform: uppercase; border-left: 4px solid #222; padding-left: 10px; }
-        .theme-classic p { font-size: 15px; margin-bottom: 30px; }
-
-        /* ---------------- THEME 2: MODERN (Two-Column) ---------------- */
-        .theme-modern { display: flex; min-height: 297mm; } /* approx A4 height */
-        .theme-modern .sidebar { width: 35%; background-color: #2c3e50; color: #fff; padding: 40px 30px; }
-        .theme-modern .main { width: 65%; padding: 40px 40px; background: #fff; }
-        .theme-modern h1 { font-size: 32px; text-transform: uppercase; margin: 0 0 10px 0; color: #2c3e50; }
-        .theme-modern .tagline { font-size: 16px; color: #7f8c8d; margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 20px; }
-        .theme-modern .sec-title-main { font-size: 18px; color: #2c3e50; text-transform: uppercase; font-weight: 700; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-        .theme-modern .sec-title-side { font-size: 16px; color: #ecf0f1; text-transform: uppercase; font-weight: 700; margin-bottom: 15px; border-bottom: 1px solid #34495e; padding-bottom: 5px; margin-top: 30px; }
-        .theme-modern .info-group { margin-bottom: 15px; }
-        .theme-modern .info-label { font-size: 11px; text-transform: uppercase; color: #bdc3c7; font-weight: 600; margin-bottom: 2px; }
-        .theme-modern .info-val { font-size: 14px; }
-        .theme-modern .main-group { margin-bottom: 20px; }
-        .theme-modern .main-group h4 { margin: 0 0 5px 0; font-size: 16px; color: #333; }
-        .theme-modern .main-group p { margin: 0; font-size: 14px; color: #555; }
-        .theme-modern table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        .theme-modern th, .theme-modern td { padding: 8px 0; border-bottom: 1px solid #eee; font-size: 14px; text-align: left; }
-        .theme-modern th { color: #7f8c8d; font-weight: normal; }
-
-        /* ---------------- THEME 3: MINIMAL ---------------- */
-        .theme-minimal { padding: 60px 70px; background: #fff; }
-        .theme-minimal h1 { font-size: 36px; font-weight: 300; margin: 0 0 5px 0; letter-spacing: 2px; text-align: center; }
-        .theme-minimal .header-contact { text-align: center; font-size: 13px; color: #777; margin-bottom: 50px; }
-        .theme-minimal .sec-title { font-size: 14px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; color: #999; margin: 30px 0 15px 0; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        .theme-minimal .grid-row { display: flex; margin-bottom: 12px; }
-        .theme-minimal .grid-label { width: 30%; font-weight: 600; font-size: 14px; color: #333; }
-        .theme-minimal .grid-val { width: 70%; font-size: 14px; color: #555; }
-        
-        /* ---------------- PRINT STYLES ---------------- */
-        @page { size: A4; margin: 0; } /* Let CSS handle margins to allow full-bleed modern sidebar */
+        /* Print */
+        @page { size: A4; margin: 0; }
         @media print {
-            * { color: #000000 !important; border-color: #000000 !important; }
-            .theme-modern .sidebar { background-color: transparent !important; }
-            body { padding: 0; background-color: #ffffff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            .preview-container { box-shadow: none; border-top: none; max-width: 100%; }
-            .no-print, .app-container { display: none !important; }
-            
-            /* Tweak sizes for print to fit one page */
-            .theme-classic { padding: 15mm; border-top:none; }
-            .theme-classic h1 { font-size: 24px; margin-bottom: 15px; padding-bottom: 10px; }
-            .theme-classic table { margin-bottom: 15px; }
-            .theme-classic th, .theme-classic td { padding: 6px; font-size: 12px; }
-            .theme-classic .sec-title { font-size: 14px; margin: 10px 0; padding-left: 6px; border-left-width: 3px; }
-            
-            .theme-modern { min-height: auto; }
-            .theme-modern .sidebar { padding: 15mm 10mm; }
-            .theme-modern .main { padding: 15mm 15mm; }
-            .theme-modern h1 { font-size: 24px; }
-            .theme-modern .sec-title-main { font-size: 15px; margin-bottom:10px; }
-            .theme-modern .sec-title-side { font-size: 14px; margin-top:20px; margin-bottom:10px; }
-            .theme-modern .info-val { font-size: 12px; }
-            .theme-modern th, .theme-modern td { font-size: 12px; padding: 5px 0; }
-
-            .theme-minimal { padding: 15mm 20mm; }
-            .theme-minimal h1 { font-size: 28px; }
-            .theme-minimal .sec-title { margin: 20px 0 10px 0; font-size: 12px; }
-            .theme-minimal .grid-label, .theme-minimal .grid-val { font-size: 12px; margin-bottom: 6px; }
+            body { background: #fff !important; padding: 0 !important; }
+            .no-print { display: none !important; }
+            .print-exact { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            #biodataPaper { box-shadow: none !important; border-radius: 0 !important; width: 210mm !important; min-height: 297mm !important; padding: 12mm 16mm !important; margin: 0 !important; }
+            * { color: #000 !important; }
+            .accent-border, .accent-border-left { border-color: #000 !important; }
+            .skill-tag-print { background: #f1f5f9 !important; border: 1px solid #999 !important; color: #000 !important; }
+            .qr-print { border: 1px solid #000 !important; }
         }
+
+        /* Validation */
+        .input-error { border-color: #ef4444 !important; }
+        .error-msg { color: #ef4444; font-size: 12px; margin-top: 2px; display: none; }
+        .error-msg.show { display: block; }
     </style>
 </head>
-<body>
+<body class="bg-gray-100 dark:bg-gray-950 transition-theme min-h-screen p-4 sm:p-8 flex justify-center items-start">
 
-    <!-- FORM VIEW -->
-    <div class="app-container" id="formView">
-        <div class="app-header">
-            <h1>Biodata Generator</h1>
-            <p>Select a design and fill out your details to instantly generate a professional biodata.</p>
+    <!-- ==================== FORM VIEW ==================== -->
+    <div id="formView" class="w-full max-w-4xl bg-white dark:bg-gray-900 rounded-2xl shadow-xl overflow-hidden transition-theme">
+        
+        <!-- HEADER -->
+        <div class="accent-bg text-white p-6 sm:p-8 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Pro Biodata Generator</h1>
+                <p class="text-white/70 text-sm mt-1">Fill details → Generate → Download PDF. It's that simple.</p>
+            </div>
+            <button onclick="toggleDark()" id="darkToggle" class="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors" title="Toggle Dark Mode">
+                <svg id="sunIcon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                <svg id="moonIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+            </button>
         </div>
 
-        <form id="biodataForm" onsubmit="generateBiodata(event)">
-            
-            <!-- THEME SELECTION -->
-            <div class="form-section">
-                <h3>1. Choose Design Layout</h3>
-                <div class="theme-selector" id="themeGroup">
-                    <label class="theme-card selected" onclick="selectTheme(this, 'classic')">
-                        <input type="radio" name="theme" value="classic" checked>
-                        <h4>Classic</h4>
-                        <p>Formal, table-based.</p>
-                    </label>
-                    <label class="theme-card" onclick="selectTheme(this, 'modern')">
-                        <input type="radio" name="theme" value="modern">
-                        <h4>Modern</h4>
-                        <p>Two-column sidebar.</p>
-                    </label>
-                    <label class="theme-card" onclick="selectTheme(this, 'minimal')">
-                        <input type="radio" name="theme" value="minimal">
-                        <h4>Minimal</h4>
-                        <p>Clean, grid-based.</p>
-                    </label>
-                </div>
-            </div>
+        <form id="biodataForm" onsubmit="generateBiodata(event)" class="p-6 sm:p-8 space-y-8">
 
-            <!-- PERSONAL INFO -->
-            <div class="form-section">
-                <h3>2. Personal Information</h3>
-                <div class="form-row">
-                    <div class="form-col"><div class="form-group"><label>Full Name</label><input type="text" id="in-name" required placeholder="e.g. Rahul Sharma"></div></div>
-                    <div class="form-col"><div class="form-group"><label>Date of Birth</label><input type="text" id="in-dob" placeholder="e.g. 21-05-2006"></div></div>
-                </div>
-                <div class="form-row">
-                    <div class="form-col"><div class="form-group"><label>Father's Name</label><input type="text" id="in-fatherName"></div></div>
-                    <div class="form-col"><div class="form-group"><label>Mother's Name</label><input type="text" id="in-motherName"></div></div>
-                </div>
-                <div class="form-row">
-                    <div class="form-col">
-                        <div class="form-group">
-                            <label>Gender</label>
-                            <select id="in-gender"><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select>
+            <!-- ====== CUSTOMIZATION: COLOR + FONT ====== -->
+            <div class="bg-gray-50 dark:bg-gray-800 p-5 rounded-xl border border-gray-200 dark:border-gray-700 transition-theme">
+                <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 mb-4">Customize Appearance</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <!-- Color Swatches -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-600 dark:text-gray-300 mb-2">Accent Color</label>
+                        <div class="flex gap-3 flex-wrap">
+                            <button type="button" onclick="setAccent('#2563eb','#dbeafe','#1e40af')" class="w-9 h-9 rounded-full bg-blue-600 border-2 border-white shadow-md hover:scale-110 transition-transform ring-2 ring-blue-600" title="Blue"></button>
+                            <button type="button" onclick="setAccent('#059669','#d1fae5','#047857')" class="w-9 h-9 rounded-full bg-emerald-600 border-2 border-white shadow-md hover:scale-110 transition-transform" title="Emerald"></button>
+                            <button type="button" onclick="setAccent('#e11d48','#ffe4e6','#be123c')" class="w-9 h-9 rounded-full bg-rose-600 border-2 border-white shadow-md hover:scale-110 transition-transform" title="Rose"></button>
+                            <button type="button" onclick="setAccent('#d97706','#fef3c7','#b45309')" class="w-9 h-9 rounded-full bg-amber-600 border-2 border-white shadow-md hover:scale-110 transition-transform" title="Amber"></button>
+                            <button type="button" onclick="setAccent('#7c3aed','#ede9fe','#6d28d9')" class="w-9 h-9 rounded-full bg-violet-600 border-2 border-white shadow-md hover:scale-110 transition-transform" title="Violet"></button>
+                            <button type="button" onclick="setAccent('#334155','#f1f5f9','#1e293b')" class="w-9 h-9 rounded-full bg-slate-700 border-2 border-white shadow-md hover:scale-110 transition-transform" title="Slate"></button>
                         </div>
                     </div>
-                    <div class="form-col"><div class="form-group"><label>Blood Group</label><input type="text" id="in-bloodGroup" placeholder="e.g. O+"></div></div>
-                </div>
-                <div class="form-row">
-                    <div class="form-col"><div class="form-group"><label>Category / Caste</label><input type="text" id="in-caste" placeholder="e.g. Unreserved"></div></div>
-                    <div class="form-col"><div class="form-group"><label>Languages</label><input type="text" id="in-languages" placeholder="e.g. Bengali, Hindi"></div></div>
+                    <!-- Font Selector -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-600 dark:text-gray-300 mb-2">Font Style</label>
+                        <select id="fontSelect" onchange="setFont(this.value)" class="w-full p-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium dark:text-gray-200">
+                            <option value="'Outfit', sans-serif" style="font-family: Outfit">Outfit — Modern GenZ</option>
+                            <option value="'Playfair Display', serif" style="font-family: Playfair Display">Playfair — Elegant Classic</option>
+                            <option value="'Space Grotesk', sans-serif" style="font-family: Space Grotesk">Space Grotesk — Techy</option>
+                            <option value="'Noto Sans', sans-serif" style="font-family: Noto Sans">Noto Sans — Clean Corporate</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
-            <!-- CONTACT INFO -->
-            <div class="form-section">
-                <h3>3. Contact Information</h3>
-                <div class="form-row">
-                    <div class="form-col"><div class="form-group"><label>Mobile Number</label><input type="text" id="in-mobile" required></div></div>
-                    <div class="form-col"><div class="form-group"><label>Email Address</label><input type="email" id="in-email"></div></div>
+            <!-- ====== 1. BASIC INFO + PHOTO ====== -->
+            <div>
+                <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">1. Basic Info & Photo</h3>
+                <div class="flex flex-col sm:flex-row gap-6">
+                    <div class="flex flex-col items-center justify-center space-y-3 w-full sm:w-1/4 p-5 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-800">
+                        <img id="imagePreview" src="" alt="Preview" class="w-24 h-32 object-cover rounded-lg shadow hidden">
+                        <div id="imagePlaceholder" class="w-24 h-32 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center text-gray-400">
+                            <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        </div>
+                        <label class="cursor-pointer text-sm font-semibold accent-text hover:underline">Upload Photo<input type="file" id="in-photo" accept="image/*" class="hidden" onchange="previewImage(event)"></label>
+                        <p id="photoError" class="error-msg">Max 2MB allowed</p>
+                    </div>
+                    <div class="w-full sm:w-3/4 space-y-4">
+                        <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Full Name *</label><input type="text" id="in-name" required class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" placeholder="e.g. Rahul Sharma"></div>
+                        <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Professional Title / Objective *</label><input type="text" id="in-role" required class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" placeholder="e.g. Full Stack Developer"></div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Date of Birth</label><input type="text" id="in-dob" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" placeholder="21-05-2006"></div>
+                            <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Gender</label><select id="in-gender" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white"><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group"><label>Full Address</label><textarea id="in-address" rows="2"></textarea></div>
             </div>
 
-            <!-- EDUCATION & CAREER -->
-            <div class="form-section">
-                <h3>4. Education & Career</h3>
-                <div class="form-row">
-                    <div class="form-col"><div class="form-group"><label>Highest Qualification</label><input type="text" id="in-qualification" placeholder="e.g. Class XII Passed"></div></div>
-                    <div class="form-col"><div class="form-group"><label>Passing Year</label><input type="text" id="in-passingYear"></div></div>
+            <!-- ====== 2. CONTACT & SOCIAL ====== -->
+            <div>
+                <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">2. Contact & Social</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Mobile *</label>
+                        <input type="text" id="in-mobile" required class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" placeholder="9876543210" oninput="validateMobile(this)">
+                        <p id="mobileError" class="error-msg">Enter a valid 10-digit number</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Email *</label>
+                        <input type="email" id="in-email" required class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" oninput="validateEmail(this)">
+                        <p id="emailError" class="error-msg">Enter a valid email</p>
+                    </div>
+                    <div class="sm:col-span-2"><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Full Address</label><input type="text" id="in-address" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" placeholder="Village, City, State, Pin"></div>
+                    <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">LinkedIn (Optional)</label><input type="text" id="in-linkedin" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" placeholder="linkedin.com/in/username"></div>
+                    <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Portfolio / GitHub (Optional)</label><input type="text" id="in-github" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" placeholder="github.com/username"></div>
                 </div>
-                <div class="form-row">
-                    <div class="form-col"><div class="form-group"><label>Total Marks</label><input type="text" id="in-totalMarks"></div></div>
-                    <div class="form-col"><div class="form-group"><label>Percentage & Grade</label><input type="text" id="in-percentage"></div></div>
-                </div>
-                <div class="form-group"><label>Subjects</label><input type="text" id="in-subjects"></div>
-                <div class="form-group"><label>Board / University</label><input type="text" id="in-boardName"></div>
-                
-                <div class="form-group" style="margin-top:20px"><label>Past Experience</label><input type="text" id="in-experience"></div>
-                <div class="form-group"><label>Career Objective</label><textarea id="in-careerObjective" rows="2"></textarea></div>
             </div>
 
-            <div style="display: flex; gap: 15px;">
-                <button type="button" class="btn-generate" style="background-color: #f1f3f5; color: #333; border: 1px solid #ccc;" onclick="fillDemoData()">Fill Demo Data</button>
-                <button type="submit" class="btn-generate">Generate Biodata</button>
+            <!-- ====== 3. PERSONAL DETAILS ====== -->
+            <div>
+                <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">3. Personal Details</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Father's Name</label><input type="text" id="in-father" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white"></div>
+                    <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Mother's Name</label><input type="text" id="in-mother" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white"></div>
+                    <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Blood Group</label><input type="text" id="in-blood" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" placeholder="O+"></div>
+                    <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Category / Caste</label><input type="text" id="in-caste" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white"></div>
+                    <div class="sm:col-span-2"><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Languages</label><input type="text" id="in-languages" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" placeholder="English, Hindi, Bengali"></div>
+                </div>
+            </div>
+
+            <!-- ====== 4. EDUCATION (Dynamic) ====== -->
+            <div>
+                <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">4. Education</h3>
+                <div id="eduContainer" class="space-y-4"></div>
+                <button type="button" onclick="addEducation()" class="mt-4 px-4 py-2 text-sm font-bold accent-text border-2 accent-border rounded-lg hover:accent-bg-light transition-colors flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"/></svg>
+                    Add Education
+                </button>
+            </div>
+
+            <!-- ====== 5. WORK EXPERIENCE (Dynamic) ====== -->
+            <div>
+                <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">5. Work Experience</h3>
+                <div id="expContainer" class="space-y-4"></div>
+                <button type="button" onclick="addExperience()" class="mt-4 px-4 py-2 text-sm font-bold accent-text border-2 accent-border rounded-lg hover:accent-bg-light transition-colors flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"/></svg>
+                    Add Experience
+                </button>
+            </div>
+
+            <!-- ====== 6. SKILLS ====== -->
+            <div>
+                <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">6. Skills</h3>
+                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Type a skill & press Enter (Max 15)</label>
+                <input type="text" id="skillInput" class="w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white mb-3" placeholder="e.g. Communication, Leadership...">
+                <div id="skillsContainer" class="flex flex-wrap gap-2"></div>
+            </div>
+
+            <!-- ====== 7. PROJECTS / HOBBIES ====== -->
+            <div>
+                <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">7. Projects / Hobbies (Optional)</h3>
+                <textarea id="in-projects" rows="3" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" placeholder="Mention projects, hobbies, or achievements..."></textarea>
+            </div>
+
+            <!-- ====== 8. REFERENCES (Optional) ====== -->
+            <div>
+                <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">8. References (Optional)</h3>
+                <div id="refContainer" class="space-y-4"></div>
+                <button type="button" onclick="addReference()" class="mt-4 px-4 py-2 text-sm font-bold accent-text border-2 accent-border rounded-lg hover:accent-bg-light transition-colors flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"/></svg>
+                    Add Reference (Max 2)
+                </button>
+            </div>
+
+            <!-- ====== 9. DECLARATION ====== -->
+            <div class="bg-gray-50 dark:bg-gray-800 p-5 rounded-xl border border-gray-200 dark:border-gray-700">
+                <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 mb-4">9. Declaration & Signature</h3>
+                <label class="flex items-center gap-3 cursor-pointer mb-4">
+                    <input type="checkbox" id="in-declaration" class="w-5 h-5 accent-blue-600 rounded">
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Add Declaration: "I hereby declare that the information provided is true to the best of my knowledge."</span>
+                </label>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Signature Image (Optional)</label>
+                    <div class="flex items-center gap-4">
+                        <img id="sigPreview" src="" alt="Signature" class="h-12 hidden border-b border-gray-400">
+                        <label class="cursor-pointer text-sm font-semibold accent-text hover:underline">Upload Signature<input type="file" id="in-signature" accept="image/*" class="hidden" onchange="previewSignature(event)"></label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BUTTONS -->
+            <div class="flex flex-col sm:flex-row gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <button type="button" onclick="fillDemo()" class="w-full sm:w-1/3 py-4 font-bold text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors uppercase tracking-wide text-sm">Fill Demo Data</button>
+                <button type="submit" class="w-full sm:w-2/3 py-4 font-bold text-white accent-bg rounded-xl hover:opacity-90 transition-colors shadow-lg uppercase tracking-wide text-sm">Generate Biodata</button>
             </div>
         </form>
     </div>
 
-    <!-- PREVIEW VIEW -->
-    <div class="preview-container" id="previewView" style="display: none;">
-        <div id="biodata-content"></div>
-        <div class="btn-container no-print">
-            <button class="btn btn-outline" onclick="editBiodata()">Edit Details</button>
-            <button class="btn" onclick="window.print()">Download as PDF / Print</button>
+    <!-- ==================== PREVIEW VIEW ==================== -->
+    <div id="previewWrapper" class="w-full flex-col items-center hidden">
+        <div class="w-full max-w-[210mm] flex justify-between items-center mb-4 no-print">
+            <button onclick="editBiodata()" class="px-5 py-2.5 bg-white border-2 border-gray-900 text-gray-900 font-bold rounded-lg hover:bg-gray-50 transition flex items-center gap-2 text-sm">
+                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/></svg>
+                Edit
+            </button>
+            <div class="flex gap-3">
+                <button onclick="window.print()" class="px-5 py-2.5 bg-gray-200 text-gray-800 font-bold rounded-lg hover:bg-gray-300 transition text-sm">Print</button>
+                <button onclick="downloadPDF()" class="px-5 py-2.5 accent-bg text-white font-bold rounded-lg hover:opacity-90 transition shadow-lg text-sm flex items-center gap-2">
+                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+                    Download PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- A4 Paper -->
+        <div id="biodataPaper" class="print-exact bg-white w-[210mm] shadow-2xl rounded-xl p-[14mm_18mm] text-gray-900 relative box-border" style="min-height:297mm;">
+            
+            <!-- Header -->
+            <div class="flex justify-between items-start accent-border pb-5 mb-6" style="border-bottom-width: 3px;">
+                <div class="flex-1 pr-4">
+                    <h1 id="out-name" class="text-[32px] font-extrabold uppercase tracking-tight leading-tight"></h1>
+                    <p id="out-role" class="text-base font-medium text-gray-500 mt-1 mb-3"></p>
+                    <div id="out-contact-row" class="flex flex-wrap gap-x-4 gap-y-1 text-[11px] font-semibold text-gray-600"></div>
+                </div>
+                <div class="flex-shrink-0 flex items-start gap-3">
+                    <img id="out-photo" src="" alt="Photo" class="w-[90px] h-[115px] object-cover rounded-md accent-border hidden" style="border-width: 2px;">
+                    <div id="out-qr" class="hidden qr-print"></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-12 gap-6 text-[13px]">
+                <!-- LEFT 60% -->
+                <div class="col-span-7 space-y-5">
+                    <div id="out-edu-section" class="hidden">
+                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Education</h3>
+                        <div id="out-edu-list" class="space-y-3"></div>
+                    </div>
+                    <div id="out-exp-section" class="hidden">
+                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Work Experience</h3>
+                        <div id="out-exp-list" class="space-y-3"></div>
+                    </div>
+                    <div id="out-projects-section" class="hidden">
+                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Projects / Hobbies</h3>
+                        <p id="out-projects" class="text-[12px] leading-relaxed whitespace-pre-line"></p>
+                    </div>
+                </div>
+
+                <!-- RIGHT 40% -->
+                <div class="col-span-5 space-y-5">
+                    <div id="out-personal-section">
+                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Personal Details</h3>
+                        <div id="out-personal-list" class="space-y-2"></div>
+                    </div>
+                    <div id="out-address-section" class="hidden">
+                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Address</h3>
+                        <p id="out-address" class="text-[12px] font-medium leading-relaxed"></p>
+                    </div>
+                    <div id="out-skills-section" class="hidden">
+                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Skills</h3>
+                        <div id="out-skills" class="flex flex-wrap gap-1.5"></div>
+                    </div>
+                    <div id="out-ref-section" class="hidden">
+                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">References</h3>
+                        <div id="out-ref-list" class="space-y-2"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Declaration -->
+            <div id="out-declaration-section" class="hidden mt-8 pt-4 border-t border-gray-200">
+                <p class="text-[11px] text-gray-500 italic mb-4">I hereby declare that the information provided above is true to the best of my knowledge and belief.</p>
+                <div class="flex justify-between items-end">
+                    <div class="text-[11px] text-gray-500">Date: <span id="out-date"></span></div>
+                    <div class="text-center">
+                        <img id="out-signature" src="" class="h-10 mb-1 hidden">
+                        <div class="border-t border-gray-400 pt-1 text-[11px] font-semibold min-w-[120px]" id="out-sig-name"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
+    <!-- ==================== JAVASCRIPT ==================== -->
     <script>
-        function fillDemoData() {
-            document.getElementById('in-name').value = 'John Doe';
-            document.getElementById('in-dob').value = '15-08-1998';
-            document.getElementById('in-fatherName').value = 'Robert Doe';
-            document.getElementById('in-motherName').value = 'Mary Doe';
-            document.getElementById('in-gender').value = 'Male';
-            document.getElementById('in-bloodGroup').value = 'O+';
-            document.getElementById('in-caste').value = 'General';
-            document.getElementById('in-languages').value = 'English, Spanish';
-            document.getElementById('in-mobile').value = '9876543210';
-            document.getElementById('in-email').value = 'johndoe@example.com';
-            document.getElementById('in-address').value = '123 Main Street, Springfield, IL, 62701';
-            document.getElementById('in-qualification').value = 'Bachelor of Arts';
-            document.getElementById('in-passingYear').value = '2020';
-            document.getElementById('in-totalMarks').value = '1600 / 2000';
-            document.getElementById('in-percentage').value = '80.00%';
-            document.getElementById('in-subjects').value = 'English, History, Political Science, Economics';
-            document.getElementById('in-boardName').value = 'Springfield University';
-            document.getElementById('in-experience').value = '2 Years Experience as a Customer Success Specialist';
-            document.getElementById('in-careerObjective').value = 'To secure a position in a dynamic organization where I can utilize my communication skills and practical experience to contribute effectively to the team and grow professionally.';
+        // ====== THEME MANAGEMENT ======
+        let isDark = false;
+        function toggleDark() {
+            isDark = !isDark;
+            document.documentElement.classList.toggle('dark', isDark);
+            document.getElementById('sunIcon').classList.toggle('hidden', !isDark);
+            document.getElementById('moonIcon').classList.toggle('hidden', isDark);
+            saveToStorage();
+        }
+        function setAccent(color, light, dark) {
+            document.documentElement.style.setProperty('--accent', color);
+            document.documentElement.style.setProperty('--accent-light', light);
+            document.documentElement.style.setProperty('--accent-dark', dark);
+            // Highlight selected swatch
+            document.querySelectorAll('.accent-bg').forEach(el => {
+                if (el.closest('#formView')) el.style.backgroundColor = color;
+            });
+            saveToStorage();
+        }
+        function setFont(font) {
+            document.documentElement.style.setProperty('--font-family', font);
+            saveToStorage();
         }
 
-        function selectTheme(element, theme) {
-            // UI Toggle
-            document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('selected'));
-            element.classList.add('selected');
-            // Set radio checked
-            element.querySelector('input').checked = true;
+        // ====== IMAGE UPLOAD ======
+        let photoDataUrl = null, sigDataUrl = null;
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (file.size > 2 * 1024 * 1024) {
+                document.getElementById('photoError').classList.add('show');
+                event.target.value = '';
+                return;
+            }
+            document.getElementById('photoError').classList.remove('show');
+            const reader = new FileReader();
+            reader.onload = e => {
+                photoDataUrl = e.target.result;
+                document.getElementById('imagePreview').src = photoDataUrl;
+                document.getElementById('imagePreview').classList.remove('hidden');
+                document.getElementById('imagePlaceholder').classList.add('hidden');
+                saveToStorage();
+            };
+            reader.readAsDataURL(file);
+        }
+        function previewSignature(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                sigDataUrl = e.target.result;
+                document.getElementById('sigPreview').src = sigDataUrl;
+                document.getElementById('sigPreview').classList.remove('hidden');
+                saveToStorage();
+            };
+            reader.readAsDataURL(file);
         }
 
-        function getVal(id) {
-            return document.getElementById(id).value || '-';
+        // ====== SKILLS TAGS ======
+        let skillsArray = [];
+        const skillInput = document.getElementById('skillInput');
+        skillInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ',') {
+                e.preventDefault();
+                const val = this.value.trim().replace(/,/g, '');
+                if (val && skillsArray.length < 15 && !skillsArray.includes(val)) {
+                    skillsArray.push(val);
+                    renderSkillsForm();
+                    this.value = '';
+                    saveToStorage();
+                }
+            }
+        });
+        function removeSkill(i) { skillsArray.splice(i, 1); renderSkillsForm(); saveToStorage(); }
+        function renderSkillsForm() {
+            const c = document.getElementById('skillsContainer');
+            c.innerHTML = '';
+            skillsArray.forEach((s, i) => {
+                const el = document.createElement('div');
+                el.className = 'px-3 py-1 accent-bg text-white text-sm font-semibold rounded-full flex items-center gap-2';
+                el.innerHTML = `${s} <button type="button" onclick="removeSkill(${i})" class="text-white/70 hover:text-white text-lg leading-none">&times;</button>`;
+                c.appendChild(el);
+            });
         }
 
+        // ====== DYNAMIC ENTRIES ======
+        let eduCount = 0, expCount = 0, refCount = 0;
+
+        function addEducation(data = {}) {
+            eduCount++;
+            const id = eduCount;
+            const html = `
+            <div id="edu-${id}" class="p-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl relative transition-theme">
+                <button type="button" onclick="document.getElementById('edu-${id}').remove(); saveToStorage();" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-xl leading-none">&times;</button>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Qualification</label><input type="text" class="edu-qual form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.qual||''}" placeholder="e.g. Class XII (Arts)" oninput="saveToStorage()"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Board / University</label><input type="text" class="edu-board form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.board||''}" oninput="saveToStorage()"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Year</label><input type="text" class="edu-year form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.year||''}" oninput="saveToStorage()"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Marks / Percentage</label><input type="text" class="edu-marks form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.marks||''}" placeholder="e.g. 80% or 8.5 CGPA" oninput="saveToStorage()"></div>
+                    <div class="sm:col-span-2"><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Subjects</label><input type="text" class="edu-subjects form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.subjects||''}" oninput="saveToStorage()"></div>
+                </div>
+            </div>`;
+            document.getElementById('eduContainer').insertAdjacentHTML('beforeend', html);
+        }
+
+        function addExperience(data = {}) {
+            expCount++;
+            const id = expCount;
+            const html = `
+            <div id="exp-${id}" class="p-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl relative transition-theme">
+                <button type="button" onclick="document.getElementById('exp-${id}').remove(); saveToStorage();" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-xl leading-none">&times;</button>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Job Title</label><input type="text" class="exp-title form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.title||''}" oninput="saveToStorage()"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Company</label><input type="text" class="exp-company form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.company||''}" oninput="saveToStorage()"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Duration</label><input type="text" class="exp-duration form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.duration||''}" placeholder="e.g. Jan 2022 - Present" oninput="saveToStorage()"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Description</label><input type="text" class="exp-desc form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.desc||''}" oninput="saveToStorage()"></div>
+                </div>
+            </div>`;
+            document.getElementById('expContainer').insertAdjacentHTML('beforeend', html);
+        }
+
+        function addReference(data = {}) {
+            if (refCount >= 2) return;
+            refCount++;
+            const id = refCount;
+            const html = `
+            <div id="ref-${id}" class="p-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl relative transition-theme">
+                <button type="button" onclick="document.getElementById('ref-${id}').remove(); refCount--; saveToStorage();" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-xl leading-none">&times;</button>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Name</label><input type="text" class="ref-name form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.name||''}" oninput="saveToStorage()"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Designation</label><input type="text" class="ref-desg form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.desg||''}" oninput="saveToStorage()"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Contact</label><input type="text" class="ref-contact form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.contact||''}" oninput="saveToStorage()"></div>
+                </div>
+            </div>`;
+            document.getElementById('refContainer').insertAdjacentHTML('beforeend', html);
+        }
+
+        // ====== VALIDATION ======
+        function validateMobile(el) {
+            const valid = /^\d{10,}$/.test(el.value.replace(/\D/g, ''));
+            el.classList.toggle('input-error', el.value.length > 0 && !valid);
+            document.getElementById('mobileError').classList.toggle('show', el.value.length > 0 && !valid);
+        }
+        function validateEmail(el) {
+            const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value);
+            el.classList.toggle('input-error', el.value.length > 0 && !valid);
+            document.getElementById('emailError').classList.toggle('show', el.value.length > 0 && !valid);
+        }
+
+        // ====== LOCALSTORAGE ======
+        function saveToStorage() {
+            const data = {};
+            document.querySelectorAll('.form-input').forEach(el => { if (el.id) data[el.id] = el.value; });
+            data.skills = skillsArray;
+            data.photoDataUrl = photoDataUrl;
+            data.sigDataUrl = sigDataUrl;
+            data.isDark = isDark;
+            data.font = document.getElementById('fontSelect').value;
+            data.accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+            data.accentLight = getComputedStyle(document.documentElement).getPropertyValue('--accent-light').trim();
+            data.accentDark = getComputedStyle(document.documentElement).getPropertyValue('--accent-dark').trim();
+            data.declaration = document.getElementById('in-declaration').checked;
+            // Save dynamic entries
+            data.eduEntries = []; document.querySelectorAll('#eduContainer > div').forEach(d => {
+                data.eduEntries.push({ qual: d.querySelector('.edu-qual')?.value, board: d.querySelector('.edu-board')?.value, year: d.querySelector('.edu-year')?.value, marks: d.querySelector('.edu-marks')?.value, subjects: d.querySelector('.edu-subjects')?.value });
+            });
+            data.expEntries = []; document.querySelectorAll('#expContainer > div').forEach(d => {
+                data.expEntries.push({ title: d.querySelector('.exp-title')?.value, company: d.querySelector('.exp-company')?.value, duration: d.querySelector('.exp-duration')?.value, desc: d.querySelector('.exp-desc')?.value });
+            });
+            data.refEntries = []; document.querySelectorAll('#refContainer > div').forEach(d => {
+                data.refEntries.push({ name: d.querySelector('.ref-name')?.value, desg: d.querySelector('.ref-desg')?.value, contact: d.querySelector('.ref-contact')?.value });
+            });
+            localStorage.setItem('biodataFormData', JSON.stringify(data));
+        }
+
+        function loadFromStorage() {
+            const raw = localStorage.getItem('biodataFormData');
+            if (!raw) { addEducation(); return; }
+            try {
+                const data = JSON.parse(raw);
+                document.querySelectorAll('.form-input').forEach(el => { if (el.id && data[el.id] !== undefined) el.value = data[el.id]; });
+                if (data.skills) { skillsArray = data.skills; renderSkillsForm(); }
+                if (data.photoDataUrl) { photoDataUrl = data.photoDataUrl; document.getElementById('imagePreview').src = photoDataUrl; document.getElementById('imagePreview').classList.remove('hidden'); document.getElementById('imagePlaceholder').classList.add('hidden'); }
+                if (data.sigDataUrl) { sigDataUrl = data.sigDataUrl; document.getElementById('sigPreview').src = sigDataUrl; document.getElementById('sigPreview').classList.remove('hidden'); }
+                if (data.isDark) toggleDark();
+                if (data.font) { document.getElementById('fontSelect').value = data.font; setFont(data.font); }
+                if (data.accent) setAccent(data.accent, data.accentLight, data.accentDark);
+                if (data.declaration) document.getElementById('in-declaration').checked = true;
+                if (data.eduEntries && data.eduEntries.length > 0) data.eduEntries.forEach(e => addEducation(e));
+                else addEducation();
+                if (data.expEntries) data.expEntries.forEach(e => addExperience(e));
+                if (data.refEntries) data.refEntries.forEach(e => addReference(e));
+            } catch(e) { addEducation(); }
+        }
+
+        // Auto-save on all input changes
+        document.addEventListener('input', e => { if (e.target.closest('#biodataForm')) saveToStorage(); });
+        document.addEventListener('change', e => { if (e.target.closest('#biodataForm')) saveToStorage(); });
+
+        // ====== GENERATE BIODATA ======
         function generateBiodata(event) {
             event.preventDefault();
-            
-            const data = {
-                name: getVal('in-name'), dob: getVal('in-dob'), fatherName: getVal('in-fatherName'), motherName: getVal('in-motherName'),
-                gender: getVal('in-gender'), bloodGroup: getVal('in-bloodGroup'), caste: getVal('in-caste'), languages: getVal('in-languages'),
-                mobile: getVal('in-mobile'), email: getVal('in-email'), address: getVal('in-address'),
-                qualification: getVal('in-qualification'), passingYear: getVal('in-passingYear'), totalMarks: getVal('in-totalMarks'), percentage: getVal('in-percentage'),
-                subjects: getVal('in-subjects'), boardName: getVal('in-boardName'),
-                experience: getVal('in-experience'), careerObjective: getVal('in-careerObjective')
-            };
 
-            const theme = document.querySelector('input[name="theme"]:checked').value;
-            let html = '';
+            // Name + Role
+            document.getElementById('out-name').innerText = document.getElementById('in-name').value;
+            document.getElementById('out-role').innerText = document.getElementById('in-role').value;
 
-            if (theme === 'classic') html = renderClassic(data);
-            else if (theme === 'modern') html = renderModern(data);
-            else if (theme === 'minimal') html = renderMinimal(data);
+            // Photo
+            const outPhoto = document.getElementById('out-photo');
+            if (photoDataUrl) { outPhoto.src = photoDataUrl; outPhoto.classList.remove('hidden'); } else { outPhoto.classList.add('hidden'); }
 
-            document.getElementById('biodata-content').innerHTML = html;
-            document.getElementById('formView').style.display = 'none';
-            document.getElementById('previewView').style.display = 'block';
+            // Contact row
+            const contactRow = document.getElementById('out-contact-row');
+            contactRow.innerHTML = '';
+            const contactItems = [
+                { icon: '📞', val: document.getElementById('in-mobile').value },
+                { icon: '✉️', val: document.getElementById('in-email').value },
+                { icon: '🔗', val: document.getElementById('in-linkedin').value },
+                { icon: '💻', val: document.getElementById('in-github').value },
+            ];
+            contactItems.forEach(c => {
+                if (c.val && c.val.trim()) {
+                    contactRow.innerHTML += `<span>${c.icon} ${c.val}</span>`;
+                }
+            });
+
+            // QR Code
+            const qrDiv = document.getElementById('out-qr');
+            qrDiv.innerHTML = '';
+            const qrUrl = document.getElementById('in-linkedin').value || document.getElementById('in-github').value;
+            if (qrUrl && qrUrl.trim()) {
+                qrDiv.classList.remove('hidden');
+                new QRCode(qrDiv, { text: qrUrl.startsWith('http') ? qrUrl : 'https://' + qrUrl, width: 64, height: 64, colorDark: '#000', colorLight: '#fff' });
+            } else { qrDiv.classList.add('hidden'); }
+
+            // Personal details
+            const personalList = document.getElementById('out-personal-list');
+            personalList.innerHTML = '';
+            const personalFields = [
+                { label: 'Date of Birth', val: document.getElementById('in-dob').value },
+                { label: "Father's Name", val: document.getElementById('in-father').value },
+                { label: "Mother's Name", val: document.getElementById('in-mother').value },
+                { label: 'Gender', val: document.getElementById('in-gender').value },
+                { label: 'Blood Group', val: document.getElementById('in-blood').value },
+                { label: 'Category', val: document.getElementById('in-caste').value },
+                { label: 'Languages', val: document.getElementById('in-languages').value },
+            ];
+            personalFields.forEach(f => {
+                if (f.val && f.val.trim()) {
+                    personalList.innerHTML += `<div><span class="block text-[10px] font-bold text-gray-400 uppercase">${f.label}</span><span class="font-semibold text-[12px]">${f.val}</span></div>`;
+                }
+            });
+
+            // Address
+            const addr = document.getElementById('in-address').value;
+            if (addr && addr.trim()) { document.getElementById('out-address').innerText = addr; document.getElementById('out-address-section').classList.remove('hidden'); }
+            else { document.getElementById('out-address-section').classList.add('hidden'); }
+
+            // Education
+            const eduList = document.getElementById('out-edu-list');
+            eduList.innerHTML = '';
+            let hasEdu = false;
+            document.querySelectorAll('#eduContainer > div').forEach(d => {
+                const qual = d.querySelector('.edu-qual')?.value;
+                if (!qual || !qual.trim()) return;
+                hasEdu = true;
+                const board = d.querySelector('.edu-board')?.value || '';
+                const year = d.querySelector('.edu-year')?.value || '';
+                const marks = d.querySelector('.edu-marks')?.value || '';
+                const subjects = d.querySelector('.edu-subjects')?.value || '';
+                eduList.innerHTML += `
+                <div class="accent-border-left pl-3 py-1">
+                    <div class="flex justify-between items-baseline"><h4 class="font-bold text-[13px]">${qual}</h4>${year ? `<span class="text-[11px] font-bold accent-bg-light px-2 py-0.5 rounded">${year}</span>` : ''}</div>
+                    ${board ? `<p class="text-[11px] text-gray-500 font-medium">${board}</p>` : ''}
+                    ${marks ? `<p class="text-[11px] text-gray-600"><span class="font-semibold">Score:</span> ${marks}</p>` : ''}
+                    ${subjects ? `<p class="text-[11px] text-gray-500">${subjects}</p>` : ''}
+                </div>`;
+            });
+            document.getElementById('out-edu-section').classList.toggle('hidden', !hasEdu);
+
+            // Experience
+            const expList = document.getElementById('out-exp-list');
+            expList.innerHTML = '';
+            let hasExp = false;
+            document.querySelectorAll('#expContainer > div').forEach(d => {
+                const title = d.querySelector('.exp-title')?.value;
+                if (!title || !title.trim()) return;
+                hasExp = true;
+                const company = d.querySelector('.exp-company')?.value || '';
+                const duration = d.querySelector('.exp-duration')?.value || '';
+                const desc = d.querySelector('.exp-desc')?.value || '';
+                expList.innerHTML += `
+                <div class="accent-border-left pl-3 py-1">
+                    <div class="flex justify-between items-baseline"><h4 class="font-bold text-[13px]">${title}</h4>${duration ? `<span class="text-[11px] font-semibold text-gray-500">${duration}</span>` : ''}</div>
+                    ${company ? `<p class="text-[11px] accent-text font-semibold">${company}</p>` : ''}
+                    ${desc ? `<p class="text-[11px] text-gray-600 mt-1">${desc}</p>` : ''}
+                </div>`;
+            });
+            document.getElementById('out-exp-section').classList.toggle('hidden', !hasExp);
+
+            // Projects
+            const proj = document.getElementById('in-projects').value;
+            if (proj && proj.trim()) { document.getElementById('out-projects').innerText = proj; document.getElementById('out-projects-section').classList.remove('hidden'); }
+            else { document.getElementById('out-projects-section').classList.add('hidden'); }
+
+            // Skills
+            const outSkills = document.getElementById('out-skills');
+            outSkills.innerHTML = '';
+            if (skillsArray.length > 0) {
+                document.getElementById('out-skills-section').classList.remove('hidden');
+                skillsArray.forEach(s => {
+                    outSkills.innerHTML += `<span class="px-2 py-0.5 accent-bg-light accent-border text-[11px] font-semibold rounded skill-tag-print" style="border-width:1px;">${s}</span>`;
+                });
+            } else { document.getElementById('out-skills-section').classList.add('hidden'); }
+
+            // References
+            const refList = document.getElementById('out-ref-list');
+            refList.innerHTML = '';
+            let hasRef = false;
+            document.querySelectorAll('#refContainer > div').forEach(d => {
+                const name = d.querySelector('.ref-name')?.value;
+                if (!name || !name.trim()) return;
+                hasRef = true;
+                const desg = d.querySelector('.ref-desg')?.value || '';
+                const contact = d.querySelector('.ref-contact')?.value || '';
+                refList.innerHTML += `<div class="text-[12px]"><span class="font-bold">${name}</span>${desg ? ` — <span class="text-gray-500">${desg}</span>` : ''}${contact ? `<br><span class="text-gray-500">${contact}</span>` : ''}</div>`;
+            });
+            document.getElementById('out-ref-section').classList.toggle('hidden', !hasRef);
+
+            // Declaration
+            if (document.getElementById('in-declaration').checked) {
+                document.getElementById('out-declaration-section').classList.remove('hidden');
+                document.getElementById('out-date').innerText = new Date().toLocaleDateString('en-IN');
+                document.getElementById('out-sig-name').innerText = document.getElementById('in-name').value;
+                if (sigDataUrl) { document.getElementById('out-signature').src = sigDataUrl; document.getElementById('out-signature').classList.remove('hidden'); }
+                else { document.getElementById('out-signature').classList.add('hidden'); }
+            } else { document.getElementById('out-declaration-section').classList.add('hidden'); }
+
+            // Toggle Views
+            document.getElementById('formView').classList.add('hidden');
+            document.getElementById('previewWrapper').classList.remove('hidden');
+            document.getElementById('previewWrapper').classList.add('flex');
             window.scrollTo(0, 0);
         }
 
         function editBiodata() {
-            document.getElementById('previewView').style.display = 'none';
-            document.getElementById('formView').style.display = 'block';
+            document.getElementById('previewWrapper').classList.add('hidden');
+            document.getElementById('previewWrapper').classList.remove('flex');
+            document.getElementById('formView').classList.remove('hidden');
             window.scrollTo(0, 0);
         }
 
-        // --- THEME TEMPLATES ---
-
-        function renderClassic(d) {
-            return `
-            <div class="theme-classic">
-                <h1>Biodata</h1>
-                
-                <div class="sec-title">Personal Information</div>
-                <table>
-                    <tr><th>Name</th><td>${d.name}</td></tr>
-                    <tr><th>Father's Name</th><td>${d.fatherName}</td></tr>
-                    <tr><th>Mother's Name</th><td>${d.motherName}</td></tr>
-                    <tr><th>Date of Birth</th><td>${d.dob}</td></tr>
-                    <tr><th>Gender</th><td>${d.gender}</td></tr>
-                    <tr><th>Blood Group</th><td>${d.bloodGroup}</td></tr>
-                    <tr><th>Caste</th><td>${d.caste}</td></tr>
-                    <tr><th>Languages</th><td>${d.languages}</td></tr>
-                </table>
-
-                <div class="sec-title">Contact Information</div>
-                <table>
-                    <tr><th>Mobile</th><td>${d.mobile}</td></tr>
-                    <tr><th>Email</th><td>${d.email}</td></tr>
-                    <tr><th>Address</th><td>${d.address}</td></tr>
-                </table>
-
-                <div class="sec-title">Educational Qualification</div>
-                <table>
-                    <tr><th>Qualification</th><td>${d.qualification}</td></tr>
-                    <tr><th>Passing Year</th><td>${d.passingYear}</td></tr>
-                    <tr><th>Total Marks</th><td>${d.totalMarks}</td></tr>
-                    <tr><th>Percentage & Grade</th><td>${d.percentage}</td></tr>
-                    <tr><th>Subjects</th><td>${d.subjects}</td></tr>
-                    <tr><th>Board / University</th><td>${d.boardName}</td></tr>
-                </table>
-
-                <div class="sec-title">Experience & Objective</div>
-                <table>
-                    <tr><th>Experience</th><td>${d.experience}</td></tr>
-                </table>
-                <p style="white-space: pre-line; margin-top:10px;">${d.careerObjective}</p>
-            </div>`;
+        // ====== PDF DOWNLOAD ======
+        function downloadPDF() {
+            const el = document.getElementById('biodataPaper');
+            const name = document.getElementById('in-name').value || 'Biodata';
+            const opt = {
+                margin: 0,
+                filename: name.replace(/\s+/g, '_') + '_Biodata.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(el).save();
         }
 
-        function renderModern(d) {
-            return `
-            <div class="theme-modern">
-                <div class="sidebar">
-                    <div class="sec-title-side" style="margin-top:0;">Contact Info</div>
-                    <div class="info-group"><div class="info-label">Mobile</div><div class="info-val">${d.mobile}</div></div>
-                    <div class="info-group"><div class="info-label">Email</div><div class="info-val">${d.email}</div></div>
-                    <div class="info-group"><div class="info-label">Address</div><div class="info-val" style="white-space: pre-line;">${d.address}</div></div>
-                    
-                    <div class="sec-title-side">Personal Details</div>
-                    <div class="info-group"><div class="info-label">Date of Birth</div><div class="info-val">${d.dob}</div></div>
-                    <div class="info-group"><div class="info-label">Father's Name</div><div class="info-val">${d.fatherName}</div></div>
-                    <div class="info-group"><div class="info-label">Mother's Name</div><div class="info-val">${d.motherName}</div></div>
-                    <div class="info-group"><div class="info-label">Gender / Blood</div><div class="info-val">${d.gender} / ${d.bloodGroup}</div></div>
-                    <div class="info-group"><div class="info-label">Caste</div><div class="info-val">${d.caste}</div></div>
-                    <div class="info-group"><div class="info-label">Languages</div><div class="info-val">${d.languages}</div></div>
-                </div>
-                <div class="main">
-                    <h1>${d.name}</h1>
-                    <div class="tagline">${d.careerObjective}</div>
-                    
-                    <div class="sec-title-main">Education</div>
-                    <div class="main-group">
-                        <h4>${d.qualification}</h4>
-                        <p>${d.boardName} | Passed: ${d.passingYear}</p>
-                        <table>
-                            <tr><th>Total Marks</th><td>${d.totalMarks}</td></tr>
-                            <tr><th>Percentage</th><td>${d.percentage}</td></tr>
-                            <tr><th>Subjects</th><td>${d.subjects}</td></tr>
-                        </table>
-                    </div>
-                    
-                    <div class="sec-title-main" style="margin-top:40px;">Work Experience</div>
-                    <div class="main-group">
-                        <p>${d.experience}</p>
-                    </div>
-                </div>
-            </div>`;
+        // ====== DEMO DATA ======
+        function fillDemo() {
+            document.getElementById('in-name').value = 'John Doe';
+            document.getElementById('in-role').value = 'Full Stack Developer | Building scalable web apps';
+            document.getElementById('in-dob').value = '15-08-1998';
+            document.getElementById('in-father').value = 'Robert Doe';
+            document.getElementById('in-mother').value = 'Mary Doe';
+            document.getElementById('in-gender').value = 'Male';
+            document.getElementById('in-blood').value = 'O+';
+            document.getElementById('in-caste').value = 'General';
+            document.getElementById('in-languages').value = 'English, Spanish, French';
+            document.getElementById('in-mobile').value = '9876543210';
+            document.getElementById('in-email').value = 'johndoe@example.com';
+            document.getElementById('in-linkedin').value = 'linkedin.com/in/johndoe';
+            document.getElementById('in-github').value = 'github.com/johndoe';
+            document.getElementById('in-address').value = '123 Innovation Avenue, Tech City, CA 94105';
+            document.getElementById('in-projects').value = 'E-Commerce Platform — Built a full-stack shop with Stripe payments and real-time inventory.\nWeather Dashboard — React app with live weather data and 5-day forecasts.';
+            document.getElementById('in-declaration').checked = true;
+
+            // Clear and add demo education
+            document.getElementById('eduContainer').innerHTML = ''; eduCount = 0;
+            addEducation({ qual: 'B.Tech in Computer Science', board: 'State Technological University', year: '2020', marks: '8.5 CGPA (85%)', subjects: 'Data Structures, Algorithms, Databases, Web Development' });
+            addEducation({ qual: 'Class XII (Science)', board: 'Central Board of Secondary Education (CBSE)', year: '2016', marks: '92%', subjects: 'Physics, Chemistry, Mathematics, English' });
+
+            // Clear and add demo experience
+            document.getElementById('expContainer').innerHTML = ''; expCount = 0;
+            addExperience({ title: 'Software Engineer', company: 'TechCorp Solutions', duration: 'Jun 2020 — Present', desc: 'Developed scalable web apps using React & Node.js. Improved query performance by 40%.' });
+            addExperience({ title: 'Frontend Intern', company: 'StartupXYZ', duration: 'Jan 2020 — May 2020', desc: 'Built responsive UI components and integrated REST APIs.' });
+
+            // Clear and add demo references
+            document.getElementById('refContainer').innerHTML = ''; refCount = 0;
+            addReference({ name: 'Dr. Jane Smith', desg: 'CTO, TechCorp', contact: 'jane@techcorp.com' });
+
+            // Demo skills
+            skillsArray = ['JavaScript', 'React', 'Node.js', 'Tailwind CSS', 'SQL', 'Git', 'Python', 'AWS'];
+            renderSkillsForm();
+            saveToStorage();
         }
 
-        function renderMinimal(d) {
-            return `
-            <div class="theme-minimal">
-                <h1>${d.name.toUpperCase()}</h1>
-                <div class="header-contact">${d.mobile} | ${d.email}<br>${d.address}</div>
-                
-                ${d.careerObjective !== '-' ? `<div class="sec-title">Objective</div><p style="font-size:14px;color:#555;margin-bottom:30px;">${d.careerObjective}</p>` : ''}
-                
-                <div class="sec-title">Personal Information</div>
-                <div class="grid-row"><div class="grid-label">Date of Birth</div><div class="grid-val">${d.dob}</div></div>
-                <div class="grid-row"><div class="grid-label">Parents</div><div class="grid-val">${d.fatherName} & ${d.motherName}</div></div>
-                <div class="grid-row"><div class="grid-label">Gender / Blood</div><div class="grid-val">${d.gender} / ${d.bloodGroup}</div></div>
-                <div class="grid-row"><div class="grid-label">Languages</div><div class="grid-val">${d.languages}</div></div>
-                <div class="grid-row"><div class="grid-label">Category</div><div class="grid-val">${d.caste}</div></div>
-
-                <div class="sec-title">Education</div>
-                <div class="grid-row"><div class="grid-label">Qualification</div><div class="grid-val"><b>${d.qualification}</b> (${d.passingYear})</div></div>
-                <div class="grid-row"><div class="grid-label">Board / Univ</div><div class="grid-val">${d.boardName}</div></div>
-                <div class="grid-row"><div class="grid-label">Performance</div><div class="grid-val">${d.percentage} (Marks: ${d.totalMarks})</div></div>
-                <div class="grid-row"><div class="grid-label">Subjects</div><div class="grid-val">${d.subjects}</div></div>
-
-                <div class="sec-title">Experience</div>
-                <div class="grid-row"><div class="grid-label">Past Work</div><div class="grid-val">${d.experience}</div></div>
-            </div>`;
-        }
+        // ====== INIT ======
+        loadFromStorage();
     </script>
 </body>
 </html>
