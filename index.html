@@ -56,10 +56,10 @@
         /* Print */
         @page { size: A4; margin: 0; }
         @media print {
-            body { background: #fff !important; padding: 0 !important; }
+            body { background: #fff !important; padding: 0 !important; -webkit-font-smoothing: antialiased !important; -moz-osx-font-smoothing: grayscale !important; }
             .no-print { display: none !important; }
             .print-exact { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-            #biodataPaper { box-shadow: none !important; border-radius: 0 !important; width: 210mm !important; min-height: 297mm !important; padding: 12mm 16mm !important; margin: 0 !important; }
+            #biodataPaper { box-shadow: none !important; border-radius: 0 !important; width: 210mm !important; min-height: 297mm !important; padding: 12mm 16mm !important; margin: 0 !important; text-rendering: optimizeLegibility !important; }
             .skill-tag-print { background: #f1f5f9 !important; border: 1px solid #999 !important; color: #000 !important; }
             .qr-print { border: 1px solid #000 !important; }
         }
@@ -79,7 +79,7 @@
         .pulse-border { animation: pulse-border 2s ease-in-out infinite; }
     </style>
 </head>
-<body class="bg-gray-100 dark:bg-gray-950 transition-theme min-h-screen p-4 sm:p-8 flex justify-center items-start">
+<body class="bg-gray-100 dark:bg-gray-950 transition-theme min-h-screen p-4 sm:p-8 flex justify-center items-start antialiased text-gray-900">
 
     <div id="hdPdfModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden text-center p-6">
