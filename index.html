@@ -10,6 +10,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>if(window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -279,6 +281,23 @@
         </form>
     </div>
 
+    <!-- ====== CROPPER MODAL ====== -->
+    <div id="cropModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="p-4 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center">
+                <h3 class="font-bold text-gray-800 dark:text-white">Crop Profile Photo</h3>
+                <button type="button" onclick="cancelCrop()" class="text-gray-500 hover:text-red-500">&times;</button>
+            </div>
+            <div class="flex-1 bg-gray-100 dark:bg-black relative min-h-[300px]">
+                <img id="cropImage" src="" class="block max-w-full">
+            </div>
+            <div class="p-4 border-t border-gray-200 dark:border-gray-800 flex justify-end gap-3">
+                <button type="button" onclick="cancelCrop()" class="px-4 py-2 font-semibold text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 text-sm">Cancel</button>
+                <button type="button" onclick="saveCrop()" class="px-4 py-2 font-bold text-white accent-bg rounded-lg hover:opacity-90 text-sm shadow-md">Crop & Save</button>
+            </div>
+        </div>
+    </div>
+
     <!-- ==================== PREVIEW VIEW ==================== -->
     <div id="previewWrapper" class="w-full flex-col items-center hidden">
         <div class="w-full max-w-[210mm] flex justify-between items-center mb-4 no-print">
@@ -389,8 +408,8 @@
             saveToStorage();
         }
 
-        // ====== IMAGE UPLOAD ======
-        let photoDataUrl = null, sigDataUrl = null;
+        // ====== IMAGE UPLOAD & CROP ======
+        let photoDataUrl = null, sigDataUrl = null, cropper = null;
         function previewImage(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -402,13 +421,43 @@
             document.getElementById('photoError').classList.remove('show');
             const reader = new FileReader();
             reader.onload = e => {
-                photoDataUrl = e.target.result;
-                document.getElementById('imagePreview').src = photoDataUrl;
-                document.getElementById('imagePreview').classList.remove('hidden');
-                document.getElementById('imagePlaceholder').classList.add('hidden');
-                saveToStorage();
+                document.getElementById('cropImage').src = e.target.result;
+                document.getElementById('cropModal').classList.remove('hidden');
+                
+                if (cropper) cropper.destroy();
+                cropper = new Cropper(document.getElementById('cropImage'), {
+                    aspectRatio: 90 / 115, // matches biodata profile image ratio
+                    viewMode: 1,
+                    dragMode: 'move',
+                    autoCropArea: 1,
+                    restore: false,
+                    guides: true,
+                    center: true,
+                    highlight: false,
+                    cropBoxMovable: true,
+                    cropBoxResizable: true,
+                    toggleDragModeOnDblclick: false,
+                });
             };
             reader.readAsDataURL(file);
+            event.target.value = '';
+        }
+
+        function cancelCrop() {
+            document.getElementById('cropModal').classList.add('hidden');
+            if (cropper) cropper.destroy();
+            cropper = null;
+        }
+
+        function saveCrop() {
+            if (!cropper) return;
+            const canvas = cropper.getCroppedCanvas({ width: 360, height: 460, fillColor: '#fff' });
+            photoDataUrl = canvas.toDataURL('image/jpeg', 0.9);
+            document.getElementById('imagePreview').src = photoDataUrl;
+            document.getElementById('imagePreview').classList.remove('hidden');
+            document.getElementById('imagePlaceholder').classList.add('hidden');
+            saveToStorage();
+            cancelCrop();
         }
         function previewSignature(event) {
             const file = event.target.files[0];
