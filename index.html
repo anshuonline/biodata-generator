@@ -169,9 +169,20 @@
                     <div class="w-full sm:w-3/4 space-y-4">
                         <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Full Name *</label><input type="text" id="in-name" required class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" placeholder="e.g. Rahul Sharma"></div>
                         <div id="tour-role">
-                            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Professional Title / Objective *</label>
+                            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Professional Title *</label>
                             <input type="text" id="in-role" required class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" placeholder="e.g. Full Stack Developer">
-                            <p class="text-xs text-blue-600 dark:text-blue-400 mt-1 flex items-center gap-1 animate-pulse"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg> <b>Pro Tip:</b> Avoid generic titles. Write exactly what role you are targeting (e.g., 'Junior Data Analyst').</p>
+                            <p class="text-xs text-blue-600 dark:text-blue-400 mt-1 flex items-center gap-1 animate-pulse"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg> <b>Pro Tip:</b> Avoid generic titles. Write exactly what role you are targeting.</p>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Career Objective / Summary</label>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="tog-objective" class="sr-only peer form-input" checked onchange="saveToStorage()">
+                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    <span class="ml-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Show in CV</span>
+                                </label>
+                            </div>
+                            <textarea id="in-objective" rows="3" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" placeholder="Write a short summary about your goals and what you bring to the table..."></textarea>
                         </div>
                         <div class="grid grid-cols-2 gap-4">
                             <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Date of Birth</label><input type="text" id="in-dob" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" placeholder="21-05-2006"></div>
@@ -215,7 +226,14 @@
 
             <!-- ====== 4. EDUCATION (Dynamic) ====== -->
             <div>
-                <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">4. Education</h3>
+                <div class="flex justify-between items-center border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">
+                    <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">4. Education</h3>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="tog-education" class="sr-only peer form-input" checked onchange="saveToStorage()">
+                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        <span class="ml-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Show in CV</span>
+                    </label>
+                </div>
                 <div id="eduContainer" class="space-y-4"></div>
                 <button type="button" onclick="addEducation()" class="mt-4 px-4 py-2 text-sm font-bold accent-text border-2 accent-border rounded-lg hover:accent-bg-light transition-colors flex items-center gap-1">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"/></svg>
@@ -225,7 +243,14 @@
 
             <!-- ====== 5. WORK EXPERIENCE (Dynamic) ====== -->
             <div id="tour-experience">
-                <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-2">5. Work Experience</h3>
+                <div class="flex justify-between items-center border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-2">
+                    <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">5. Work Experience</h3>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="tog-experience" class="sr-only peer form-input" checked onchange="saveToStorage()">
+                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        <span class="ml-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Show in CV</span>
+                    </label>
+                </div>
                 <p class="text-xs text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-1"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg> <b>Pro Tip:</b> Focus on what you achieved, not just what you did. Be 100% truthful.</p>
                 <div id="expContainer" class="space-y-4"></div>
                 <button type="button" onclick="addExperience()" class="mt-4 px-4 py-2 text-sm font-bold accent-text border-2 accent-border rounded-lg hover:accent-bg-light transition-colors flex items-center gap-1">
@@ -236,7 +261,14 @@
 
             <!-- ====== 6. SKILLS ====== -->
             <div id="tour-skills">
-                <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-2">6. Skills</h3>
+                <div class="flex justify-between items-center border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-2">
+                    <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">6. Skills</h3>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="tog-skills" class="sr-only peer form-input" checked onchange="saveToStorage()">
+                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        <span class="ml-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Show in CV</span>
+                    </label>
+                </div>
                 <p class="text-xs text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-1 animate-pulse"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg> <b>Pro Tip:</b> Only add skills you can confidently explain in an interview. Quality over quantity.</p>
                 <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Type a skill & press Enter (Max 15) — suggestions will appear as you type</label>
                 <div class="relative">
@@ -255,16 +287,56 @@
                 <div id="skillsContainer" class="flex flex-wrap gap-2 mt-3"></div>
             </div>
 
-            <!-- ====== 7. PROJECTS / HOBBIES ====== -->
+            <!-- ====== 7. PROJECTS ====== -->
             <div>
-                <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-2">7. Projects / Hobbies (Optional)</h3>
-                <p class="text-xs text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-1"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg> <b>Pro Tip:</b> If adding projects, mention the technologies used and your exact contribution.</p>
-                <textarea id="in-projects" rows="3" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" placeholder="Mention projects, hobbies, or achievements..."></textarea>
+                <div class="flex justify-between items-center border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-2">
+                    <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">7. Projects</h3>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="tog-projects" class="sr-only peer form-input" checked onchange="saveToStorage()">
+                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        <span class="ml-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Show in CV</span>
+                    </label>
+                </div>
+                <p class="text-xs text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-1"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg> <b>Pro Tip:</b> Mention the technologies used and your exact contribution.</p>
+                <textarea id="in-projects" rows="3" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" placeholder="Describe your key projects..."></textarea>
             </div>
 
-            <!-- ====== 8. REFERENCES (Optional) ====== -->
+            <!-- ====== 8. CERTIFICATIONS ====== -->
             <div>
-                <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">8. References (Optional)</h3>
+                <div class="flex justify-between items-center border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">
+                    <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">8. Certifications / Awards</h3>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="tog-certs" class="sr-only peer form-input" checked onchange="saveToStorage()">
+                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        <span class="ml-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Show in CV</span>
+                    </label>
+                </div>
+                <textarea id="in-certs" rows="3" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" placeholder="Mention certifications, courses, or achievements..."></textarea>
+            </div>
+
+            <!-- ====== 9. HOBBIES ====== -->
+            <div>
+                <div class="flex justify-between items-center border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">
+                    <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">9. Hobbies & Interests</h3>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="tog-hobbies" class="sr-only peer form-input" checked onchange="saveToStorage()">
+                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        <span class="ml-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Show in CV</span>
+                    </label>
+                </div>
+                <textarea id="in-hobbies" rows="2" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" placeholder="Reading, Traveling, Photography..."></textarea>
+            </div>
+
+            <!-- ====== 10. REFERENCES ====== -->
+            <div>
+                <div class="flex justify-between items-center border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">
+                    <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">10. References (Optional)</h3>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="tog-references" class="sr-only peer form-input" checked onchange="saveToStorage()">
+                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        <span class="ml-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Show in CV</span>
+                    </label>
+                </div>
                 <div id="refContainer" class="space-y-4"></div>
                 <button type="button" onclick="addReference()" class="mt-4 px-4 py-2 text-sm font-bold accent-text border-2 accent-border rounded-lg hover:accent-bg-light transition-colors flex items-center gap-1">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"/></svg>
@@ -272,7 +344,7 @@
                 </button>
             </div>
 
-            <!-- ====== 9. DECLARATION ====== -->
+            <!-- ====== 11. DECLARATION ====== -->
             <div class="bg-gray-50 dark:bg-gray-800 p-5 rounded-xl border border-gray-200 dark:border-gray-700">
                 <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 mb-4">9. Declaration & Signature</h3>
                 <label class="flex items-center gap-3 cursor-pointer mb-4">
@@ -348,6 +420,10 @@
             <div class="grid grid-cols-12 gap-6 text-[13px]">
                 <!-- LEFT 60% -->
                 <div class="col-span-7 space-y-5">
+                    <div id="out-objective-section" class="hidden">
+                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Career Objective</h3>
+                        <p id="out-objective" class="text-[12px] leading-relaxed whitespace-pre-line"></p>
+                    </div>
                     <div id="out-edu-section" class="hidden">
                         <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Education</h3>
                         <div id="out-edu-list" class="space-y-3"></div>
@@ -356,8 +432,12 @@
                         <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Work Experience</h3>
                         <div id="out-exp-list" class="space-y-3"></div>
                     </div>
+                    <div id="out-certs-section" class="hidden">
+                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Certifications</h3>
+                        <p id="out-certs" class="text-[12px] leading-relaxed whitespace-pre-line"></p>
+                    </div>
                     <div id="out-projects-section" class="hidden">
-                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Projects / Hobbies</h3>
+                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Projects</h3>
                         <p id="out-projects" class="text-[12px] leading-relaxed whitespace-pre-line"></p>
                     </div>
                 </div>
@@ -374,7 +454,11 @@
                     </div>
                     <div id="out-skills-section" class="hidden">
                         <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Skills</h3>
-                        <div id="out-skills" class="flex flex-wrap gap-1.5"></div>
+                        <div id="out-skills" class="flex flex-wrap gap-2"></div>
+                    </div>
+                    <div id="out-hobbies-section" class="hidden">
+                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Hobbies & Interests</h3>
+                        <p id="out-hobbies" class="text-[12px] leading-relaxed whitespace-pre-line"></p>
                     </div>
                     <div id="out-ref-section" class="hidden">
                         <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">References</h3>
@@ -767,7 +851,9 @@
         // ====== LOCALSTORAGE ======
         function saveToStorage() {
             const data = {};
-            document.querySelectorAll('.form-input').forEach(el => { if (el.id) data[el.id] = el.value; });
+            document.querySelectorAll('.form-input').forEach(el => { 
+                if (el.id) data[el.id] = el.type === 'checkbox' ? el.checked : el.value; 
+            });
             data.skills = skillsArray;
             data.photoDataUrl = photoDataUrl;
             data.sigDataUrl = sigDataUrl;
@@ -795,7 +881,12 @@
             if (!raw) { addEducation(); return; }
             try {
                 const data = JSON.parse(raw);
-                document.querySelectorAll('.form-input').forEach(el => { if (el.id && data[el.id] !== undefined) el.value = data[el.id]; });
+                document.querySelectorAll('.form-input').forEach(el => { 
+                    if (el.id && data[el.id] !== undefined) {
+                        if(el.type === 'checkbox') el.checked = data[el.id];
+                        else el.value = data[el.id];
+                    } 
+                });
                 if (data.skills) { skillsArray = data.skills; renderSkillsForm(); }
                 if (data.photoDataUrl) { photoDataUrl = data.photoDataUrl; document.getElementById('imagePreview').src = photoDataUrl; document.getElementById('imagePreview').classList.remove('hidden'); document.getElementById('imagePlaceholder').classList.add('hidden'); }
                 if (data.sigDataUrl) { sigDataUrl = data.sigDataUrl; document.getElementById('sigPreview').src = sigDataUrl; document.getElementById('sigPreview').classList.remove('hidden'); }
@@ -897,6 +988,12 @@
             if (addr && addr.trim()) { document.getElementById('out-address').innerText = addr; document.getElementById('out-address-section').classList.remove('hidden'); }
             else { document.getElementById('out-address-section').classList.add('hidden'); }
 
+            // Objective
+            const obj = document.getElementById('in-objective').value;
+            const togObj = document.getElementById('tog-objective').checked;
+            if (togObj && obj && obj.trim()) { document.getElementById('out-objective').innerText = obj; document.getElementById('out-objective-section').classList.remove('hidden'); }
+            else { document.getElementById('out-objective-section').classList.add('hidden'); }
+
             // Education
             const eduList = document.getElementById('out-edu-list');
             eduList.innerHTML = '';
@@ -917,7 +1014,7 @@
                     ${subjects ? `<p class="text-[11px] text-gray-500">${subjects}</p>` : ''}
                 </div>`;
             });
-            document.getElementById('out-edu-section').classList.toggle('hidden', !hasEdu);
+            document.getElementById('out-edu-section').classList.toggle('hidden', !hasEdu || !document.getElementById('tog-education').checked);
 
             // Experience
             const expList = document.getElementById('out-exp-list');
@@ -937,17 +1034,31 @@
                     ${desc ? `<p class="text-[11px] text-gray-600 mt-1">${desc}</p>` : ''}
                 </div>`;
             });
-            document.getElementById('out-exp-section').classList.toggle('hidden', !hasExp);
+            document.getElementById('out-exp-section').classList.toggle('hidden', !hasExp || !document.getElementById('tog-experience').checked);
+
+            // Certifications
+            const certs = document.getElementById('in-certs').value;
+            const togCerts = document.getElementById('tog-certs').checked;
+            if (togCerts && certs && certs.trim()) { document.getElementById('out-certs').innerText = certs; document.getElementById('out-certs-section').classList.remove('hidden'); }
+            else { document.getElementById('out-certs-section').classList.add('hidden'); }
 
             // Projects
             const proj = document.getElementById('in-projects').value;
-            if (proj && proj.trim()) { document.getElementById('out-projects').innerText = proj; document.getElementById('out-projects-section').classList.remove('hidden'); }
+            const togProj = document.getElementById('tog-projects').checked;
+            if (togProj && proj && proj.trim()) { document.getElementById('out-projects').innerText = proj; document.getElementById('out-projects-section').classList.remove('hidden'); }
             else { document.getElementById('out-projects-section').classList.add('hidden'); }
+
+            // Hobbies
+            const hobbies = document.getElementById('in-hobbies').value;
+            const togHob = document.getElementById('tog-hobbies').checked;
+            if (togHob && hobbies && hobbies.trim()) { document.getElementById('out-hobbies').innerText = hobbies; document.getElementById('out-hobbies-section').classList.remove('hidden'); }
+            else { document.getElementById('out-hobbies-section').classList.add('hidden'); }
 
             // Skills
             const outSkills = document.getElementById('out-skills');
             outSkills.innerHTML = '';
-            if (skillsArray.length > 0) {
+            const togSkills = document.getElementById('tog-skills').checked;
+            if (togSkills && skillsArray.length > 0) {
                 document.getElementById('out-skills-section').classList.remove('hidden');
                 skillsArray.forEach(s => {
                     outSkills.innerHTML += `<span class="px-2 py-0.5 accent-bg-light accent-border text-[11px] font-semibold rounded skill-tag-print" style="border-width:1px;">${s}</span>`;
@@ -966,7 +1077,7 @@
                 const contact = d.querySelector('.ref-contact')?.value || '';
                 refList.innerHTML += `<div class="text-[12px]"><span class="font-bold">${name}</span>${desg ? ` — <span class="text-gray-500">${desg}</span>` : ''}${contact ? `<br><span class="text-gray-500">${contact}</span>` : ''}</div>`;
             });
-            document.getElementById('out-ref-section').classList.toggle('hidden', !hasRef);
+            document.getElementById('out-ref-section').classList.toggle('hidden', !hasRef || !document.getElementById('tog-references').checked);
 
             // Declaration
             if (document.getElementById('in-declaration').checked) {
@@ -1022,6 +1133,8 @@
             document.getElementById('in-github').value = 'github.com/johndoe';
             document.getElementById('in-address').value = '123 Innovation Avenue, Tech City, CA 94105';
             document.getElementById('in-projects').value = 'E-Commerce Platform — Built a full-stack shop with Stripe payments and real-time inventory.\nWeather Dashboard — React app with live weather data and 5-day forecasts.';
+            document.getElementById('in-certs').value = 'AWS Certified Developer Associate\nComplete Web Development Bootcamp 2024';
+            document.getElementById('in-hobbies').value = 'Open Source Contributing, Photography, Chess';
             document.getElementById('in-declaration').checked = true;
 
             // Clear and add demo education
