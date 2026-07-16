@@ -183,6 +183,7 @@
                                 </label>
                             </div>
                             <textarea id="in-objective" rows="3" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" placeholder="Write a short summary about your goals and what you bring to the table..."></textarea>
+                            <p class="text-xs text-blue-600 dark:text-blue-400 mt-1 flex items-center gap-1"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg> <b>Pro Tip:</b> Keep it concise (2-3 lines). Focus on how you can add value to the company, not just what you want.</p>
                         </div>
                         <div class="grid grid-cols-2 gap-4">
                             <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Date of Birth</label><input type="text" id="in-dob" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" placeholder="21-05-2006"></div>
@@ -234,6 +235,7 @@
                         <span class="ml-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Show in CV</span>
                     </label>
                 </div>
+                <p class="text-xs text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-1"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg> <b>Pro Tip:</b> Start with your highest qualification first (Reverse Chronological).</p>
                 <div id="eduContainer" class="space-y-4"></div>
                 <button type="button" onclick="addEducation()" class="mt-4 px-4 py-2 text-sm font-bold accent-text border-2 accent-border rounded-lg hover:accent-bg-light transition-colors flex items-center gap-1">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"/></svg>
@@ -311,6 +313,7 @@
                         <span class="ml-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Show in CV</span>
                     </label>
                 </div>
+                <p class="text-xs text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-1"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg> <b>Pro Tip:</b> Only include certifications relevant to your target role.</p>
                 <textarea id="in-certs" rows="3" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" placeholder="Mention certifications, courses, or achievements..."></textarea>
             </div>
 
@@ -324,7 +327,19 @@
                         <span class="ml-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Show in CV</span>
                     </label>
                 </div>
-                <textarea id="in-hobbies" rows="2" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" placeholder="Reading, Traveling, Photography..."></textarea>
+                <p class="text-xs text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-1"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg> <b>Pro Tip:</b> Avoid generic hobbies. Choose ones that show character (e.g. Chess = Strategy, Sports = Teamwork).</p>
+                <textarea id="in-hobbies" rows="2" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white mb-2" placeholder="Reading, Traveling, Photography..."></textarea>
+                <!-- Quick Add Hobbies -->
+                <div class="flex flex-wrap gap-2">
+                    <span class="text-xs font-bold text-gray-400 dark:text-gray-500 self-center mr-1">Suggestions:</span>
+                    <button type="button" onclick="addHobby('📚 Reading')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">📚 Reading</button>
+                    <button type="button" onclick="addHobby('✈️ Traveling')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">✈️ Traveling</button>
+                    <button type="button" onclick="addHobby('📸 Photography')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">📸 Photography</button>
+                    <button type="button" onclick="addHobby('♟️ Chess')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">♟️ Chess</button>
+                    <button type="button" onclick="addHobby('🎸 Playing Guitar')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">🎸 Guitar</button>
+                    <button type="button" onclick="addHobby('✍️ Blogging')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">✍️ Blogging</button>
+                    <button type="button" onclick="addHobby('🏃‍♂️ Marathon Running')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">🏃‍♂️ Running</button>
+                </div>
             </div>
 
             <!-- ====== 10. REFERENCES ====== -->
@@ -649,6 +664,18 @@
                 el.innerHTML = `${s} <button type="button" onclick="removeSkill(${i})" class="text-white/70 hover:text-white text-lg leading-none">&times;</button>`;
                 c.appendChild(el);
             });
+        }
+
+        // ====== ADD HOBBY (Quick Add) ======
+        function addHobby(hobby) {
+            const el = document.getElementById('in-hobbies');
+            const val = el.value.trim();
+            if (val) {
+                if (!val.includes(hobby)) el.value = val + ', ' + hobby;
+            } else {
+                el.value = hobby;
+            }
+            saveToStorage();
         }
 
         // ====== CV EXTRACT (PDF PARSER) ======
