@@ -12,6 +12,8 @@
     <script>if(window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.js.iife.js"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -87,19 +89,25 @@
         <!-- HEADER -->
         <div class="accent-bg text-white p-6 sm:p-8 flex justify-between items-center">
             <div>
-                <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Pro Biodata Generator</h1>
+                <h1 id="tour-welcome" class="text-2xl sm:text-3xl font-extrabold tracking-tight">Pro Biodata Generator</h1>
                 <p class="text-white/70 text-sm mt-1">Fill details → Generate → Download PDF. It's that simple.</p>
             </div>
-            <button onclick="toggleDark()" id="darkToggle" class="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors" title="Toggle Dark Mode">
-                <svg id="sunIcon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-                <svg id="moonIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
-            </button>
+            <div class="flex items-center gap-2">
+                <button onclick="startTour(true)" class="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors text-xs font-bold flex items-center gap-1" title="Replay Guide">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span class="hidden sm:inline">Guide</span>
+                </button>
+                <button onclick="toggleDark()" id="darkToggle" class="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors" title="Toggle Dark Mode">
+                    <svg id="sunIcon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    <svg id="moonIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                </button>
+            </div>
         </div>
 
         <form id="biodataForm" onsubmit="generateBiodata(event)" class="p-6 sm:p-8 space-y-8">
 
             <!-- ====== EXTRACT FROM CV ====== -->
-            <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-850 p-5 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-600 pulse-border transition-theme">
+            <div id="tour-extract" class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-850 p-5 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-600 pulse-border transition-theme">
                 <div class="flex flex-col sm:flex-row items-center gap-4">
                     <div class="flex-1">
                         <h3 class="text-base font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
@@ -160,7 +168,11 @@
                     </div>
                     <div class="w-full sm:w-3/4 space-y-4">
                         <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Full Name *</label><input type="text" id="in-name" required class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" placeholder="e.g. Rahul Sharma"></div>
-                        <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Professional Title / Objective *</label><input type="text" id="in-role" required class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" placeholder="e.g. Full Stack Developer"></div>
+                        <div id="tour-role">
+                            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Professional Title / Objective *</label>
+                            <input type="text" id="in-role" required class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" placeholder="e.g. Full Stack Developer">
+                            <p class="text-xs text-blue-600 dark:text-blue-400 mt-1 flex items-center gap-1 animate-pulse"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg> <b>Pro Tip:</b> Avoid generic titles. Write exactly what role you are targeting (e.g., 'Junior Data Analyst').</p>
+                        </div>
                         <div class="grid grid-cols-2 gap-4">
                             <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Date of Birth</label><input type="text" id="in-dob" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" placeholder="21-05-2006"></div>
                             <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Gender</label><select id="in-gender" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white"><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div>
@@ -212,8 +224,9 @@
             </div>
 
             <!-- ====== 5. WORK EXPERIENCE (Dynamic) ====== -->
-            <div>
-                <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">5. Work Experience</h3>
+            <div id="tour-experience">
+                <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-2">5. Work Experience</h3>
+                <p class="text-xs text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-1"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg> <b>Pro Tip:</b> Focus on what you achieved, not just what you did. Be 100% truthful.</p>
                 <div id="expContainer" class="space-y-4"></div>
                 <button type="button" onclick="addExperience()" class="mt-4 px-4 py-2 text-sm font-bold accent-text border-2 accent-border rounded-lg hover:accent-bg-light transition-colors flex items-center gap-1">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"/></svg>
@@ -222,8 +235,9 @@
             </div>
 
             <!-- ====== 6. SKILLS ====== -->
-            <div>
-                <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">6. Skills</h3>
+            <div id="tour-skills">
+                <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-2">6. Skills</h3>
+                <p class="text-xs text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-1 animate-pulse"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg> <b>Pro Tip:</b> Only add skills you can confidently explain in an interview. Quality over quantity.</p>
                 <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Type a skill & press Enter (Max 15) — suggestions will appear as you type</label>
                 <div class="relative">
                     <input type="text" id="skillInput" autocomplete="off" class="w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" placeholder="e.g. Communication, Leadership..." oninput="showSkillSuggestions(this.value)" onfocus="showSkillSuggestions(this.value)">
@@ -243,7 +257,8 @@
 
             <!-- ====== 7. PROJECTS / HOBBIES ====== -->
             <div>
-                <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">7. Projects / Hobbies (Optional)</h3>
+                <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-2">7. Projects / Hobbies (Optional)</h3>
+                <p class="text-xs text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-1"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg> <b>Pro Tip:</b> If adding projects, mention the technologies used and your exact contribution.</p>
                 <textarea id="in-projects" rows="3" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" placeholder="Mention projects, hobbies, or achievements..."></textarea>
             </div>
 
@@ -274,7 +289,7 @@
             </div>
 
             <!-- BUTTONS -->
-            <div class="flex flex-col sm:flex-row gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <div id="tour-generate" class="flex flex-col sm:flex-row gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                 <button type="button" onclick="fillDemo()" class="w-full sm:w-1/3 py-4 font-bold text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors uppercase tracking-wide text-sm">Fill Demo Data</button>
                 <button type="submit" class="w-full sm:w-2/3 py-4 font-bold text-white accent-bg rounded-xl hover:opacity-90 transition-colors shadow-lg uppercase tracking-wide text-sm">Generate Biodata</button>
             </div>
@@ -777,7 +792,11 @@
 
         function loadFromStorage() {
             const raw = localStorage.getItem('biodataFormData');
-            if (!raw) { addEducation(); return; }
+            if (!raw) { 
+                addEducation(); 
+                setTimeout(() => startTour(false), 500); // Start tour for new users
+                return; 
+            }
             try {
                 const data = JSON.parse(raw);
                 document.querySelectorAll('.form-input').forEach(el => { if (el.id && data[el.id] !== undefined) el.value = data[el.id]; });
@@ -793,6 +812,30 @@
                 if (data.expEntries) data.expEntries.forEach(e => addExperience(e));
                 if (data.refEntries) data.refEntries.forEach(e => addReference(e));
             } catch(e) { addEducation(); }
+        }
+
+        // ====== ONBOARDING TOUR (Driver.js) ======
+        function startTour(force = false) {
+            const hasSeenTour = localStorage.getItem('hasSeenTour');
+            if (hasSeenTour && !force) return;
+            
+            const driverObj = window.driver.js.driver({
+                showProgress: true,
+                animate: true,
+                steps: [
+                    { element: '#tour-welcome', popover: { title: 'Welcome to Pro Biodata!', description: 'Let\'s build a highly professional, honest, and attractive CV together.', side: "bottom", align: 'start' }},
+                    { element: '#tour-extract', popover: { title: 'Have an old CV?', description: 'Upload your existing PDF or Text resume here. Our tool will instantly extract your details to save you time!', side: "bottom", align: 'start' }},
+                    { element: '#tour-role', popover: { title: 'Professional Title', description: 'Avoid generic titles. Use exact, targeted roles (e.g. "Junior UI/UX Designer"). It makes a huge difference.', side: "bottom", align: 'start' }},
+                    { element: '#tour-skills', popover: { title: 'Add Core Skills', description: 'Honesty is key! Only add skills you can confidently explain in an interview. Use our smart suggestions.', side: "top", align: 'start' }},
+                    { element: '#tour-experience', popover: { title: 'Work Experience', description: 'Focus on your achievements and contributions, not just daily tasks.', side: "top", align: 'start' }},
+                    { element: '#tour-generate', popover: { title: 'Generate PDF', description: 'Once everything is truthful and complete, generate your beautiful Pro Biodata here!', side: "top", align: 'start' }}
+                ],
+                onDestroyStarted: () => {
+                    localStorage.setItem('hasSeenTour', 'true');
+                    driverObj.destroy();
+                }
+            });
+            driverObj.drive();
         }
 
         // Auto-save on all input changes
