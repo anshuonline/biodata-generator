@@ -8,6 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>if(window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -64,6 +66,15 @@
         .input-error { border-color: #ef4444 !important; }
         .error-msg { color: #ef4444; font-size: 12px; margin-top: 2px; display: none; }
         .error-msg.show { display: block; }
+
+        /* Skills Suggestions Dropdown */
+        .suggestions-box { position: absolute; top: 100%; left: 0; right: 0; max-height: 180px; overflow-y: auto; z-index: 50; border-radius: 0 0 8px 8px; }
+        .suggestion-item { cursor: pointer; transition: background 0.15s; }
+        .suggestion-item:hover { background-color: var(--accent-light) !important; }
+
+        /* CV Upload Pulse */
+        @keyframes pulse-border { 0%,100% { border-color: #cbd5e1; } 50% { border-color: var(--accent); } }
+        .pulse-border { animation: pulse-border 2s ease-in-out infinite; }
     </style>
 </head>
 <body class="bg-gray-100 dark:bg-gray-950 transition-theme min-h-screen p-4 sm:p-8 flex justify-center items-start">
@@ -84,6 +95,25 @@
         </div>
 
         <form id="biodataForm" onsubmit="generateBiodata(event)" class="p-6 sm:p-8 space-y-8">
+
+            <!-- ====== EXTRACT FROM CV ====== -->
+            <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-850 p-5 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-600 pulse-border transition-theme">
+                <div class="flex flex-col sm:flex-row items-center gap-4">
+                    <div class="flex-1">
+                        <h3 class="text-base font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                            <svg class="w-5 h-5 accent-text" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            Extract Data from Old CV
+                        </h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Upload your existing resume (PDF) and we'll auto-fill matching fields for you.</p>
+                    </div>
+                    <label class="cursor-pointer px-5 py-2.5 accent-bg text-white font-bold text-sm rounded-lg hover:opacity-90 transition shadow-md flex items-center gap-2 whitespace-nowrap">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                        Upload CV
+                        <input type="file" id="cvUpload" accept=".pdf,.txt" class="hidden" onchange="extractFromCV(event)">
+                    </label>
+                </div>
+                <div id="cvStatus" class="hidden mt-3 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-700 p-3 rounded-lg"></div>
+            </div>
 
             <!-- ====== CUSTOMIZATION: COLOR + FONT ====== -->
             <div class="bg-gray-50 dark:bg-gray-800 p-5 rounded-xl border border-gray-200 dark:border-gray-700 transition-theme">
@@ -192,9 +222,21 @@
             <!-- ====== 6. SKILLS ====== -->
             <div>
                 <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">6. Skills</h3>
-                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Type a skill & press Enter (Max 15)</label>
-                <input type="text" id="skillInput" class="w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white mb-3" placeholder="e.g. Communication, Leadership...">
-                <div id="skillsContainer" class="flex flex-wrap gap-2"></div>
+                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Type a skill & press Enter (Max 15) — suggestions will appear as you type</label>
+                <div class="relative">
+                    <input type="text" id="skillInput" autocomplete="off" class="w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" placeholder="e.g. Communication, Leadership..." oninput="showSkillSuggestions(this.value)" onfocus="showSkillSuggestions(this.value)">
+                    <div id="skillSuggestions" class="suggestions-box hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 shadow-xl"></div>
+                </div>
+                <!-- Quick Add Category Buttons -->
+                <div class="mt-3 flex flex-wrap gap-2">
+                    <span class="text-xs font-bold text-gray-400 dark:text-gray-500 self-center mr-1">Quick Add:</span>
+                    <button type="button" onclick="addCategorySkills('tech')" class="px-2.5 py-1 text-xs font-semibold bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full hover:bg-blue-100 transition">💻 Tech</button>
+                    <button type="button" onclick="addCategorySkills('soft')" class="px-2.5 py-1 text-xs font-semibold bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full hover:bg-green-100 transition">🤝 Soft Skills</button>
+                    <button type="button" onclick="addCategorySkills('office')" class="px-2.5 py-1 text-xs font-semibold bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 rounded-full hover:bg-amber-100 transition">📊 Office</button>
+                    <button type="button" onclick="addCategorySkills('language')" class="px-2.5 py-1 text-xs font-semibold bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full hover:bg-purple-100 transition">🌐 Languages</button>
+                    <button type="button" onclick="addCategorySkills('design')" class="px-2.5 py-1 text-xs font-semibold bg-pink-50 dark:bg-pink-900/30 text-pink-700 dark:text-pink-300 rounded-full hover:bg-pink-100 transition">🎨 Design</button>
+                </div>
+                <div id="skillsContainer" class="flex flex-wrap gap-2 mt-3"></div>
             </div>
 
             <!-- ====== 7. PROJECTS / HOBBIES ====== -->
@@ -381,9 +423,21 @@
             reader.readAsDataURL(file);
         }
 
+        // ====== SKILLS SUGGESTIONS DATABASE ======
+        const SKILL_DB = {
+            tech: ['JavaScript','Python','Java','C++','HTML/CSS','React','Node.js','SQL','MongoDB','Git','Docker','AWS','TypeScript','PHP','Flutter','Kotlin','Swift','REST APIs','Linux','Machine Learning'],
+            soft: ['Communication','Leadership','Teamwork','Problem Solving','Time Management','Critical Thinking','Adaptability','Creativity','Public Speaking','Decision Making','Conflict Resolution','Negotiation','Emotional Intelligence','Work Ethic','Attention to Detail'],
+            office: ['MS Word','MS Excel','MS PowerPoint','Google Sheets','Google Docs','Data Entry','Typing Speed','Tally','SAP','CRM Software','Email Management','File Management'],
+            language: ['English','Hindi','Bengali','Tamil','Telugu','Marathi','Gujarati','Kannada','Malayalam','Urdu','Punjabi','Spanish','French','German','Japanese'],
+            design: ['Photoshop','Illustrator','Figma','Canva','UI/UX Design','Video Editing','Premiere Pro','After Effects','CorelDRAW','Blender','Photography','Graphic Design']
+        };
+        const ALL_SKILLS = [...new Set(Object.values(SKILL_DB).flat())];
+
         // ====== SKILLS TAGS ======
         let skillsArray = [];
         const skillInput = document.getElementById('skillInput');
+        const suggestionsBox = document.getElementById('skillSuggestions');
+
         skillInput.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' || e.key === ',') {
                 e.preventDefault();
@@ -394,8 +448,49 @@
                     this.value = '';
                     saveToStorage();
                 }
+                hideSuggestions();
             }
+            if (e.key === 'Escape') hideSuggestions();
         });
+
+        function showSkillSuggestions(query) {
+            if (!query || query.trim().length < 1) { hideSuggestions(); return; }
+            const q = query.toLowerCase();
+            const matches = ALL_SKILLS.filter(s => s.toLowerCase().includes(q) && !skillsArray.includes(s)).slice(0, 8);
+            if (matches.length === 0) { hideSuggestions(); return; }
+            suggestionsBox.innerHTML = '';
+            matches.forEach(s => {
+                const div = document.createElement('div');
+                div.className = 'suggestion-item px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 border-b border-gray-100 dark:border-gray-700';
+                // Highlight matched part
+                const idx = s.toLowerCase().indexOf(q);
+                div.innerHTML = s.substring(0,idx) + '<span class="font-bold accent-text">' + s.substring(idx, idx+q.length) + '</span>' + s.substring(idx+q.length);
+                div.onclick = () => {
+                    if (skillsArray.length < 15 && !skillsArray.includes(s)) {
+                        skillsArray.push(s);
+                        renderSkillsForm();
+                        skillInput.value = '';
+                        saveToStorage();
+                    }
+                    hideSuggestions();
+                };
+                suggestionsBox.appendChild(div);
+            });
+            suggestionsBox.classList.remove('hidden');
+        }
+
+        function hideSuggestions() { suggestionsBox.classList.add('hidden'); }
+        document.addEventListener('click', e => { if (!e.target.closest('#skillInput') && !e.target.closest('#skillSuggestions')) hideSuggestions(); });
+
+        function addCategorySkills(cat) {
+            const catSkills = SKILL_DB[cat] || [];
+            let added = 0;
+            catSkills.forEach(s => {
+                if (skillsArray.length < 15 && !skillsArray.includes(s)) { skillsArray.push(s); added++; }
+            });
+            if (added > 0) { renderSkillsForm(); saveToStorage(); }
+        }
+
         function removeSkill(i) { skillsArray.splice(i, 1); renderSkillsForm(); saveToStorage(); }
         function renderSkillsForm() {
             const c = document.getElementById('skillsContainer');
@@ -406,6 +501,139 @@
                 el.innerHTML = `${s} <button type="button" onclick="removeSkill(${i})" class="text-white/70 hover:text-white text-lg leading-none">&times;</button>`;
                 c.appendChild(el);
             });
+        }
+
+        // ====== CV EXTRACT (PDF PARSER) ======
+        async function extractFromCV(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const statusEl = document.getElementById('cvStatus');
+            statusEl.classList.remove('hidden');
+            statusEl.innerHTML = '⏳ Reading your CV...';
+
+            let text = '';
+            try {
+                if (file.name.endsWith('.txt')) {
+                    text = await file.text();
+                } else if (file.name.endsWith('.pdf')) {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        const page = await pdf.getPage(i);
+                        const content = await page.getTextContent();
+                        text += content.items.map(item => item.str).join(' ') + '\n';
+                    }
+                } else {
+                    statusEl.innerHTML = '❌ Unsupported file. Please upload a PDF or TXT file.';
+                    return;
+                }
+
+                if (!text.trim()) { statusEl.innerHTML = '❌ Could not extract text. The PDF might be image-based.'; return; }
+
+                // Parse extracted text
+                const result = parseCV(text);
+                applyParsedData(result);
+
+                // Show status
+                const fields = Object.keys(result).filter(k => result[k] && (typeof result[k] === 'string' ? result[k].trim() : result[k].length > 0));
+                statusEl.innerHTML = `✅ Extracted <strong>${fields.length} fields</strong> from your CV! Review the form and adjust if needed.`;
+            } catch(err) {
+                console.error(err);
+                statusEl.innerHTML = '❌ Error reading file. Please try a different PDF.';
+            }
+            event.target.value = '';
+        }
+
+        function parseCV(text) {
+            const data = {};
+            const lines = text.split('\n').map(l => l.trim()).filter(l => l);
+            const fullText = text.replace(/\s+/g, ' ');
+
+            // Email
+            const emailMatch = fullText.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/i);
+            if (emailMatch) data.email = emailMatch[0];
+
+            // Phone / Mobile
+            const phoneMatch = fullText.match(/(?:\+91[\s-]?)?(?:[6-9]\d{9})/)
+                || fullText.match(/(?:\+?\d{1,3}[\s-]?)?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{4}/);
+            if (phoneMatch) data.mobile = phoneMatch[0].trim();
+
+            // Name: Usually the first substantial line before any labels
+            for (const line of lines.slice(0, 5)) {
+                const cleaned = line.replace(/[^a-zA-Z\s.]/g, '').trim();
+                if (cleaned.length > 3 && cleaned.length < 50 && !cleaned.match(/resume|curriculum|vitae|biodata|page|email|phone|mobile|address/i)) {
+                    data.name = cleaned;
+                    break;
+                }
+            }
+
+            // LinkedIn
+            const linkedinMatch = fullText.match(/linkedin\.com\/in\/[a-zA-Z0-9_-]+/i);
+            if (linkedinMatch) data.linkedin = linkedinMatch[0];
+
+            // GitHub
+            const githubMatch = fullText.match(/github\.com\/[a-zA-Z0-9_-]+/i);
+            if (githubMatch) data.github = githubMatch[0];
+
+            // Address: look for keywords
+            const addrMatch = fullText.match(/(?:address|location|residence)[:\s-]+([^\n.]{10,100})/i);
+            if (addrMatch) data.address = addrMatch[1].trim();
+
+            // DOB
+            const dobMatch = fullText.match(/(?:date of birth|dob|d\.o\.b|birth date)[:\s-]+([\d]{1,2}[\/-][\d]{1,2}[\/-][\d]{2,4})/i)
+                || fullText.match(/(?:date of birth|dob|d\.o\.b|birth date)[:\s-]+(\d{1,2}\s+\w+\s+\d{4})/i);
+            if (dobMatch) data.dob = dobMatch[1].trim();
+
+            // Father's Name
+            const fatherMatch = fullText.match(/(?:father'?s?\s*name)[:\s-]+([A-Za-z\s.]{3,50})/i);
+            if (fatherMatch) data.father = fatherMatch[1].trim();
+
+            // Mother's Name
+            const motherMatch = fullText.match(/(?:mother'?s?\s*name)[:\s-]+([A-Za-z\s.]{3,50})/i);
+            if (motherMatch) data.mother = motherMatch[1].trim();
+
+            // Gender
+            const genderMatch = fullText.match(/(?:gender|sex)[:\s-]+(Male|Female|Other)/i);
+            if (genderMatch) data.gender = genderMatch[1];
+
+            // Languages
+            const langMatch = fullText.match(/(?:languages?(?:\s*(?:known|spoken))?)[:\s-]+([A-Za-z,\s&]+?)(?:\.|\n|$)/i);
+            if (langMatch) data.languages = langMatch[1].replace(/\s+/g, ' ').trim();
+
+            // Skills: look for skills section and extract items
+            const skillsMatch = fullText.match(/(?:skills|technical skills|key skills|core competencies)[:\s-]+(.*?)(?=(?:education|experience|project|hobbies|reference|declaration|objective|$))/is);
+            if (skillsMatch) {
+                const raw = skillsMatch[1];
+                data.skills = raw.split(/[,|•·\n]+/).map(s => s.replace(/[^a-zA-Z0-9+#/.\s-]/g,'').trim()).filter(s => s.length > 1 && s.length < 40).slice(0, 15);
+            }
+
+            // Objective / Role
+            const objMatch = fullText.match(/(?:objective|career objective|professional summary|summary|profile)[:\s-]+(.*?)(?=(?:education|experience|skill|personal|$))/is);
+            if (objMatch) data.role = objMatch[1].replace(/\s+/g, ' ').trim().substring(0, 200);
+
+            return data;
+        }
+
+        function applyParsedData(data) {
+            if (data.name) document.getElementById('in-name').value = data.name;
+            if (data.role) document.getElementById('in-role').value = data.role;
+            if (data.email) document.getElementById('in-email').value = data.email;
+            if (data.mobile) document.getElementById('in-mobile').value = data.mobile;
+            if (data.linkedin) document.getElementById('in-linkedin').value = data.linkedin;
+            if (data.github) document.getElementById('in-github').value = data.github;
+            if (data.address) document.getElementById('in-address').value = data.address;
+            if (data.dob) document.getElementById('in-dob').value = data.dob;
+            if (data.father) document.getElementById('in-father').value = data.father;
+            if (data.mother) document.getElementById('in-mother').value = data.mother;
+            if (data.gender) document.getElementById('in-gender').value = data.gender;
+            if (data.languages) document.getElementById('in-languages').value = data.languages;
+            if (data.skills && data.skills.length > 0) {
+                data.skills.forEach(s => {
+                    if (skillsArray.length < 15 && !skillsArray.includes(s)) skillsArray.push(s);
+                });
+                renderSkillsForm();
+            }
+            saveToStorage();
         }
 
         // ====== DYNAMIC ENTRIES ======
