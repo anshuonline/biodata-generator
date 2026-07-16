@@ -6,7 +6,6 @@
     <title>Pro Biodata Generator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>if(window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
@@ -82,6 +81,18 @@
     </style>
 </head>
 <body class="bg-gray-100 dark:bg-gray-950 transition-theme min-h-screen p-4 sm:p-8 flex justify-center items-start">
+
+    <div id="hdPdfModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden text-center p-6">
+            <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">High Definition PDF</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm mb-6">To ensure your CV text is selectable, clear, and links are clickable, we use your browser's native HD engine. <br><br>In the next screen, change the Destination to <b>"Save as PDF"</b>.</p>
+            <button onclick="document.getElementById('hdPdfModal').classList.add('hidden'); window.print();" class="w-full py-3 font-bold text-white accent-bg rounded-lg hover:opacity-90 transition shadow-lg">Got it, Proceed</button>
+            <button onclick="document.getElementById('hdPdfModal').classList.add('hidden')" class="w-full mt-3 py-2 font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white transition">Cancel</button>
+        </div>
+    </div>
 
     <!-- ==================== FORM VIEW ==================== -->
     <div id="formView" class="w-full max-w-4xl bg-white dark:bg-gray-900 rounded-2xl shadow-xl overflow-hidden transition-theme">
@@ -1234,18 +1245,9 @@
             window.scrollTo(0, 0);
         }
 
-        // ====== PDF DOWNLOAD ======
+        // ====== DOWNLOAD PDF ======
         function downloadPDF() {
-            const el = document.getElementById('biodataPaper');
-            const name = document.getElementById('in-name').value || 'Biodata';
-            const opt = {
-                margin: 0,
-                filename: name.replace(/\s+/g, '_') + '_Biodata.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-            html2pdf().set(opt).from(el).save();
+            document.getElementById('hdPdfModal').classList.remove('hidden');
         }
 
         // ====== DEMO DATA ======
