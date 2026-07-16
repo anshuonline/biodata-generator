@@ -60,8 +60,6 @@
             .no-print { display: none !important; }
             .print-exact { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             #biodataPaper { box-shadow: none !important; border-radius: 0 !important; width: 210mm !important; min-height: 297mm !important; padding: 12mm 16mm !important; margin: 0 !important; }
-            * { color: #000 !important; }
-            .accent-border, .accent-border-left { border-color: #000 !important; }
             .skill-tag-print { background: #f1f5f9 !important; border: 1px solid #999 !important; color: #000 !important; }
             .qr-print { border: 1px solid #000 !important; }
         }
@@ -543,6 +541,20 @@
             document.getElementById('moonIcon').classList.toggle('hidden', isDark);
             saveToStorage();
         }
+
+        // ====== PRINT HANDLERS ======
+        window.addEventListener('beforeprint', () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                document.documentElement.dataset.wasDark = 'true';
+            }
+        });
+        window.addEventListener('afterprint', () => {
+            if (document.documentElement.dataset.wasDark === 'true') {
+                document.documentElement.classList.add('dark');
+                document.documentElement.dataset.wasDark = 'false';
+            }
+        });
         function setAccent(color, light, dark) {
             document.documentElement.style.setProperty('--accent', color);
             document.documentElement.style.setProperty('--accent-light', light);
