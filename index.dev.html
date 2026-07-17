@@ -320,29 +320,6 @@
                             <option value="'Noto Sans', sans-serif" style="font-family: Noto Sans">Noto Sans — Clean Corporate</option>
                         </select>
                     </div>
-                    <!-- Section Colors -->
-                    <div class="sm:col-span-2 pt-2 border-t border-gray-100 dark:border-gray-700">
-                        <label class="block text-sm font-semibold text-gray-600 dark:text-gray-300 mb-2">Section Background Colors (Optional)</label>
-                        <div class="flex flex-wrap items-center gap-3">
-                            <select id="sectionColorSelect" onchange="loadSectionColor(this.value)" class="flex-1 max-w-xs p-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium dark:text-gray-200 outline-none focus:border-blue-500 transition-colors">
-                                <option value="objective">Career Objective</option>
-                                <option value="edu">Education</option>
-                                <option value="exp">Work Experience</option>
-                                <option value="certs">Certifications</option>
-                                <option value="projects">Projects</option>
-                                <option value="personal">Personal Details</option>
-                                <option value="address">Address</option>
-                                <option value="skills">Skills</option>
-                                <option value="hobbies">Hobbies & Interests</option>
-                                <option value="ref">References</option>
-                            </select>
-                            <div class="relative w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 dark:border-gray-600 shadow-sm overflow-hidden bg-white cursor-pointer hover:border-blue-500 transition-colors">
-                                <input type="color" id="sectionColorPicker" value="#ffffff" onchange="setSectionColor(this.value)" class="absolute -inset-2 w-16 h-16 cursor-pointer opacity-0">
-                                <div id="sectionColorIndicator" class="w-full h-full pointer-events-none" style="background-color: #ffffff;"></div>
-                            </div>
-                            <button type="button" onclick="resetSectionColor()" class="text-xs font-bold text-gray-500 hover:text-red-500 dark:hover:text-red-400 transition-colors px-2 py-1 rounded">Reset</button>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -744,49 +721,79 @@
             <div class="grid grid-cols-12 gap-6 text-[13px]">
                 <!-- LEFT 60% -->
                 <div class="col-span-7 space-y-5">
-                    <div id="out-objective-section" class="hidden">
-                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Career Objective</h3>
-                        <p id="out-objective" class="text-[12px] leading-relaxed whitespace-pre-line"></p>
+                    <div id="out-objective-section" class="group relative hover:ring-2 hover:ring-blue-400/50 hover:shadow-sm rounded-lg transition-all hidden">
+                        <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-blue-500 hover:bg-blue-600 text-white rounded-full p-1.5 shadow-md cursor-pointer z-10 no-print" onclick="openStyleEditor('objective')">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                        </div>
+                        <h3 class="style-target-heading text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Career Objective</h3>
+                        <p id="out-objective" class="style-target-text text-[12px] leading-relaxed whitespace-pre-line"></p>
                     </div>
-                    <div id="out-edu-section" class="hidden">
-                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Education</h3>
-                        <div id="out-edu-list" class="space-y-3"></div>
+                    <div id="out-edu-section" class="group relative hover:ring-2 hover:ring-blue-400/50 hover:shadow-sm rounded-lg transition-all hidden">
+                        <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-blue-500 hover:bg-blue-600 text-white rounded-full p-1.5 shadow-md cursor-pointer z-10 no-print" onclick="openStyleEditor('edu')">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                        </div>
+                        <h3 class="style-target-heading text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Education</h3>
+                        <div id="out-edu-list" class="style-target-text space-y-3"></div>
                     </div>
-                    <div id="out-exp-section" class="hidden">
-                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Work Experience</h3>
-                        <div id="out-exp-list" class="space-y-3"></div>
+                    <div id="out-exp-section" class="group relative hover:ring-2 hover:ring-blue-400/50 hover:shadow-sm rounded-lg transition-all hidden">
+                        <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-blue-500 hover:bg-blue-600 text-white rounded-full p-1.5 shadow-md cursor-pointer z-10 no-print" onclick="openStyleEditor('exp')">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                        </div>
+                        <h3 class="style-target-heading text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Work Experience</h3>
+                        <div id="out-exp-list" class="style-target-text space-y-3"></div>
                     </div>
-                    <div id="out-certs-section" class="hidden">
-                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Certifications</h3>
-                        <p id="out-certs" class="text-[12px] leading-relaxed whitespace-pre-line"></p>
+                    <div id="out-certs-section" class="group relative hover:ring-2 hover:ring-blue-400/50 hover:shadow-sm rounded-lg transition-all hidden">
+                        <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-blue-500 hover:bg-blue-600 text-white rounded-full p-1.5 shadow-md cursor-pointer z-10 no-print" onclick="openStyleEditor('certs')">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                        </div>
+                        <h3 class="style-target-heading text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Certifications</h3>
+                        <p id="out-certs" class="style-target-text text-[12px] leading-relaxed whitespace-pre-line"></p>
                     </div>
-                    <div id="out-projects-section" class="hidden">
-                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Projects</h3>
-                        <p id="out-projects" class="text-[12px] leading-relaxed whitespace-pre-line"></p>
+                    <div id="out-projects-section" class="group relative hover:ring-2 hover:ring-blue-400/50 hover:shadow-sm rounded-lg transition-all hidden">
+                        <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-blue-500 hover:bg-blue-600 text-white rounded-full p-1.5 shadow-md cursor-pointer z-10 no-print" onclick="openStyleEditor('projects')">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                        </div>
+                        <h3 class="style-target-heading text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Projects</h3>
+                        <p id="out-projects" class="style-target-text text-[12px] leading-relaxed whitespace-pre-line"></p>
                     </div>
                 </div>
 
                 <!-- RIGHT 40% -->
                 <div class="col-span-5 space-y-5">
-                    <div id="out-personal-section">
-                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Personal Details</h3>
-                        <div id="out-personal-list" class="space-y-2"></div>
+                    <div id="out-personal-section" class="group relative hover:ring-2 hover:ring-blue-400/50 hover:shadow-sm rounded-lg transition-all">
+                        <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-blue-500 hover:bg-blue-600 text-white rounded-full p-1.5 shadow-md cursor-pointer z-10 no-print" onclick="openStyleEditor('personal')">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                        </div>
+                        <h3 class="style-target-heading text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Personal Details</h3>
+                        <div id="out-personal-list" class="style-target-text space-y-2"></div>
                     </div>
-                    <div id="out-address-section" class="hidden">
-                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Address</h3>
-                        <p id="out-address" class="text-[12px] font-medium leading-relaxed"></p>
+                    <div id="out-address-section" class="group relative hover:ring-2 hover:ring-blue-400/50 hover:shadow-sm rounded-lg transition-all hidden">
+                        <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-blue-500 hover:bg-blue-600 text-white rounded-full p-1.5 shadow-md cursor-pointer z-10 no-print" onclick="openStyleEditor('address')">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                        </div>
+                        <h3 class="style-target-heading text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Address</h3>
+                        <p id="out-address" class="style-target-text text-[12px] font-medium leading-relaxed"></p>
                     </div>
-                    <div id="out-skills-section" class="hidden">
-                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Skills</h3>
-                        <div id="out-skills" class="flex flex-wrap gap-2"></div>
+                    <div id="out-skills-section" class="group relative hover:ring-2 hover:ring-blue-400/50 hover:shadow-sm rounded-lg transition-all hidden">
+                        <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-blue-500 hover:bg-blue-600 text-white rounded-full p-1.5 shadow-md cursor-pointer z-10 no-print" onclick="openStyleEditor('skills')">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                        </div>
+                        <h3 class="style-target-heading text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Skills</h3>
+                        <div id="out-skills" class="style-target-text flex flex-wrap gap-2"></div>
                     </div>
-                    <div id="out-hobbies-section" class="hidden">
-                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Hobbies & Interests</h3>
-                        <p id="out-hobbies" class="text-[12px] leading-relaxed whitespace-pre-line"></p>
+                    <div id="out-hobbies-section" class="group relative hover:ring-2 hover:ring-blue-400/50 hover:shadow-sm rounded-lg transition-all hidden">
+                        <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-blue-500 hover:bg-blue-600 text-white rounded-full p-1.5 shadow-md cursor-pointer z-10 no-print" onclick="openStyleEditor('hobbies')">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                        </div>
+                        <h3 class="style-target-heading text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Hobbies & Interests</h3>
+                        <p id="out-hobbies" class="style-target-text text-[12px] leading-relaxed whitespace-pre-line"></p>
                     </div>
-                    <div id="out-ref-section" class="hidden">
-                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">References</h3>
-                        <div id="out-ref-list" class="space-y-2"></div>
+                    <div id="out-ref-section" class="group relative hover:ring-2 hover:ring-blue-400/50 hover:shadow-sm rounded-lg transition-all hidden">
+                        <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-blue-500 hover:bg-blue-600 text-white rounded-full p-1.5 shadow-md cursor-pointer z-10 no-print" onclick="openStyleEditor('ref')">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                        </div>
+                        <h3 class="style-target-heading text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">References</h3>
+                        <div id="out-ref-list" class="style-target-text space-y-2"></div>
                     </div>
                 </div>
             </div>
@@ -807,6 +814,51 @@
     </div>
 
     </div> <!-- End Main Layout -->
+
+    <!-- Style Editor Modal -->
+    <div id="styleEditorModal" class="fixed inset-0 bg-black/60 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white dark:bg-gray-800 w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden transform scale-95 opacity-0 transition-all duration-300" id="styleEditorContent">
+            <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50">
+                <h3 class="font-bold text-gray-800 dark:text-gray-100 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                    Edit <span id="styleEditorTitle" class="text-blue-600 dark:text-blue-400"></span> Styles
+                </h3>
+                <button onclick="closeStyleEditor()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 bg-white dark:bg-gray-700 rounded-full p-1 border border-gray-200 dark:border-gray-600 hover:bg-gray-100 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-5 space-y-4">
+                <!-- Background Color -->
+                <div class="flex items-center justify-between">
+                    <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Background Color</label>
+                    <div class="relative w-9 h-9 rounded-lg border border-gray-300 shadow-sm overflow-hidden bg-white hover:ring-2 ring-blue-400 transition-all">
+                        <input type="color" id="se-bg-color" oninput="liveUpdateStyleEditor()" class="absolute -inset-2 w-16 h-16 cursor-pointer opacity-0">
+                        <div id="se-bg-ind" class="w-full h-full pointer-events-none"></div>
+                    </div>
+                </div>
+                <!-- Heading Color -->
+                <div class="flex items-center justify-between">
+                    <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Heading Color</label>
+                    <div class="relative w-9 h-9 rounded-lg border border-gray-300 shadow-sm overflow-hidden bg-white hover:ring-2 ring-blue-400 transition-all">
+                        <input type="color" id="se-heading-color" oninput="liveUpdateStyleEditor()" class="absolute -inset-2 w-16 h-16 cursor-pointer opacity-0">
+                        <div id="se-heading-ind" class="w-full h-full pointer-events-none"></div>
+                    </div>
+                </div>
+                <!-- Text Color -->
+                <div class="flex items-center justify-between">
+                    <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Text Color</label>
+                    <div class="relative w-9 h-9 rounded-lg border border-gray-300 shadow-sm overflow-hidden bg-white hover:ring-2 ring-blue-400 transition-all">
+                        <input type="color" id="se-text-color" oninput="liveUpdateStyleEditor()" class="absolute -inset-2 w-16 h-16 cursor-pointer opacity-0">
+                        <div id="se-text-ind" class="w-full h-full pointer-events-none"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="px-5 py-4 border-t border-gray-100 dark:border-gray-700 flex justify-between gap-3 bg-gray-50 dark:bg-gray-800/50">
+                <button onclick="resetStyleEditor()" class="text-sm font-bold text-red-500 hover:text-red-700 transition-colors px-3 py-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/30">Reset Default</button>
+                <button onclick="saveStyleEditor()" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg shadow-md transition-colors w-full text-center">Save Styles</button>
+            </div>
+        </div>
+    </div>
 
     <!-- ==================== JAVASCRIPT ==================== -->
     <script src="script.dev.js"></script>

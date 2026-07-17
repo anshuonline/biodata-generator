@@ -60,43 +60,128 @@
             setAccent(hex, light, dark);
         }
 
-        // Section Background Color Logic
-        let sectionBgColors = {};
-        
-        function loadSectionColor(sectionId) {
-            const color = sectionBgColors[sectionId] || '#ffffff';
-            document.getElementById('sectionColorPicker').value = color;
-            document.getElementById('sectionColorIndicator').style.backgroundColor = color;
+        // ====== WYSIWYG SECTION STYLING ======
+        let sectionStyles = {};
+        let activeEditSection = null;
+
+        const defaultStyles = { bg: '#ffffff', heading: '#000000', text: '#000000' };
+
+        function openStyleEditor(sectionId) {
+            activeEditSection = sectionId;
+            const styles = sectionStyles[sectionId] || { ...defaultStyles };
+            
+            // Set inputs
+            document.getElementById('se-bg-color').value = styles.bg;
+            document.getElementById('se-bg-ind').style.backgroundColor = styles.bg;
+            
+            document.getElementById('se-heading-color').value = styles.heading;
+            document.getElementById('se-heading-ind').style.backgroundColor = styles.heading;
+            
+            document.getElementById('se-text-color').value = styles.text;
+            document.getElementById('se-text-ind').style.backgroundColor = styles.text;
+            
+            // Set title
+            const names = {
+                'objective': 'Career Objective', 'edu': 'Education', 'exp': 'Experience', 'certs': 'Certifications',
+                'projects': 'Projects', 'personal': 'Personal Details', 'address': 'Address',
+                'skills': 'Skills', 'hobbies': 'Hobbies', 'ref': 'References'
+            };
+            document.getElementById('styleEditorTitle').innerText = names[sectionId] || 'Section';
+            
+            // Show modal
+            const modal = document.getElementById('styleEditorModal');
+            const content = document.getElementById('styleEditorContent');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
         }
 
-        function setSectionColor(color) {
-            const sectionId = document.getElementById('sectionColorSelect').value;
-            sectionBgColors[sectionId] = color;
-            document.getElementById('sectionColorIndicator').style.backgroundColor = color;
-            saveToStorage(); 
+        function closeStyleEditor() {
+            const modal = document.getElementById('styleEditorModal');
+            const content = document.getElementById('styleEditorContent');
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                activeEditSection = null;
+            }, 300);
         }
 
-        function resetSectionColor() {
-            const sectionId = document.getElementById('sectionColorSelect').value;
-            delete sectionBgColors[sectionId];
-            loadSectionColor(sectionId);
+        function liveUpdateStyleEditor() {
+            const bg = document.getElementById('se-bg-color').value;
+            const heading = document.getElementById('se-heading-color').value;
+            const text = document.getElementById('se-text-color').value;
+            
+            document.getElementById('se-bg-ind').style.backgroundColor = bg;
+            document.getElementById('se-heading-ind').style.backgroundColor = heading;
+            document.getElementById('se-text-ind').style.backgroundColor = text;
+            
+            if(activeEditSection) {
+                applyStylesToElement(activeEditSection, { bg, heading, text });
+            }
+        }
+
+        function saveStyleEditor() {
+            if(!activeEditSection) return;
+            const bg = document.getElementById('se-bg-color').value;
+            const heading = document.getElementById('se-heading-color').value;
+            const text = document.getElementById('se-text-color').value;
+            
+            sectionStyles[activeEditSection] = { bg, heading, text };
             saveToStorage();
+            closeStyleEditor();
         }
 
-        function applySectionColors() {
-            const sections = ['objective', 'edu', 'exp', 'certs', 'projects', 'personal', 'address', 'skills', 'hobbies', 'ref'];
-            sections.forEach(sec => {
-                const el = document.getElementById(`out-${sec}-section`);
-                if (el) {
-                    const color = sectionBgColors[sec];
-                    if (color && color !== '#ffffff') {
-                        el.style.backgroundColor = color;
-                        el.classList.add('p-4', 'rounded-xl', 'shadow-sm', 'border', 'border-gray-100', 'dark:border-gray-700');
+        function resetStyleEditor() {
+            if(!activeEditSection) return;
+            delete sectionStyles[activeEditSection];
+            applyStylesToElement(activeEditSection, defaultStyles);
+            saveToStorage();
+            closeStyleEditor();
+        }
+
+        function applyStylesToElement(sec, styles) {
+            const el = document.getElementById(`out-${sec}-section`);
+            if (el) {
+                if (styles.bg && styles.bg !== '#ffffff') {
+                    el.style.backgroundColor = styles.bg;
+                    el.classList.add('p-4', 'rounded-xl', 'shadow-sm', 'border', 'border-gray-100', 'dark:border-gray-700');
+                } else {
+                    el.style.backgroundColor = 'transparent';
+                    el.classList.remove('p-4', 'rounded-xl', 'shadow-sm', 'border', 'border-gray-100', 'dark:border-gray-700');
+                }
+                
+                // Heading
+                const headingEl = el.querySelector('.style-target-heading');
+                if (headingEl) {
+                    if(styles.heading && styles.heading !== '#000000') {
+                        headingEl.style.color = styles.heading;
+                        headingEl.classList.remove('accent-text'); 
                     } else {
-                        el.style.backgroundColor = 'transparent';
-                        el.classList.remove('p-4', 'rounded-xl', 'shadow-sm', 'border', 'border-gray-100', 'dark:border-gray-700');
+                        headingEl.style.color = '';
+                        headingEl.classList.add('accent-text');
                     }
                 }
+                
+                // Text
+                const textEl = el.querySelector('.style-target-text');
+                if (textEl) {
+                    if(styles.text && (styles.text !== '#000000' && styles.text !== '#374151')) {
+                        textEl.style.color = styles.text;
+                    } else {
+                        textEl.style.color = '';
+                    }
+                }
+            }
+        }
+
+        function applySectionStyles() {
+            const sections = ['objective', 'edu', 'exp', 'certs', 'projects', 'personal', 'address', 'skills', 'hobbies', 'ref'];
+            sections.forEach(sec => {
+                const styles = sectionStyles[sec] || defaultStyles;
+                applyStylesToElement(sec, styles);
             });
         }
 
@@ -420,7 +505,7 @@
             data.refEntries = []; document.querySelectorAll('#refContainer > div').forEach(d => {
                 data.refEntries.push({ name: d.querySelector('.ref-name')?.value, desg: d.querySelector('.ref-desg')?.value, contact: d.querySelector('.ref-contact')?.value });
             });
-            data.sectionBgColors = sectionBgColors;
+            data.sectionStyles = sectionStyles;
             localStorage.setItem('biodataSave', JSON.stringify(data));
             
             // Trigger Live Preview Update
@@ -466,9 +551,13 @@
                 else addEducation();
                 if (data.expEntries) data.expEntries.forEach(e => addExperience(e));
                 if (data.refEntries) data.refEntries.forEach(e => addReference(e));
-                if (data.sectionBgColors) {
-                    sectionBgColors = data.sectionBgColors;
-                    loadSectionColor(document.getElementById('sectionColorSelect').value);
+                if (data.sectionStyles) {
+                    sectionStyles = data.sectionStyles;
+                } else if (data.sectionBgColors) {
+                    // Backwards compatibility
+                    Object.keys(data.sectionBgColors).forEach(k => {
+                        sectionStyles[k] = { bg: data.sectionBgColors[k], heading: '#000000', text: '#000000' };
+                    });
                 }
 
                 if (data.fontScale) {
@@ -542,7 +631,7 @@
         // ====== LIVE PREVIEW LOGIC ======
         function updateLivePreview() {
             // Apply section background colors
-            applySectionColors();
+            applySectionStyles();
 
             // Name + Role
             const inName = document.getElementById('in-name');
