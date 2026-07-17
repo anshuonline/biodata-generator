@@ -650,7 +650,7 @@
                     <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/></svg>
                     Edit
                 </button>
-                <div class="flex gap-2">
+                <div class="flex gap-2 xl:hidden">
                     <button onclick="shareLink()" id="btn-share" class="px-3 py-2.5 bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 font-bold rounded-xl hover:bg-indigo-100 transition text-xs flex items-center gap-1.5 border border-indigo-200 dark:border-indigo-800">
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
                         Share
@@ -1423,6 +1423,13 @@
 
         function generateBiodata(event) {
             if(event) event.preventDefault();
+            
+            if (window.innerWidth >= 1280) {
+                // On PC, generate button directly saves/prints PDF
+                printBiodata();
+                return;
+            }
+
             document.body.classList.add('mobile-view-preview');
             document.getElementById('previewWrapper').classList.remove('hidden');
             document.getElementById('previewWrapper').classList.add('flex');
