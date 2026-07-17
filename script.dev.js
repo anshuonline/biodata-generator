@@ -934,10 +934,10 @@
 <style>${allCSS}</style>
 <style>
 :root{--font-family:${font};--accent:${accent};--accent-light:${accentLight};--accent-dark:${accentDark}}
-@page{size:A4;margin:14mm 16mm}
+@page{size:A4;margin:7mm 10mm 14mm 10mm}
 *,*::before,*::after{transform:none!important;-webkit-transform:none!important;transition:none!important;-webkit-transition:none!important;animation:none!important;will-change:auto!important;backface-visibility:visible!important;-webkit-backface-visibility:visible!important;perspective:none!important;contain:none!important;isolation:auto!important}
 body{margin:0;padding:0;background:#fff;font-family:var(--font-family),sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-#biodataPaper{width:auto!important;min-height:auto!important;padding:0!important;margin:0!important;box-shadow:none!important;border-radius:0!important;overflow:visible!important}
+#biodataPaper{width:auto!important;min-height:auto!important;padding:7mm 8mm 0 8mm!important;margin:0!important;box-shadow:none!important;border-radius:0!important;overflow:visible!important}
 .no-print{display:none!important}
 .skill-tag-print{background:#f1f5f9!important;border:1px solid #999!important;color:#000!important}
 ${dynCSS}
