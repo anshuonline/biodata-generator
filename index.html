@@ -144,18 +144,6 @@
         </div>
     </div>
 
-    <div id="hdPdfModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center hidden p-4">
-        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden text-center p-6">
-            <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-            </div>
-            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">High Definition PDF</h3>
-            <p class="text-gray-600 dark:text-gray-400 text-sm mb-6">To ensure your CV text is selectable, clear, and links are clickable, we use your browser's native HD engine. <br><br>In the next screen, change the Destination to <b>"Save as PDF"</b>.</p>
-            <button onclick="document.getElementById('hdPdfModal').classList.add('hidden'); window.print();" class="w-full py-3 font-bold text-white accent-bg rounded-lg hover:opacity-90 transition shadow-lg">Got it, Proceed</button>
-            <button onclick="document.getElementById('hdPdfModal').classList.add('hidden')" class="w-full mt-3 py-2 font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white transition">Cancel</button>
-        </div>
-    </div>
-
     <!-- ==================== MAIN LAYOUT WRAPPER ==================== -->
     <div id="mainLayout" class="w-full max-w-[1600px] mx-auto flex flex-col xl:flex-row gap-8 items-start relative">
 
@@ -495,10 +483,9 @@
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
                     <span>Share Link</span>
                 </button>
-                <button onclick="window.print()" class="px-4 py-2.5 bg-gray-200 text-gray-800 font-bold rounded-lg hover:bg-gray-300 transition text-sm">Print</button>
-                <button onclick="downloadPDF()" class="px-5 py-2.5 accent-bg text-white font-bold rounded-lg hover:opacity-90 transition shadow-lg text-sm flex items-center gap-2">
+                <button onclick="window.print()" class="px-5 py-2.5 accent-bg text-white font-bold rounded-lg hover:opacity-90 transition shadow-lg text-sm flex items-center gap-2">
                     <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
-                    Download PDF
+                    Print / Save PDF
                 </button>
             </div>
         </div>
@@ -1193,9 +1180,9 @@
             window.scrollTo(0, 0);
         }
 
-        // ====== DOWNLOAD PDF ======
-        function downloadPDF() {
-            document.getElementById('hdPdfModal').classList.remove('hidden');
+        // ====== PRINT / SAVE PDF ======
+        function printBiodata() {
+            window.print();
         }
 
         // ====== SHARE LINK ======
