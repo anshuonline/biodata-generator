@@ -507,12 +507,25 @@
                 </div>
             </div>
 
-            <!-- BUTTONS -->
-            <div id="tour-generate" class="flex flex-col sm:flex-row gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                <button type="button" onclick="fillDemo()" class="w-full sm:w-1/4 py-4 font-bold text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors uppercase tracking-wide text-sm">Fill Demo Data</button>
-                <button type="button" onclick="clearData()" class="w-full sm:w-1/4 py-4 font-bold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors uppercase tracking-wide text-sm">Clear All</button>
-                <button type="submit" onclick="updateLivePreview()" class="w-full sm:w-2/4 py-4 font-bold text-white accent-bg rounded-xl hover:opacity-90 transition-colors shadow-lg uppercase tracking-wide text-sm hidden xl:block">Generate Biodata</button>
-                <button type="submit" onclick="updateLivePreview()" class="xl:hidden w-full sm:w-2/4 py-4 text-lg font-black text-white accent-bg rounded-xl hover:opacity-90 transition shadow-[0_4px_14px_0_rgba(37,99,235,0.39)] hover:shadow-[0_6px_20px_rgba(37,99,235,0.23)] hover:-translate-y-1 transform">Generate Biodata &rarr;</button>
+            </div> <!-- Close Step 4 -->
+
+            <!-- Navigation Buttons -->
+            <div class="flex justify-between items-center mt-8 pt-6 border-t-2 border-gray-100 dark:border-gray-800" x-cloak>
+                <button type="button" x-show="step > 1" @click="step--; window.scrollTo({top: 0, behavior: 'smooth'})" class="px-6 py-3 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-bold hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+                    &larr; Previous
+                </button>
+                <div x-show="step === 1"></div>
+                
+                <button type="button" x-show="step < totalSteps" @click="step++; window.scrollTo({top: 0, behavior: 'smooth'})" class="px-8 py-3 rounded-xl bg-blue-600 text-white font-bold shadow-lg hover:bg-blue-700 transition transform hover:-translate-y-1">
+                    Next Step &rarr;
+                </button>
+                
+                <div id="tour-generate" x-show="step === totalSteps" class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-end">
+                    <button type="button" onclick="fillDemo()" class="w-full sm:w-auto px-4 py-3 font-bold text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors uppercase tracking-wide text-xs">Fill Demo Data</button>
+                    <button type="button" onclick="clearData()" class="w-full sm:w-auto px-4 py-3 font-bold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors uppercase tracking-wide text-xs">Clear All</button>
+                    <button type="submit" onclick="updateLivePreview()" class="w-full sm:w-auto px-8 py-3 font-bold text-white accent-bg rounded-xl hover:opacity-90 transition-colors shadow-lg uppercase tracking-wide text-sm hidden xl:block">Generate Biodata</button>
+                    <button type="submit" onclick="updateLivePreview()" class="xl:hidden w-full sm:w-auto px-8 py-3 text-sm font-black text-white accent-bg rounded-xl hover:opacity-90 transition shadow-[0_4px_14px_0_rgba(37,99,235,0.39)] hover:shadow-[0_6px_20px_rgba(37,99,235,0.23)] hover:-translate-y-1 transform">Generate Biodata &rarr;</button>
+                </div>
             </div>
             <!-- PRIVACY & HOW IT WORKS -->
             <div class="mt-8 bg-green-50 dark:bg-green-900/10 border border-green-100 dark:border-green-900/30 rounded-xl p-4 flex gap-4 items-start text-left">
@@ -546,7 +559,6 @@
                     &copy; Copyright by <a href="https://hypecrews.com" target="_blank" class="hover:underline">hypecrews.com</a>
                 </p>
                 </div>
-            </div>
         </form>
     </div>
 
