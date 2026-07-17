@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biodata + Resume Generator</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Create a stunning, professional Biodata and Resume for free. Use our Modern Hybrid Generator to build an HD PDF in seconds without any signups. Perfect for marriage proposals and job applications.">
+    <meta name="keywords" content="biodata maker, resume maker, cv maker, resume builder, biodata, resume, curriculum vitae, job resume, marriage biodata, cv builder, resume pdf, biodata pdf, professional resume, resume templates, free resume maker, biodata maker online, resume maker app, free biodata maker, cv maker app, professional resume maker, marriage biodata maker, resume builder free, biodata pdf maker, job biodata, resume templates free, ats resume builder, best resume maker app">
+    <meta name="author" content="Rajdeep">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://anshuonline.github.io/biodata-generator/">
+    <meta property="og:title" content="Biodata + Resume Generator">
+    <meta property="og:description" content="Create a stunning, professional Biodata and Resume for free. Use our Modern Hybrid Generator to build an HD PDF in seconds.">
+    <meta property="og:image" content="https://anshuonline.github.io/biodata-generator/images/biodata-maker-png-logo.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://anshuonline.github.io/biodata-generator/">
+    <meta property="twitter:title" content="Biodata + Resume Generator">
+    <meta property="twitter:description" content="Create a stunning, professional Biodata and Resume for free. Use our Modern Hybrid Generator to build an HD PDF in seconds.">
+    <meta property="twitter:image" content="https://anshuonline.github.io/biodata-generator/images/biodata-maker-png-logo.png">
+
+    <!-- Favicons & App Icons -->
+    <link rel="icon" type="image/png" href="favicons/favicon-96x96.png?v=20260717" sizes="96x96">
+    <link rel="icon" type="image/svg+xml" href="favicons/favicon.svg?v=20260717">
+    <link rel="shortcut icon" href="favicons/favicon.ico?v=20260717">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicons/apple-touch-icon.png?v=20260717">
+    <meta name="apple-mobile-web-app-title" content="Biodata + Resume Generator">
+    <link rel="manifest" href="favicons/site.webmanifest?v=20260717">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.js.iife.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        outfit: ['Outfit', 'sans-serif'],
+                        playfair: ['Playfair Display', 'serif'],
+                        grotesk: ['Space Grotesk', 'sans-serif'],
+                        noto: ['Noto Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --accent: #2563eb;
+            --accent-light: #dbeafe;
+            --accent-dark: #1e40af;
+            --font-family: 'Outfit', sans-serif;
+        }
+        body { font-family: var(--font-family); }
+        .accent-border { border-color: var(--accent) !important; }
+        .accent-bg { background-color: var(--accent) !important; }
+        .accent-bg-light { background-color: var(--accent-light) !important; }
+        .accent-text { color: var(--accent) !important; }
+        .accent-border-left { border-left: 4px solid var(--accent) !important; }
+
+        /* Swatch radio hide */
+        .swatch-radio:checked + .swatch-circle { ring: 3px; transform: scale(1.2); box-shadow: 0 0 0 3px var(--accent); }
+
+        /* Smooth transitions for dark mode */
+        .transition-theme { transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
+
+        /* Print */
+        @page { size: A4; margin: 0; }
+        @media print {
+            body { background: #fff !important; padding: 0 !important; -webkit-font-smoothing: antialiased !important; -moz-osx-font-smoothing: grayscale !important; }
+            .no-print, #formView, #onboardingModal, #hdPdfModal { display: none !important; }
+            
+            /* Reset Flex/Grid layouts for clean print */
+            #mainLayout, #previewWrapper, #previewContainer { 
+                display: block !important; 
+                width: 100% !important; 
+                margin: 0 !important; 
+                padding: 0 !important; 
+            }
+            
+            .print-exact { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            #biodataPaper { 
+                box-shadow: none !important; 
+                border-radius: 0 !important; 
+                width: 210mm !important; 
+                min-height: 297mm !important; 
+                padding: 12mm 16mm !important; 
+                margin: 0 auto !important; 
+                text-rendering: optimizeLegibility !important;
+                transform: none !important;
+                position: relative !important;
+                left: 0 !important;
+                top: 0 !important;
+            }
+            .skill-tag-print { background: #f1f5f9 !important; border: 1px solid #999 !important; color: #000 !important; }
+            .qr-print { border: 1px solid #000 !important; }
+        }
+
+        /* Validation */
+        .input-error { border-color: #ef4444 !important; }
+        .error-msg { color: #ef4444; font-size: 12px; margin-top: 2px; display: none; }
+        .error-msg.show { display: block; }
+
+        /* Skills Suggestions Dropdown */
+        .suggestions-box { position: absolute; top: 100%; left: 0; right: 0; max-height: 180px; overflow-y: auto; z-index: 50; border-radius: 0 0 8px 8px; }
+        .suggestion-item { cursor: pointer; transition: background 0.15s; }
+        .suggestion-item:hover { background-color: var(--accent-light) !important; }
+
+        /* CV Upload Pulse */
+        @keyframes pulse-border { 0%,100% { border-color: #cbd5e1; } 50% { border-color: var(--accent); } }
+        .pulse-border { animation: pulse-border 2s ease-in-out infinite; }
+
+        /* Responsive CV Scaling for Mobile */
+        @media screen and (max-width: 768px) {
+            #previewContainer { width: 100%; display: flex; justify-content: center; overflow: hidden; padding-bottom: 20px; }
+            #biodataPaper { transform: scale(0.48); transform-origin: top center; margin-bottom: -150mm !important; }
+        }
+        @media screen and (min-width: 769px) and (max-width: 1279px) {
+            #previewContainer { width: 100%; display: flex; justify-content: center; overflow: hidden; padding-bottom: 20px; }
+            #biodataPaper { transform: scale(0.65); transform-origin: top center; margin-bottom: -100mm !important; }
+        }
+        @media screen and (min-width: 1280px) and (max-width: 1500px) {
+            #previewContainer { width: 100%; display: flex; justify-content: center; overflow: hidden; padding-bottom: 20px; }
+            #biodataPaper { transform: scale(0.85); transform-origin: top center; margin-bottom: -50mm !important; }
+        }
+
+        /* Mobile View Toggle System */
+        @media screen and (max-width: 1279px) {
+            body.mobile-view-preview #formView { display: none !important; }
+            body:not(.mobile-view-preview) #previewWrapper { display: none !important; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-950 transition-theme min-h-screen p-4 sm:p-8 flex justify-center items-start antialiased text-gray-900">
+
+    <!-- ==================== ONBOARDING ==================== -->
+    <div id="onboardingModal" class="fixed inset-0 z-[100] bg-white/40 dark:bg-black/60 backdrop-blur-xl flex flex-col items-center justify-center p-6 transition-opacity duration-700 hidden">
+        <div id="onb-step1" class="w-full max-w-md bg-white dark:bg-gray-900 rounded-3xl shadow-2xl p-8 transform transition-all duration-500 scale-95 opacity-0 text-center border border-gray-100 dark:border-gray-800">
+            <div class="w-20 h-20 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span class="text-4xl">👋</span>
+            </div>
+            <h2 class="text-2xl font-black text-gray-800 dark:text-white mb-2">Welcome!</h2>
+            <p class="text-gray-500 dark:text-gray-400 font-medium mb-8">Let's build a stunning Biodata. What should we call you?</p>
+            <input type="text" id="onb-name" class="w-full text-center text-xl font-bold p-4 bg-gray-50 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl outline-none focus:border-blue-500 dark:focus:border-blue-500 transition-colors dark:text-white mb-6" placeholder="Your Name">
+            <button onclick="nextOnboarding()" class="w-full py-4 bg-blue-600 text-white font-bold rounded-xl text-lg hover:bg-blue-700 transition shadow-lg transform hover:-translate-y-1">Next Step &rarr;</button>
+        </div>
+
+        <div id="onb-step2" class="w-full max-w-md bg-white dark:bg-gray-900 rounded-3xl shadow-2xl p-8 transform transition-all duration-500 scale-95 opacity-0 hidden text-center border border-gray-100 dark:border-gray-800 absolute">
+            <h2 class="text-2xl font-black text-gray-800 dark:text-white mb-2" id="onb-greeting">Nice to meet you!</h2>
+            <p class="text-gray-500 dark:text-gray-400 font-medium mb-8">Choose your favorite accent color for your CV.</p>
+            <div class="flex flex-wrap justify-center gap-4 mb-8">
+                <button type="button" onclick="finishOnboarding('#2563eb','#dbeafe','#1e40af')" class="w-14 h-14 rounded-full bg-blue-600 border-4 border-white dark:border-gray-800 shadow-lg hover:scale-110 transition-transform"></button>
+                <button type="button" onclick="finishOnboarding('#059669','#d1fae5','#047857')" class="w-14 h-14 rounded-full bg-emerald-600 border-4 border-white dark:border-gray-800 shadow-lg hover:scale-110 transition-transform"></button>
+                <button type="button" onclick="finishOnboarding('#e11d48','#ffe4e6','#be123c')" class="w-14 h-14 rounded-full bg-rose-600 border-4 border-white dark:border-gray-800 shadow-lg hover:scale-110 transition-transform"></button>
+                <button type="button" onclick="finishOnboarding('#d97706','#fef3c7','#b45309')" class="w-14 h-14 rounded-full bg-amber-600 border-4 border-white dark:border-gray-800 shadow-lg hover:scale-110 transition-transform"></button>
+                <button type="button" onclick="finishOnboarding('#7c3aed','#ede9fe','#6d28d9')" class="w-14 h-14 rounded-full bg-violet-600 border-4 border-white dark:border-gray-800 shadow-lg hover:scale-110 transition-transform"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MAIN LAYOUT WRAPPER ==================== -->
+    <div id="mainLayout" class="w-full max-w-[1600px] mx-auto flex flex-col xl:flex-row gap-8 items-start relative">
+
+    <!-- ==================== FORM VIEW ==================== -->
+    <div id="formView" class="w-full xl:w-[50%] max-w-4xl bg-white dark:bg-gray-900 rounded-2xl shadow-xl overflow-hidden transition-theme">
+        
+        <!-- HEADER -->
+        <div class="accent-bg text-white p-6 sm:p-8 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <img src="images/biodata-maker-png-logo.png" alt="Logo" class="w-12 h-12 sm:w-14 sm:h-14 object-contain drop-shadow-xl bg-white/20 p-2 rounded-xl">
+                <div>
+                    <h1 id="tour-welcome" class="text-2xl sm:text-3xl font-extrabold tracking-tight">Biodata + Resume Generator</h1>
+                    <p class="text-white/70 text-sm mt-1">Fill details → Print / Save PDF. It's that simple.</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="startTour(true)" class="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors text-xs font-bold flex items-center gap-1" title="Replay Guide">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span class="hidden sm:inline">Guide</span>
+                </button>
+                <button onclick="toggleDark()" id="darkToggle" class="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors" title="Toggle Dark Mode">
+                    <svg id="sunIcon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    <svg id="moonIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <form id="biodataForm" onsubmit="generateBiodata(event)" class="p-6 sm:p-8 space-y-8">
+
+            <!-- ====== CUSTOMIZATION: COLOR + FONT ====== -->
+            <div class="bg-gray-50 dark:bg-gray-800 p-5 rounded-xl border border-gray-200 dark:border-gray-700 transition-theme">
+                <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 mb-4">Customize Appearance</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <!-- Color Swatches -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-600 dark:text-gray-300 mb-2">Accent Color</label>
+                        <div class="flex gap-3 flex-wrap">
+                            <button type="button" onclick="setAccent('#2563eb','#dbeafe','#1e40af')" class="w-9 h-9 rounded-full bg-blue-600 border-2 border-white shadow-md hover:scale-110 transition-transform ring-2 ring-blue-600" title="Blue"></button>
+                            <button type="button" onclick="setAccent('#059669','#d1fae5','#047857')" class="w-9 h-9 rounded-full bg-emerald-600 border-2 border-white shadow-md hover:scale-110 transition-transform" title="Emerald"></button>
+                            <button type="button" onclick="setAccent('#e11d48','#ffe4e6','#be123c')" class="w-9 h-9 rounded-full bg-rose-600 border-2 border-white shadow-md hover:scale-110 transition-transform" title="Rose"></button>
+                            <button type="button" onclick="setAccent('#d97706','#fef3c7','#b45309')" class="w-9 h-9 rounded-full bg-amber-600 border-2 border-white shadow-md hover:scale-110 transition-transform" title="Amber"></button>
+                            <button type="button" onclick="setAccent('#7c3aed','#ede9fe','#6d28d9')" class="w-9 h-9 rounded-full bg-violet-600 border-2 border-white shadow-md hover:scale-110 transition-transform" title="Violet"></button>
+                            <button type="button" onclick="setAccent('#334155','#f1f5f9','#1e293b')" class="w-9 h-9 rounded-full bg-slate-700 border-2 border-white shadow-md hover:scale-110 transition-transform" title="Slate"></button>
+                        </div>
+                    </div>
+                    <!-- Font Selector -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-600 dark:text-gray-300 mb-2">Font Style</label>
+                        <select id="fontSelect" onchange="setFont(this.value)" class="w-full p-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium dark:text-gray-200">
+                            <option value="'Outfit', sans-serif" style="font-family: Outfit">Outfit — Modern GenZ</option>
+                            <option value="'Playfair Display', serif" style="font-family: Playfair Display">Playfair — Elegant Classic</option>
+                            <option value="'Space Grotesk', sans-serif" style="font-family: Space Grotesk">Space Grotesk — Techy</option>
+                            <option value="'Noto Sans', sans-serif" style="font-family: Noto Sans">Noto Sans — Clean Corporate</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ====== 1. BASIC INFO + PHOTO ====== -->
+            <div>
+                <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">1. Basic Info & Photo</h3>
+                <div class="flex flex-col sm:flex-row gap-6">
+                    <div class="flex flex-col items-center justify-center space-y-3 w-full sm:w-1/4 p-5 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-800">
+                        <img id="imagePreview" src="" alt="Preview" class="w-24 h-32 object-cover rounded-lg shadow hidden">
+                        <div id="imagePlaceholder" class="w-24 h-32 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center text-gray-400">
+                            <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        </div>
+                        <label class="cursor-pointer text-sm font-semibold accent-text hover:underline">Upload Photo<input type="file" id="in-photo" accept="image/*" class="hidden" onchange="previewImage(event)"></label>
+                        <p id="photoError" class="error-msg">Max 2MB allowed</p>
+                    </div>
+                    <div class="w-full sm:w-3/4 space-y-4">
+                        <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Full Name *</label><input type="text" id="in-name" required class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" placeholder="e.g. Rahul Sharma"></div>
+                        <div id="tour-role">
+                            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Professional Title *</label>
+                            <input type="text" id="in-role" required class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" placeholder="e.g. Full Stack Developer">
+                            <p class="text-xs text-blue-600 dark:text-blue-400 mt-1 flex items-center gap-1 animate-pulse"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg> <b>Pro Tip:</b> Avoid generic titles. Write exactly what role you are targeting.</p>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Career Objective / Summary</label>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="tog-objective" class="sr-only peer form-input" checked onchange="saveToStorage()">
+                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    <span class="ml-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Show in CV</span>
+                                </label>
+                            </div>
+                            <textarea id="in-objective" rows="3" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" placeholder="Write a short summary about your goals and what you bring to the table..."></textarea>
+                            <p class="text-xs text-blue-600 dark:text-blue-400 mt-1 flex items-center gap-1"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg> <b>Pro Tip:</b> Keep it concise (2-3 lines). Focus on how you can add value to the company, not just what you want.</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Date of Birth</label><input type="text" id="in-dob" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" placeholder="21-05-2006"></div>
+                            <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Gender</label><select id="in-gender" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white"><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ====== 2. CONTACT & SOCIAL ====== -->
+            <div>
+                <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">2. Contact & Social</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Mobile *</label>
+                        <input type="text" id="in-mobile" required class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" placeholder="9876543210" oninput="validateMobile(this)">
+                        <p id="mobileError" class="error-msg">Enter a valid 10-digit number</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Email *</label>
+                        <input type="email" id="in-email" required class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" oninput="validateEmail(this)">
+                        <p id="emailError" class="error-msg">Enter a valid email</p>
+                    </div>
+                    <div class="sm:col-span-2"><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Full Address</label><input type="text" id="in-address" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" placeholder="Village, City, State, Pin"></div>
+                    <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">LinkedIn (Optional)</label><input type="text" id="in-linkedin" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" placeholder="linkedin.com/in/username"></div>
+                    <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Portfolio / GitHub (Optional)</label><input type="text" id="in-github" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" placeholder="github.com/username"></div>
+                </div>
+            </div>
+
+            <!-- ====== 3. PERSONAL DETAILS ====== -->
+            <div>
+                <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">3. Personal Details</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Father's Name</label><input type="text" id="in-father" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white"></div>
+                    <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Mother's Name</label><input type="text" id="in-mother" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white"></div>
+                    <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Blood Group</label><input type="text" id="in-blood" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" placeholder="O+"></div>
+                    <div><label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Category / Caste</label><input type="text" id="in-caste" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white"></div>
+                    <div class="sm:col-span-2">
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Languages & Proficiency</label>
+                            <p class="text-[10px] text-blue-600 dark:text-blue-400 font-bold hidden sm:block">Pro Tip: Mention your fluency level.</p>
+                        </div>
+                        <div id="langContainer" class="space-y-2 mb-2"></div>
+                        <button type="button" onclick="addLanguage()" class="px-3 py-1 text-xs font-bold accent-text border border-dashed accent-border rounded-lg hover:accent-bg-light transition-colors">+ Add Language</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ====== 4. EDUCATION (Dynamic) ====== -->
+            <div>
+                <div class="flex justify-between items-center border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">
+                    <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">4. Education</h3>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="tog-education" class="sr-only peer form-input" checked onchange="saveToStorage()">
+                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        <span class="ml-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Show in CV</span>
+                    </label>
+                </div>
+                <p class="text-xs text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-1"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg> <b>Pro Tip:</b> Start with your highest qualification first (Reverse Chronological).</p>
+                <div id="eduContainer" class="space-y-4"></div>
+                <button type="button" onclick="addEducation()" class="mt-4 px-4 py-2 text-sm font-bold accent-text border-2 accent-border rounded-lg hover:accent-bg-light transition-colors flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"/></svg>
+                    Add Education
+                </button>
+            </div>
+
+            <!-- ====== 5. WORK EXPERIENCE (Dynamic) ====== -->
+            <div id="tour-experience">
+                <div class="flex justify-between items-center border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-2">
+                    <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">5. Work Experience</h3>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="tog-experience" class="sr-only peer form-input" checked onchange="saveToStorage()">
+                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        <span class="ml-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Show in CV</span>
+                    </label>
+                </div>
+                <p class="text-xs text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-1"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg> <b>Pro Tip:</b> Focus on what you achieved, not just what you did. Be 100% truthful.</p>
+                <div id="expContainer" class="space-y-4"></div>
+                <button type="button" onclick="addExperience()" class="mt-4 px-4 py-2 text-sm font-bold accent-text border-2 accent-border rounded-lg hover:accent-bg-light transition-colors flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"/></svg>
+                    Add Experience
+                </button>
+            </div>
+
+            <!-- ====== 6. SKILLS ====== -->
+            <div id="tour-skills">
+                <div class="flex justify-between items-center border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-2">
+                    <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">6. Skills</h3>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="tog-skills" class="sr-only peer form-input" checked onchange="saveToStorage()">
+                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        <span class="ml-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Show in CV</span>
+                    </label>
+                </div>
+                <p class="text-xs text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-1 animate-pulse"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg> <b>Pro Tip:</b> Only add skills you can confidently explain in an interview. Quality over quantity.</p>
+                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Type a skill & press Enter (Max 15) — suggestions will appear as you type</label>
+                <div class="relative">
+                    <input type="text" id="skillInput" autocomplete="off" class="w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" placeholder="e.g. Communication, Leadership..." oninput="showSkillSuggestions(this.value)" onfocus="showSkillSuggestions(this.value)">
+                    <div id="skillSuggestions" class="suggestions-box hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 shadow-xl"></div>
+                </div>
+                <!-- Quick Add Category Buttons -->
+                <div class="mt-3 flex flex-wrap gap-2">
+                    <span class="text-xs font-bold text-gray-400 dark:text-gray-500 self-center mr-1">Quick Add:</span>
+                    <button type="button" onclick="addCategorySkills('tech')" class="px-2.5 py-1 text-xs font-semibold bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full hover:bg-blue-100 transition">💻 Tech</button>
+                    <button type="button" onclick="addCategorySkills('soft')" class="px-2.5 py-1 text-xs font-semibold bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full hover:bg-green-100 transition">🤝 Soft Skills</button>
+                    <button type="button" onclick="addCategorySkills('office')" class="px-2.5 py-1 text-xs font-semibold bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 rounded-full hover:bg-amber-100 transition">📊 Office</button>
+                    <button type="button" onclick="addCategorySkills('language')" class="px-2.5 py-1 text-xs font-semibold bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full hover:bg-purple-100 transition">🌐 Languages</button>
+                    <button type="button" onclick="addCategorySkills('design')" class="px-2.5 py-1 text-xs font-semibold bg-pink-50 dark:bg-pink-900/30 text-pink-700 dark:text-pink-300 rounded-full hover:bg-pink-100 transition">🎨 Design</button>
+                </div>
+                <div id="skillsContainer" class="flex flex-wrap gap-2 mt-3"></div>
+            </div>
+
+            <!-- ====== 7. PROJECTS ====== -->
+            <div>
+                <div class="flex justify-between items-center border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-2">
+                    <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">7. Projects</h3>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="tog-projects" class="sr-only peer form-input" checked onchange="saveToStorage()">
+                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        <span class="ml-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Show in CV</span>
+                    </label>
+                </div>
+                <p class="text-xs text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-1"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg> <b>Pro Tip:</b> Mention the technologies used and your exact contribution.</p>
+                <textarea id="in-projects" rows="3" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" placeholder="Describe your key projects..."></textarea>
+            </div>
+
+            <!-- ====== 8. CERTIFICATIONS ====== -->
+            <div>
+                <div class="flex justify-between items-center border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">
+                    <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">8. Certifications / Awards</h3>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="tog-certs" class="sr-only peer form-input" checked onchange="saveToStorage()">
+                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        <span class="ml-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Show in CV</span>
+                    </label>
+                </div>
+                <p class="text-xs text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-1"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg> <b>Pro Tip:</b> Only include certifications relevant to your target role.</p>
+                <textarea id="in-certs" rows="3" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" placeholder="Mention certifications, courses, or achievements..."></textarea>
+            </div>
+
+            <!-- ====== 9. HOBBIES ====== -->
+            <div>
+                <div class="flex justify-between items-center border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">
+                    <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">9. Hobbies & Interests</h3>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="tog-hobbies" class="sr-only peer form-input" checked onchange="saveToStorage()">
+                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        <span class="ml-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Show in CV</span>
+                    </label>
+                </div>
+                <p class="text-xs text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-1"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg> <b>Pro Tip:</b> Avoid generic hobbies. Choose ones that show character (e.g. Chess = Strategy, Sports = Teamwork).</p>
+                <textarea id="in-hobbies" rows="2" class="form-input w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white mb-2" placeholder="Reading, Traveling, Photography..."></textarea>
+                <!-- Quick Add Hobbies -->
+                <div class="flex flex-wrap gap-2">
+                    <span class="text-xs font-bold text-gray-400 dark:text-gray-500 self-center mr-1">Suggestions:</span>
+                    <button type="button" onclick="addHobby('📚 Reading')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">📚 Reading</button>
+                    <button type="button" onclick="addHobby('✈️ Traveling')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">✈️ Traveling</button>
+                    <button type="button" onclick="addHobby('📸 Photography')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">📸 Photography</button>
+                    <button type="button" onclick="addHobby('♟️ Chess')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">♟️ Chess</button>
+                    <button type="button" onclick="addHobby('🎸 Guitar')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">🎸 Guitar</button>
+                    
+                    <span id="more-hobbies" class="hidden flex flex-wrap gap-2">
+                        <button type="button" onclick="addHobby('✍️ Blogging')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">✍️ Blogging</button>
+                        <button type="button" onclick="addHobby('🏃‍♂️ Running')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">🏃‍♂️ Running</button>
+                        <button type="button" onclick="addHobby('🎨 Digital Art')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">🎨 Digital Art</button>
+                        <button type="button" onclick="addHobby('🍳 Cooking')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">🍳 Cooking</button>
+                        <button type="button" onclick="addHobby('🏋️‍♂️ Fitness')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">🏋️‍♂️ Fitness</button>
+                        <button type="button" onclick="addHobby('⛰️ Hiking')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">⛰️ Hiking</button>
+                        <button type="button" onclick="addHobby('🎤 Public Speaking')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">🎤 Public Speaking</button>
+                        <button type="button" onclick="addHobby('🧩 Puzzle Solving')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">🧩 Puzzle Solving</button>
+                        <button type="button" onclick="addHobby('🌱 Gardening')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">🌱 Gardening</button>
+                        <button type="button" onclick="addHobby('🎬 Video Editing')" class="px-2.5 py-1 text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 transition">🎬 Video Editing</button>
+                    </span>
+                    
+                    <button type="button" id="btn-more-hobbies" onclick="toggleMoreHobbies()" class="px-2.5 py-1 text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 rounded-full hover:bg-blue-100 transition">More...</button>
+                </div>
+            </div>
+
+            <!-- ====== 10. REFERENCES ====== -->
+            <div>
+                <div class="flex justify-between items-center border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">
+                    <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">10. References (Optional)</h3>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="tog-references" class="sr-only peer form-input" checked onchange="saveToStorage()">
+                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        <span class="ml-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Show in CV</span>
+                    </label>
+                </div>
+                <div id="refContainer" class="space-y-4"></div>
+                <button type="button" onclick="addReference()" class="mt-4 px-4 py-2 text-sm font-bold accent-text border-2 accent-border rounded-lg hover:accent-bg-light transition-colors flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"/></svg>
+                    Add Reference (Max 2)
+                </button>
+            </div>
+
+            <!-- ====== 11. DECLARATION ====== -->
+            <div class="bg-gray-50 dark:bg-gray-800 p-5 rounded-xl border border-gray-200 dark:border-gray-700">
+                <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 mb-4">9. Declaration & Signature</h3>
+                <label class="flex items-center gap-3 cursor-pointer mb-4">
+                    <input type="checkbox" id="in-declaration" class="w-5 h-5 accent-blue-600 rounded">
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Add Declaration: "I hereby declare that the information provided is true to the best of my knowledge."</span>
+                </label>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Signature Image (Optional)</label>
+                    <div class="flex items-center gap-4">
+                        <img id="sigPreview" src="" alt="Signature" class="h-12 hidden border-b border-gray-400">
+                        <label class="cursor-pointer text-sm font-semibold accent-text hover:underline">Upload Signature<input type="file" id="in-signature" accept="image/*" class="hidden" onchange="previewSignature(event)"></label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BUTTONS -->
+            <div id="tour-generate" class="flex flex-col sm:flex-row gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <button type="button" onclick="fillDemo()" class="w-full sm:w-1/4 py-4 font-bold text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors uppercase tracking-wide text-sm">Fill Demo Data</button>
+                <button type="button" onclick="clearData()" class="w-full sm:w-1/4 py-4 font-bold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors uppercase tracking-wide text-sm">Clear All</button>
+                <button type="submit" onclick="updateLivePreview()" class="w-full sm:w-2/4 py-4 font-bold text-white accent-bg rounded-xl hover:opacity-90 transition-colors shadow-lg uppercase tracking-wide text-sm hidden xl:block">Generate Biodata</button>
+                <button type="submit" onclick="updateLivePreview()" class="xl:hidden w-full sm:w-2/4 py-4 text-lg font-black text-white accent-bg rounded-xl hover:opacity-90 transition shadow-[0_4px_14px_0_rgba(37,99,235,0.39)] hover:shadow-[0_6px_20px_rgba(37,99,235,0.23)] hover:-translate-y-1 transform">Generate Biodata &rarr;</button>
+            </div>
+            <!-- PRIVACY & HOW IT WORKS -->
+            <div class="mt-8 bg-green-50 dark:bg-green-900/10 border border-green-100 dark:border-green-900/30 rounded-xl p-4 flex gap-4 items-start text-left">
+                <div class="bg-green-100 dark:bg-green-900/40 p-2.5 rounded-full text-green-600 dark:text-green-400 shrink-0 mt-0.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="font-bold text-green-800 dark:text-green-300 mb-1 text-sm">100% Private & Secure (How it Works)</h3>
+                    <p class="text-xs text-green-700 dark:text-green-400/80 leading-relaxed">
+                        Your privacy is our priority. <strong>Your data never leaves this browser and is never sent to any server.</strong> All your resume details are securely saved locally inside your browser's storage (similar to cookies) so you can safely resume editing anytime. No signups, no tracking.
+                    </p>
+                </div>
+            </div>
+
+            <!-- SEO TEXT BLOCK FOR GOOGLE RANKING -->
+            <div class="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800 text-center">
+                <h2 class="text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Free Online Biodata Maker & Resume Generator</h2>
+                <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed max-w-2xl mx-auto">
+                    Welcome to the most advanced and free <strong>Biodata Maker</strong> and <strong>Resume Generator</strong>. Whether you need an <strong>ATS-friendly job resume</strong>, a standard <strong>Curriculum Vitae</strong>, or a <strong>professional biodata format</strong>, our tool helps you build it instantly. Featuring real-time live preview, HD PDF download, and zero signups required. Create your perfect <strong>online resume</strong> today!
+                </p>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="text-center mt-6 pt-4 border-t border-gray-100 dark:border-gray-800">
+                <p class="text-gray-500 dark:text-gray-400 text-sm font-medium">
+                    Made with <span class="text-red-500">❤️</span> in India by <a href="https://github.com/anshuonline" target="_blank" class="text-blue-600 dark:text-blue-400 font-bold hover:underline">Rajdeep</a>
+                </p>
+                <p class="text-gray-400 dark:text-gray-500 text-xs mt-1">
+                    &copy; Copyright by <a href="https://hypecrews.com" target="_blank" class="hover:underline">hypecrews.com</a>
+                </p>
+            </div>
+        </form>
+    </div>
+
+    <!-- ====== CLEAR CONFIRM MODAL ====== -->
+    <div id="clearModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center hidden p-4 transition-opacity">
+        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden text-center p-6 border-t-4 border-red-500">
+            <div class="w-16 h-16 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">Clear All Data?</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm mb-6">Are you sure you want to delete everything? This action cannot be undone.</p>
+            <div class="flex gap-3">
+                <button onclick="document.getElementById('clearModal').classList.add('hidden')" class="w-1/2 py-3 font-semibold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-xl transition">Cancel</button>
+                <button onclick="executeClearData()" class="w-1/2 py-3 font-bold text-white bg-red-600 hover:bg-red-700 rounded-xl transition shadow-lg shadow-red-500/30">Yes, Clear</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== CROPPER MODAL ====== -->
+    <div id="cropModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="p-4 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center">
+                <h3 class="font-bold text-gray-800 dark:white">Crop Profile Photo</h3>
+                <button type="button" onclick="cancelCrop()" class="text-gray-500 hover:text-red-500">&times;</button>
+            </div>
+            <div class="flex-1 bg-gray-100 dark:bg-black relative min-h-[300px]">
+                <img id="cropImage" src="" class="block max-w-full">
+            </div>
+            <div class="p-4 border-t border-gray-200 dark:border-gray-800 flex justify-end gap-3">
+                <button type="button" onclick="cancelCrop()" class="px-4 py-2 font-semibold text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 text-sm">Cancel</button>
+                <button type="button" onclick="saveCrop()" class="px-4 py-2 font-bold text-white accent-bg rounded-lg hover:opacity-90 text-sm shadow-md">Crop & Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== PREVIEW VIEW ==================== -->
+    <div id="previewWrapper" class="hidden w-full xl:w-[50%] flex-col items-center xl:sticky xl:top-8 pb-10 xl:flex">
+        <div class="w-full max-w-[210mm] flex justify-between items-center mb-4 no-print flex-wrap gap-4">
+            <button onclick="editBiodata()" class="xl:hidden px-5 py-2.5 bg-white border-2 border-gray-900 text-gray-900 font-bold rounded-lg hover:bg-gray-50 transition flex items-center gap-2 text-sm">
+                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/></svg>
+                Edit
+            </button>
+            <div class="flex items-center gap-3 bg-white dark:bg-gray-800 px-4 py-3 rounded-xl border-2 border-gray-900 dark:border-gray-600 shadow-sm w-full sm:w-auto">
+                <label class="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wide whitespace-nowrap">Font Size</label>
+                <div class="relative flex-1 w-32 flex items-center">
+                    <input type="range" id="fontScale" min="80" max="130" value="100" class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 accent-blue-600 transition-shadow" oninput="updateFontSize(this.value)">
+                </div>
+                <span id="fontScaleVal" class="text-xs font-black text-gray-800 dark:text-gray-100 w-10 text-right">100%</span>
+            </div>
+            <div class="flex flex-wrap gap-2 justify-end sm:gap-3">
+                <button onclick="shareLink()" id="btn-share" class="px-4 py-2.5 bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-400 font-bold rounded-lg hover:bg-indigo-200 transition text-sm flex items-center gap-2">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                    <span>Share Link</span>
+                </button>
+                <button onclick="window.print()" class="px-5 py-2.5 accent-bg text-white font-bold rounded-lg hover:opacity-90 transition shadow-lg text-sm flex items-center gap-2">
+                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+                    Print / Save PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- A4 Paper (Wrapped for responsiveness) -->
+        <div id="previewContainer" class="flex-1">
+            <div id="biodataPaper" class="print-exact bg-white w-[210mm] shadow-2xl rounded-xl p-[14mm_18mm] text-gray-900 relative box-border transition-transform" style="min-height:297mm;">
+            
+            <!-- Header -->
+            <div class="flex justify-between items-start accent-border pb-5 mb-6" style="border-bottom-width: 3px;">
+                <div class="flex-1 pr-4">
+                    <h1 id="out-name" class="text-[32px] font-extrabold uppercase tracking-tight leading-tight"></h1>
+                    <p id="out-role" class="text-base font-medium text-gray-500 mt-1 mb-3"></p>
+                    <div id="out-contact-row" class="flex flex-wrap gap-x-4 gap-y-1 text-[11px] font-semibold text-gray-600"></div>
+                </div>
+                <div class="flex-shrink-0 flex items-start gap-3">
+                    <img id="out-photo" src="" alt="Photo" class="w-[90px] h-[115px] object-cover rounded-md accent-border hidden" style="border-width: 2px;">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-12 gap-6 text-[13px]">
+                <!-- LEFT 60% -->
+                <div class="col-span-7 space-y-5">
+                    <div id="out-objective-section" class="hidden">
+                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Career Objective</h3>
+                        <p id="out-objective" class="text-[12px] leading-relaxed whitespace-pre-line"></p>
+                    </div>
+                    <div id="out-edu-section" class="hidden">
+                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Education</h3>
+                        <div id="out-edu-list" class="space-y-3"></div>
+                    </div>
+                    <div id="out-exp-section" class="hidden">
+                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Work Experience</h3>
+                        <div id="out-exp-list" class="space-y-3"></div>
+                    </div>
+                    <div id="out-certs-section" class="hidden">
+                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Certifications</h3>
+                        <p id="out-certs" class="text-[12px] leading-relaxed whitespace-pre-line"></p>
+                    </div>
+                    <div id="out-projects-section" class="hidden">
+                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Projects</h3>
+                        <p id="out-projects" class="text-[12px] leading-relaxed whitespace-pre-line"></p>
+                    </div>
+                </div>
+
+                <!-- RIGHT 40% -->
+                <div class="col-span-5 space-y-5">
+                    <div id="out-personal-section">
+                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Personal Details</h3>
+                        <div id="out-personal-list" class="space-y-2"></div>
+                    </div>
+                    <div id="out-address-section" class="hidden">
+                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Address</h3>
+                        <p id="out-address" class="text-[12px] font-medium leading-relaxed"></p>
+                    </div>
+                    <div id="out-skills-section" class="hidden">
+                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Skills</h3>
+                        <div id="out-skills" class="flex flex-wrap gap-2"></div>
+                    </div>
+                    <div id="out-hobbies-section" class="hidden">
+                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">Hobbies & Interests</h3>
+                        <p id="out-hobbies" class="text-[12px] leading-relaxed whitespace-pre-line"></p>
+                    </div>
+                    <div id="out-ref-section" class="hidden">
+                        <h3 class="text-[15px] font-bold uppercase tracking-wider accent-text border-b border-gray-200 pb-1 mb-3">References</h3>
+                        <div id="out-ref-list" class="space-y-2"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Declaration -->
+            <div id="out-declaration-section" class="hidden mt-8 pt-4 border-t border-gray-200">
+                <p class="text-[11px] text-gray-500 italic mb-4">I hereby declare that the information provided above is true to the best of my knowledge and belief.</p>
+                <div class="flex justify-between items-end">
+                    <div class="text-[11px] text-gray-500">Date: <span id="out-date"></span></div>
+                    <div class="text-center">
+                        <img id="out-signature" src="" class="h-10 mb-1 hidden">
+                        <div class="border-t border-gray-400 pt-1 text-[11px] font-semibold min-w-[120px]" id="out-sig-name"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    </div> <!-- End Main Layout -->
+
+    <!-- ==================== JAVASCRIPT ==================== -->
+    <script>
+        // ====== THEME MANAGEMENT ======
+        let isDark = false;
+        function toggleDark() {
+            isDark = !isDark;
+            document.documentElement.classList.toggle('dark', isDark);
+            document.getElementById('sunIcon').classList.toggle('hidden', !isDark);
+            document.getElementById('moonIcon').classList.toggle('hidden', isDark);
+            saveToStorage();
+        }
+
+        // ====== PRINT HANDLERS ======
+        window.addEventListener('beforeprint', () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                document.documentElement.dataset.wasDark = 'true';
+            }
+        });
+        window.addEventListener('afterprint', () => {
+            if (document.documentElement.dataset.wasDark === 'true') {
+                document.documentElement.classList.add('dark');
+                document.documentElement.dataset.wasDark = 'false';
+            }
+        });
+        function setAccent(color, light, dark) {
+            document.documentElement.style.setProperty('--accent', color);
+            document.documentElement.style.setProperty('--accent-light', light);
+            document.documentElement.style.setProperty('--accent-dark', dark);
+            // Highlight selected swatch
+            document.querySelectorAll('.accent-bg').forEach(el => {
+                if (el.closest('#formView')) el.style.backgroundColor = color;
+            });
+            saveToStorage();
+        }
+        function setFont(font) {
+            document.documentElement.style.setProperty('--font-family', font);
+            saveToStorage();
+        }
+
+        // ====== IMAGE UPLOAD & CROP ======
+        let photoDataUrl = null, sigDataUrl = null, cropper = null;
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (file.size > 2 * 1024 * 1024) {
+                document.getElementById('photoError').classList.add('show');
+                event.target.value = '';
+                return;
+            }
+            document.getElementById('photoError').classList.remove('show');
+            const reader = new FileReader();
+            reader.onload = e => {
+                document.getElementById('cropImage').src = e.target.result;
+                document.getElementById('cropModal').classList.remove('hidden');
+                
+                if (cropper) cropper.destroy();
+                cropper = new Cropper(document.getElementById('cropImage'), {
+                    aspectRatio: 90 / 115, // matches biodata profile image ratio
+                    viewMode: 1,
+                    dragMode: 'move',
+                    autoCropArea: 1,
+                    restore: false,
+                    guides: true,
+                    center: true,
+                    highlight: false,
+                    cropBoxMovable: true,
+                    cropBoxResizable: true,
+                    toggleDragModeOnDblclick: false,
+                });
+            };
+            reader.readAsDataURL(file);
+            event.target.value = '';
+        }
+
+        function cancelCrop() {
+            document.getElementById('cropModal').classList.add('hidden');
+            if (cropper) cropper.destroy();
+            cropper = null;
+        }
+
+        function saveCrop() {
+            if (!cropper) return;
+            const canvas = cropper.getCroppedCanvas({ width: 360, height: 460, fillColor: '#fff' });
+            photoDataUrl = canvas.toDataURL('image/jpeg', 0.9);
+            document.getElementById('imagePreview').src = photoDataUrl;
+            document.getElementById('imagePreview').classList.remove('hidden');
+            document.getElementById('imagePlaceholder').classList.add('hidden');
+            saveToStorage();
+            cancelCrop();
+        }
+        function previewSignature(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                sigDataUrl = e.target.result;
+                document.getElementById('sigPreview').src = sigDataUrl;
+                document.getElementById('sigPreview').classList.remove('hidden');
+                saveToStorage();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // ====== SKILLS SUGGESTIONS DATABASE ======
+        const SKILL_DB = {
+            tech: ['JavaScript','Python','Java','C++','HTML/CSS','React','Node.js','SQL','MongoDB','Git','Docker','AWS','TypeScript','PHP','Flutter','Kotlin','Swift','REST APIs','Linux','Machine Learning'],
+            soft: ['Communication','Leadership','Teamwork','Problem Solving','Time Management','Critical Thinking','Adaptability','Creativity','Public Speaking','Decision Making','Conflict Resolution','Negotiation','Emotional Intelligence','Work Ethic','Attention to Detail'],
+            office: ['MS Word','MS Excel','MS PowerPoint','Google Sheets','Google Docs','Data Entry','Typing Speed','Tally','SAP','CRM Software','Email Management','File Management'],
+            language: ['English','Hindi','Bengali','Tamil','Telugu','Marathi','Gujarati','Kannada','Malayalam','Urdu','Punjabi','Spanish','French','German','Japanese'],
+            design: ['Photoshop','Illustrator','Figma','Canva','UI/UX Design','Video Editing','Premiere Pro','After Effects','CorelDRAW','Blender','Photography','Graphic Design']
+        };
+        const ALL_SKILLS = [...new Set(Object.values(SKILL_DB).flat())];
+
+        // ====== SKILLS TAGS ======
+        let skillsArray = [];
+        const skillInput = document.getElementById('skillInput');
+        const suggestionsBox = document.getElementById('skillSuggestions');
+
+        skillInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ',') {
+                e.preventDefault();
+                const val = this.value.trim().replace(/,/g, '');
+                if (val && skillsArray.length < 15 && !skillsArray.includes(val)) {
+                    skillsArray.push(val);
+                    renderSkillsForm();
+                    this.value = '';
+                    saveToStorage();
+                }
+                hideSuggestions();
+            }
+            if (e.key === 'Escape') hideSuggestions();
+        });
+
+        function showSkillSuggestions(query) {
+            if (!query || query.trim().length < 1) { hideSuggestions(); return; }
+            const q = query.toLowerCase();
+            const matches = ALL_SKILLS.filter(s => s.toLowerCase().includes(q) && !skillsArray.includes(s)).slice(0, 8);
+            if (matches.length === 0) { hideSuggestions(); return; }
+            suggestionsBox.innerHTML = '';
+            matches.forEach(s => {
+                const div = document.createElement('div');
+                div.className = 'suggestion-item px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 border-b border-gray-100 dark:border-gray-700';
+                // Highlight matched part
+                const idx = s.toLowerCase().indexOf(q);
+                div.innerHTML = s.substring(0,idx) + '<span class="font-bold accent-text">' + s.substring(idx, idx+q.length) + '</span>' + s.substring(idx+q.length);
+                div.onclick = () => {
+                    if (skillsArray.length < 15 && !skillsArray.includes(s)) {
+                        skillsArray.push(s);
+                        renderSkillsForm();
+                        skillInput.value = '';
+                        saveToStorage();
+                    }
+                    hideSuggestions();
+                };
+                suggestionsBox.appendChild(div);
+            });
+            suggestionsBox.classList.remove('hidden');
+        }
+
+        function hideSuggestions() { suggestionsBox.classList.add('hidden'); }
+        document.addEventListener('click', e => { if (!e.target.closest('#skillInput') && !e.target.closest('#skillSuggestions')) hideSuggestions(); });
+
+        function addCategorySkills(cat) {
+            const catSkills = SKILL_DB[cat] || [];
+            let added = 0;
+            catSkills.forEach(s => {
+                if (skillsArray.length < 15 && !skillsArray.includes(s)) { skillsArray.push(s); added++; }
+            });
+            if (added > 0) { renderSkillsForm(); saveToStorage(); }
+        }
+
+        function removeSkill(i) { skillsArray.splice(i, 1); renderSkillsForm(); saveToStorage(); }
+        function renderSkillsForm() {
+            const c = document.getElementById('skillsContainer');
+            c.innerHTML = '';
+            skillsArray.forEach((s, i) => {
+                const el = document.createElement('div');
+                el.className = 'px-3 py-1 accent-bg text-white text-sm font-semibold rounded-full flex items-center gap-2';
+                el.innerHTML = `${s} <button type="button" onclick="removeSkill(${i})" class="text-white/70 hover:text-white text-lg leading-none">&times;</button>`;
+                c.appendChild(el);
+            });
+        }
+
+        // ====== ADD HOBBY (Quick Add) ======
+        function addHobby(hobby) {
+            const el = document.getElementById('in-hobbies');
+            const val = el.value.trim();
+            if (val) {
+                if (!val.includes(hobby)) el.value = val + ', ' + hobby;
+            } else {
+                el.value = hobby;
+            }
+            saveToStorage();
+        }
+
+        function toggleMoreHobbies() {
+            const more = document.getElementById('more-hobbies');
+            const btn = document.getElementById('btn-more-hobbies');
+            if (more.classList.contains('hidden')) {
+                more.classList.remove('hidden');
+                btn.innerText = 'Less...';
+            } else {
+                more.classList.add('hidden');
+                btn.innerText = 'More...';
+            }
+        }
+
+
+        // ====== DYNAMIC ENTRIES ======
+        let eduCount = 0; let expCount = 0; let refCount = 0; let langCount = 0;
+        
+        function addLanguage(data = {}) {
+            langCount++;
+            const id = `lang-${langCount}`;
+            const div = document.createElement('div');
+            div.className = "flex gap-2 items-center";
+            div.id = id;
+            div.innerHTML = `
+                <input type="text" class="lang-name form-input flex-1 p-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white text-sm" placeholder="e.g. English" value="${data.name || ''}" oninput="saveToStorage()">
+                <select class="lang-prof form-input w-1/3 sm:w-1/4 p-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white text-sm" onchange="saveToStorage()">
+                    <option value="" disabled ${!data.prof ? 'selected' : ''}>Proficiency...</option>
+                    <option value="Native" ${data.prof === 'Native' ? 'selected' : ''}>Native</option>
+                    <option value="Fluent" ${data.prof === 'Fluent' ? 'selected' : ''}>Fluent</option>
+                    <option value="Conversational" ${data.prof === 'Conversational' ? 'selected' : ''}>Conversational</option>
+                    <option value="Basic" ${data.prof === 'Basic' ? 'selected' : ''}>Basic</option>
+                </select>
+                <button type="button" onclick="document.getElementById('${id}').remove(); saveToStorage()" class="text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 p-2 rounded-lg font-bold text-lg leading-none">&times;</button>
+            `;
+            document.getElementById('langContainer').appendChild(div);
+        }
+
+        function addEducation(data = {}) {
+            eduCount++;
+            const id = eduCount;
+            const html = `
+            <div id="edu-${id}" class="p-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl relative transition-theme">
+                <button type="button" onclick="document.getElementById('edu-${id}').remove(); saveToStorage();" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-xl leading-none">&times;</button>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Qualification</label><input type="text" class="edu-qual form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.qual||''}" placeholder="e.g. Class XII (Arts)" oninput="saveToStorage()"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Board / University</label><input type="text" class="edu-board form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.board||''}" oninput="saveToStorage()"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Year</label><input type="text" class="edu-year form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.year||''}" oninput="saveToStorage()"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Marks / Percentage</label><input type="text" class="edu-marks form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.marks||''}" placeholder="e.g. 80% or 8.5 CGPA" oninput="saveToStorage()"></div>
+                    <div class="sm:col-span-2"><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Subjects</label><input type="text" class="edu-subjects form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.subjects||''}" oninput="saveToStorage()"></div>
+                </div>
+            </div>`;
+            document.getElementById('eduContainer').insertAdjacentHTML('beforeend', html);
+        }
+
+        function addExperience(data = {}) {
+            expCount++;
+            const id = expCount;
+            const html = `
+            <div id="exp-${id}" class="p-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl relative transition-theme">
+                <button type="button" onclick="document.getElementById('exp-${id}').remove(); saveToStorage();" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-xl leading-none">&times;</button>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Job Title</label><input type="text" class="exp-title form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.title||''}" oninput="saveToStorage()"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Company</label><input type="text" class="exp-company form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.company||''}" oninput="saveToStorage()"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Duration</label><input type="text" class="exp-duration form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.duration||''}" placeholder="e.g. Jan 2022 - Present" oninput="saveToStorage()"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Description</label><input type="text" class="exp-desc form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.desc||''}" oninput="saveToStorage()"></div>
+                </div>
+            </div>`;
+            document.getElementById('expContainer').insertAdjacentHTML('beforeend', html);
+        }
+
+        function addReference(data = {}) {
+            if (refCount >= 2) return;
+            refCount++;
+            const id = refCount;
+            const html = `
+            <div id="ref-${id}" class="p-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl relative transition-theme">
+                <button type="button" onclick="document.getElementById('ref-${id}').remove(); refCount--; saveToStorage();" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-xl leading-none">&times;</button>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Name</label><input type="text" class="ref-name form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.name||''}" oninput="saveToStorage()"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Designation</label><input type="text" class="ref-desg form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.desg||''}" oninput="saveToStorage()"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Contact</label><input type="text" class="ref-contact form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.contact||''}" oninput="saveToStorage()"></div>
+                </div>
+            </div>`;
+            document.getElementById('refContainer').insertAdjacentHTML('beforeend', html);
+        }
+
+        // ====== VALIDATION ======
+        function validateMobile(el) {
+            const valid = /^\d{10,}$/.test(el.value.replace(/\D/g, ''));
+            el.classList.toggle('input-error', el.value.length > 0 && !valid);
+            document.getElementById('mobileError').classList.toggle('show', el.value.length > 0 && !valid);
+        }
+        function validateEmail(el) {
+            const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value);
+            el.classList.toggle('input-error', el.value.length > 0 && !valid);
+            document.getElementById('emailError').classList.toggle('show', el.value.length > 0 && !valid);
+        }
+
+        // ====== LOCALSTORAGE ======
+        function saveToStorage() {
+            const data = {};
+            document.querySelectorAll('.form-input').forEach(el => { 
+                if (el.id) data[el.id] = el.type === 'checkbox' ? el.checked : el.value; 
+            });
+            data.skills = skillsArray;
+            const langEntries = [];
+            document.querySelectorAll('#langContainer > div').forEach(d => {
+                langEntries.push({ name: d.querySelector('.lang-name').value, prof: d.querySelector('.lang-prof').value });
+            });
+            data.langEntries = langEntries;
+
+            data.photoDataUrl = photoDataUrl;
+            data.sigDataUrl = sigDataUrl;
+            data.isDark = isDark;
+            data.font = document.getElementById('fontSelect').value;
+            data.accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+            data.accentLight = getComputedStyle(document.documentElement).getPropertyValue('--accent-light').trim();
+            data.accentDark = getComputedStyle(document.documentElement).getPropertyValue('--accent-dark').trim();
+            data.declaration = document.getElementById('in-declaration').checked;
+            // Save dynamic entries
+            data.eduEntries = []; document.querySelectorAll('#eduContainer > div').forEach(d => {
+                data.eduEntries.push({ qual: d.querySelector('.edu-qual')?.value, board: d.querySelector('.edu-board')?.value, year: d.querySelector('.edu-year')?.value, marks: d.querySelector('.edu-marks')?.value, subjects: d.querySelector('.edu-subjects')?.value });
+            });
+            data.expEntries = []; document.querySelectorAll('#expContainer > div').forEach(d => {
+                data.expEntries.push({ title: d.querySelector('.exp-title')?.value, company: d.querySelector('.exp-company')?.value, duration: d.querySelector('.exp-duration')?.value, desc: d.querySelector('.exp-desc')?.value });
+            });
+            data.refEntries = []; document.querySelectorAll('#refContainer > div').forEach(d => {
+                data.refEntries.push({ name: d.querySelector('.ref-name')?.value, desg: d.querySelector('.ref-desg')?.value, contact: d.querySelector('.ref-contact')?.value });
+            });
+            localStorage.setItem('biodataSave', JSON.stringify(data));
+            
+            // Trigger Live Preview Update
+            updateLivePreview();
+        }
+
+        function loadFromStorage() {
+            let saved = localStorage.getItem('biodataSave');
+            
+            // --- URL DATA SHARING LOGIC ---
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('data')) {
+                try {
+                    const decompressed = LZString.decompressFromEncodedURIComponent(urlParams.get('data'));
+                    if (decompressed) {
+                        saved = decompressed;
+                        localStorage.setItem('biodataSave', saved);
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                    }
+                } catch(e) { console.error("Could not parse URL data", e); }
+            }
+            
+            if (!saved) { addEducation(); addLanguage(); return; }
+            
+            try {
+                const data = JSON.parse(saved);
+                document.querySelectorAll('.form-input').forEach(el => { 
+                    if (el.id && data[el.id] !== undefined) {
+                        if(el.type === 'checkbox') el.checked = data[el.id];
+                        else el.value = data[el.id];
+                    } 
+                });
+                if (data.skills) { skillsArray = data.skills; renderSkillsForm(); }
+                if (data.photoDataUrl) { photoDataUrl = data.photoDataUrl; document.getElementById('imagePreview').src = photoDataUrl; document.getElementById('imagePreview').classList.remove('hidden'); document.getElementById('imagePlaceholder').classList.add('hidden'); }
+                if (data.sigDataUrl) { sigDataUrl = data.sigDataUrl; document.getElementById('sigPreview').src = sigDataUrl; document.getElementById('sigPreview').classList.remove('hidden'); }
+                if (data.isDark) toggleDark();
+                if (data.font) { document.getElementById('fontSelect').value = data.font; setFont(data.font); }
+                if (data.accent) setAccent(data.accent, data.accentLight, data.accentDark);
+                if (data.declaration) document.getElementById('in-declaration').checked = true;
+                if (data.langEntries && data.langEntries.length > 0) data.langEntries.forEach(e => addLanguage(e));
+                else addLanguage();
+                if (data.eduEntries && data.eduEntries.length > 0) data.eduEntries.forEach(e => addEducation(e));
+                else addEducation();
+                if (data.expEntries) data.expEntries.forEach(e => addExperience(e));
+                if (data.refEntries) data.refEntries.forEach(e => addReference(e));
+
+                if (data.fontScale) {
+                    const fsInput = document.getElementById('fontScale');
+                    if (fsInput) fsInput.value = data.fontScale;
+                    updateFontSize(data.fontScale);
+                }
+            } catch(e) { console.error(e); addEducation(); addLanguage(); }
+        }
+
+        function updateFontSize(percent) {
+            document.getElementById('fontScaleVal').innerText = percent + '%';
+            const scale = percent / 100;
+            let styleEl = document.getElementById('dynamic-font-style');
+            if (!styleEl) {
+                styleEl = document.createElement('style');
+                styleEl.id = 'dynamic-font-style';
+                document.head.appendChild(styleEl);
+            }
+            styleEl.innerHTML = `
+                #biodataPaper { font-size: calc(13px * ${scale}) !important; }
+                #biodataPaper h1 { font-size: calc(32px * ${scale}) !important; }
+                #biodataPaper h3 { font-size: calc(15px * ${scale}) !important; }
+                #biodataPaper h4 { font-size: calc(13px * ${scale}) !important; }
+                #biodataPaper .text-\\[10px\\] { font-size: calc(10px * ${scale}) !important; }
+                #biodataPaper .text-\\[11px\\] { font-size: calc(11px * ${scale}) !important; }
+                #biodataPaper .text-\\[12px\\] { font-size: calc(12px * ${scale}) !important; }
+                #biodataPaper .text-\\[13px\\] { font-size: calc(13px * ${scale}) !important; }
+                #biodataPaper .text-\\[15px\\] { font-size: calc(15px * ${scale}) !important; }
+            `;
+            // Trigger save only if event originated from input (not load)
+            if (event && event.type === 'input') saveToStorage();
+        }
+
+        // ====== ONBOARDING TOUR (Driver.js) ======
+        function startTour(force = false) {
+            const hasSeenTour = localStorage.getItem('hasSeenTour');
+            if (hasSeenTour && !force) return;
+            
+            const driverObj = window.driver.js.driver({
+                showProgress: true,
+                animate: true,
+                steps: [
+                    { element: '#tour-welcome', popover: { title: 'Welcome to Pro Biodata!', description: 'Let\'s build a highly professional, honest, and attractive CV together.', side: "bottom", align: 'start' }},
+
+                    { element: '#tour-role', popover: { title: 'Professional Title', description: 'Avoid generic titles. Use exact, targeted roles (e.g. "Junior UI/UX Designer"). It makes a huge difference.', side: "bottom", align: 'start' }},
+                    { element: '#tour-skills', popover: { title: 'Add Core Skills', description: 'Honesty is key! Only add skills you can confidently explain in an interview. Use our smart suggestions.', side: "top", align: 'start' }},
+                    { element: '#tour-experience', popover: { title: 'Work Experience', description: 'Focus on your achievements and contributions, not just daily tasks.', side: "top", align: 'start' }},
+                    { element: '#tour-generate', popover: { title: 'Generate PDF', description: 'Once everything is truthful and complete, generate your beautiful Pro Biodata here!', side: "top", align: 'start' }}
+                ],
+                onDestroyStarted: () => {
+                    localStorage.setItem('hasSeenTour', 'true');
+                    driverObj.destroy();
+                }
+            });
+            driverObj.drive();
+        }
+
+        // Auto-save on all input changes
+        document.addEventListener('input', e => { if (e.target.closest('#biodataForm')) saveToStorage(); });
+        document.addEventListener('change', e => { if (e.target.closest('#biodataForm')) saveToStorage(); });
+
+        // ====== LIVE PREVIEW LOGIC ======
+        function updateLivePreview() {
+            // Name + Role
+            const inName = document.getElementById('in-name');
+            if (inName) document.getElementById('out-name').innerText = inName.value;
+            const inRole = document.getElementById('in-role');
+            if (inRole) document.getElementById('out-role').innerText = inRole.value;
+
+            // Photo
+            const outPhoto = document.getElementById('out-photo');
+            if (photoDataUrl) { outPhoto.src = photoDataUrl; outPhoto.classList.remove('hidden'); } else { outPhoto.classList.add('hidden'); }
+
+            // Contact row
+            const contactRow = document.getElementById('out-contact-row');
+            contactRow.innerHTML = '';
+            const contactItems = [
+                { icon: '📞', val: document.getElementById('in-mobile').value },
+                { icon: '✉️', val: document.getElementById('in-email').value },
+                { icon: '🔗', val: document.getElementById('in-linkedin').value },
+                { icon: '💻', val: document.getElementById('in-github').value },
+            ];
+            contactItems.forEach(c => {
+                if (c.val && c.val.trim()) {
+                    contactRow.innerHTML += `<span>${c.icon} ${c.val}</span>`;
+                }
+            });
+
+            // Personal details
+            const personalList = document.getElementById('out-personal-list');
+            personalList.innerHTML = '';
+            const personalFields = [
+                { label: 'Date of Birth', val: document.getElementById('in-dob').value },
+                { label: "Father's Name", val: document.getElementById('in-father').value },
+                { label: "Mother's Name", val: document.getElementById('in-mother').value },
+                { label: 'Gender', val: document.getElementById('in-gender').value },
+                { label: 'Blood Group', val: document.getElementById('in-blood').value },
+                { label: 'Category', val: document.getElementById('in-caste').value },
+            ];
+            personalFields.forEach(f => {
+                if (f.val && f.val.trim()) {
+                    personalList.innerHTML += `<div><span class="block text-[10px] font-bold text-gray-400 uppercase">${f.label}</span><span class="font-semibold text-[12px]">${f.val}</span></div>`;
+                }
+            });
+
+            let langText = '';
+            document.querySelectorAll('#langContainer > div').forEach(d => {
+                const name = d.querySelector('.lang-name')?.value;
+                const prof = d.querySelector('.lang-prof')?.value;
+                if (name && name.trim()) {
+                    langText += `${name} <span class="text-gray-500 font-normal">(${prof || 'Basic'})</span>, `;
+                }
+            });
+            if (langText) {
+                langText = langText.slice(0, -2);
+                personalList.innerHTML += `<div><span class="block text-[10px] font-bold text-gray-400 uppercase">Languages</span><span class="font-semibold text-[12px]">${langText}</span></div>`;
+            }
+
+            // Address
+            const addr = document.getElementById('in-address').value;
+            if (addr && addr.trim()) { document.getElementById('out-address').innerText = addr; document.getElementById('out-address-section').classList.remove('hidden'); }
+            else { document.getElementById('out-address-section').classList.add('hidden'); }
+
+            // Objective
+            const obj = document.getElementById('in-objective').value;
+            const togObj = document.getElementById('tog-objective').checked;
+            if (togObj && obj && obj.trim()) { document.getElementById('out-objective').innerText = obj; document.getElementById('out-objective-section').classList.remove('hidden'); }
+            else { document.getElementById('out-objective-section').classList.add('hidden'); }
+
+            // Education
+            const eduList = document.getElementById('out-edu-list');
+            eduList.innerHTML = '';
+            let hasEdu = false;
+            document.querySelectorAll('#eduContainer > div').forEach(d => {
+                const qual = d.querySelector('.edu-qual')?.value;
+                if (!qual || !qual.trim()) return;
+                hasEdu = true;
+                const board = d.querySelector('.edu-board')?.value || '';
+                const year = d.querySelector('.edu-year')?.value || '';
+                const marks = d.querySelector('.edu-marks')?.value || '';
+                const subjects = d.querySelector('.edu-subjects')?.value || '';
+                eduList.innerHTML += `
+                <div class="accent-border-left pl-3 py-1">
+                    <div class="flex justify-between items-baseline"><h4 class="font-bold text-[13px]">${qual}</h4>${year ? `<span class="text-[11px] font-bold accent-bg-light px-2 py-0.5 rounded">${year}</span>` : ''}</div>
+                    ${board ? `<p class="text-[11px] text-gray-500 font-medium">${board}</p>` : ''}
+                    ${marks ? `<p class="text-[11px] text-gray-600"><span class="font-semibold">Score:</span> ${marks}</p>` : ''}
+                    ${subjects ? `<p class="text-[11px] text-gray-500">${subjects}</p>` : ''}
+                </div>`;
+            });
+            document.getElementById('out-edu-section').classList.toggle('hidden', !hasEdu || !document.getElementById('tog-education').checked);
+
+            // Experience
+            const expList = document.getElementById('out-exp-list');
+            expList.innerHTML = '';
+            let hasExp = false;
+            document.querySelectorAll('#expContainer > div').forEach(d => {
+                const title = d.querySelector('.exp-title')?.value;
+                if (!title || !title.trim()) return;
+                hasExp = true;
+                const company = d.querySelector('.exp-company')?.value || '';
+                const duration = d.querySelector('.exp-duration')?.value || '';
+                const desc = d.querySelector('.exp-desc')?.value || '';
+                expList.innerHTML += `
+                <div class="accent-border-left pl-3 py-1">
+                    <div class="flex justify-between items-baseline"><h4 class="font-bold text-[13px]">${title}</h4>${duration ? `<span class="text-[11px] font-semibold text-gray-500">${duration}</span>` : ''}</div>
+                    ${company ? `<p class="text-[11px] accent-text font-semibold">${company}</p>` : ''}
+                    ${desc ? `<p class="text-[11px] text-gray-600 mt-1">${desc}</p>` : ''}
+                </div>`;
+            });
+            document.getElementById('out-exp-section').classList.toggle('hidden', !hasExp || !document.getElementById('tog-experience').checked);
+
+            // Certifications
+            const certs = document.getElementById('in-certs').value;
+            const togCerts = document.getElementById('tog-certs').checked;
+            if (togCerts && certs && certs.trim()) { document.getElementById('out-certs').innerText = certs; document.getElementById('out-certs-section').classList.remove('hidden'); }
+            else { document.getElementById('out-certs-section').classList.add('hidden'); }
+
+            // Projects
+            const proj = document.getElementById('in-projects').value;
+            const togProj = document.getElementById('tog-projects').checked;
+            if (togProj && proj && proj.trim()) { document.getElementById('out-projects').innerText = proj; document.getElementById('out-projects-section').classList.remove('hidden'); }
+            else { document.getElementById('out-projects-section').classList.add('hidden'); }
+
+            // Hobbies
+            const hobbies = document.getElementById('in-hobbies').value;
+            const togHob = document.getElementById('tog-hobbies').checked;
+            if (togHob && hobbies && hobbies.trim()) { document.getElementById('out-hobbies').innerText = hobbies; document.getElementById('out-hobbies-section').classList.remove('hidden'); }
+            else { document.getElementById('out-hobbies-section').classList.add('hidden'); }
+
+            // Skills
+            const outSkills = document.getElementById('out-skills');
+            outSkills.innerHTML = '';
+            const togSkills = document.getElementById('tog-skills').checked;
+            if (togSkills && skillsArray.length > 0) {
+                document.getElementById('out-skills-section').classList.remove('hidden');
+                skillsArray.forEach(s => {
+                    outSkills.innerHTML += `<span class="px-2 py-0.5 accent-bg-light accent-border text-[11px] font-semibold rounded skill-tag-print" style="border-width:1px;">${s}</span>`;
+                });
+            } else { document.getElementById('out-skills-section').classList.add('hidden'); }
+
+            // References
+            const refList = document.getElementById('out-ref-list');
+            refList.innerHTML = '';
+            let hasRef = false;
+            document.querySelectorAll('#refContainer > div').forEach(d => {
+                const name = d.querySelector('.ref-name')?.value;
+                if (!name || !name.trim()) return;
+                hasRef = true;
+                const desg = d.querySelector('.ref-desg')?.value || '';
+                const contact = d.querySelector('.ref-contact')?.value || '';
+                refList.innerHTML += `<div class="text-[12px]"><span class="font-bold">${name}</span>${desg ? ` — <span class="text-gray-500">${desg}</span>` : ''}${contact ? `<br><span class="text-gray-500">${contact}</span>` : ''}</div>`;
+            });
+            document.getElementById('out-ref-section').classList.toggle('hidden', !hasRef || !document.getElementById('tog-references').checked);
+
+            // Declaration
+            if (document.getElementById('in-declaration').checked) {
+                document.getElementById('out-declaration-section').classList.remove('hidden');
+                document.getElementById('out-date').innerText = new Date().toLocaleDateString('en-IN');
+                document.getElementById('out-sig-name').innerText = document.getElementById('in-name').value;
+                if (sigDataUrl) { document.getElementById('out-signature').src = sigDataUrl; document.getElementById('out-signature').classList.remove('hidden'); }
+                else { document.getElementById('out-signature').classList.add('hidden'); }
+            } else { document.getElementById('out-declaration-section').classList.add('hidden'); }
+        }
+
+        function generateBiodata(event) {
+            if(event) event.preventDefault();
+            document.body.classList.add('mobile-view-preview');
+            window.scrollTo(0, 0);
+        }
+
+        function editBiodata() {
+            document.body.classList.remove('mobile-view-preview');
+            document.getElementById('previewWrapper').classList.add('hidden');
+            document.getElementById('previewWrapper').classList.remove('flex');
+            document.getElementById('formView').classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        // ====== PRINT / SAVE PDF ======
+        function printBiodata() {
+            window.print();
+        }
+
+        // ====== SHARE LINK ======
+        function shareLink() {
+            const btn = document.getElementById('btn-share');
+            const span = btn.querySelector('span');
+            try {
+                let saved = localStorage.getItem('biodataSave');
+                if (!saved) return;
+                
+                let dataObj = JSON.parse(saved);
+                let compressed = LZString.compressToEncodedURIComponent(JSON.stringify(dataObj));
+                
+                // If URL length is too long (mostly due to photo base64), drop the photo and try again
+                if (compressed.length > 5000 && dataObj.photo) {
+                    delete dataObj.photo;
+                    compressed = LZString.compressToEncodedURIComponent(JSON.stringify(dataObj));
+                    alert("Your profile photo was too large to fit in a shareable link. The link has been generated without the photo. (All other text data is included!)");
+                }
+                
+                const shareUrl = window.location.origin + window.location.pathname + '?data=' + compressed;
+                navigator.clipboard.writeText(shareUrl).then(() => {
+                    const orig = span.innerText;
+                    span.innerText = "Link Copied!";
+                    btn.classList.replace('text-indigo-700', 'text-green-700');
+                    btn.classList.replace('bg-indigo-100', 'bg-green-100');
+                    setTimeout(() => { 
+                        span.innerText = orig; 
+                        btn.classList.replace('text-green-700', 'text-indigo-700');
+                        btn.classList.replace('bg-green-100', 'bg-indigo-100');
+                    }, 3000);
+                });
+            } catch(e) {
+                console.error("Share error", e);
+                alert("Could not generate share link.");
+            }
+        }
+
+        // ====== DEMO DATA ======
+        function fillDemo() {
+            document.getElementById('in-name').value = 'John Doe';
+            document.getElementById('in-role').value = 'Full Stack Developer | Building scalable web apps';
+            document.getElementById('in-dob').value = '15-08-1998';
+            document.getElementById('in-father').value = 'Robert Doe';
+            document.getElementById('in-mother').value = 'Mary Doe';
+            document.getElementById('in-gender').value = 'Male';
+            document.getElementById('in-blood').value = 'O+';
+            document.getElementById('in-caste').value = 'General';
+            document.getElementById('in-mobile').value = '9876543210';
+            document.getElementById('in-email').value = 'johndoe@example.com';
+            document.getElementById('in-linkedin').value = 'linkedin.com/in/johndoe';
+            document.getElementById('in-github').value = 'github.com/johndoe';
+            document.getElementById('in-address').value = '123 Innovation Avenue, Tech City, CA 94105';
+            document.getElementById('in-projects').value = 'E-Commerce Platform — Built a full-stack shop with Stripe payments and real-time inventory.\nWeather Dashboard — React app with live weather data and 5-day forecasts.';
+            document.getElementById('in-certs').value = 'AWS Certified Developer Associate\nComplete Web Development Bootcamp 2024';
+            document.getElementById('in-hobbies').value = 'Open Source Contributing, Photography, Chess';
+            document.getElementById('in-declaration').checked = true;
+
+            // Clear and add languages
+            document.getElementById('langContainer').innerHTML = ''; langCount = 0;
+            addLanguage({ name: 'English', prof: 'Fluent' });
+            addLanguage({ name: 'Spanish', prof: 'Conversational' });
+
+            // Clear and add demo education
+            document.getElementById('eduContainer').innerHTML = ''; eduCount = 0;
+            addEducation({ qual: 'B.Tech in Computer Science', board: 'State Technological University', year: '2020', marks: '8.5 CGPA (85%)', subjects: 'Data Structures, Algorithms, Databases, Web Development' });
+            addEducation({ qual: 'Class XII (Science)', board: 'Central Board of Secondary Education (CBSE)', year: '2016', marks: '92%', subjects: 'Physics, Chemistry, Mathematics, English' });
+
+            // Clear and add demo experience
+            document.getElementById('expContainer').innerHTML = ''; expCount = 0;
+            addExperience({ title: 'Software Engineer', company: 'TechCorp Solutions', duration: 'Jun 2020 — Present', desc: 'Developed scalable web apps using React & Node.js. Improved query performance by 40%.' });
+            addExperience({ title: 'Frontend Intern', company: 'StartupXYZ', duration: 'Jan 2020 — May 2020', desc: 'Built responsive UI components and integrated REST APIs.' });
+
+            // Clear and add demo references
+            document.getElementById('refContainer').innerHTML = ''; refCount = 0;
+            addReference({ name: 'Dr. Jane Smith', desg: 'CTO, TechCorp', contact: 'jane@techcorp.com' });
+
+            // Demo skills
+            skillsArray = ['JavaScript', 'React', 'Node.js', 'Tailwind CSS', 'SQL', 'Git', 'Python', 'AWS'];
+            renderSkillsForm();
+            saveToStorage();
+        }
+
+        // ====== ONBOARDING LOGIC ======
+        function nextOnboarding() {
+            const nameInput = document.getElementById('onb-name').value.trim();
+            const name = nameInput || 'Awesome Person';
+            
+            document.getElementById('in-name').value = name;
+            document.getElementById('out-name').innerText = name;
+            document.getElementById('onb-greeting').innerText = `Nice to meet you, ${name.split(' ')[0]}!`;
+            
+            const s1 = document.getElementById('onb-step1');
+            const s2 = document.getElementById('onb-step2');
+            s1.classList.remove('scale-100', 'opacity-100');
+            s1.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                s1.classList.add('hidden');
+                s2.classList.remove('hidden');
+                setTimeout(() => { s2.classList.remove('scale-95', 'opacity-0'); s2.classList.add('scale-100', 'opacity-100'); }, 50);
+            }, 500);
+        }
+
+        function finishOnboarding(c, l, d) {
+            setAccent(c, l, d);
+            localStorage.setItem('hasSeenOnboarding', 'true');
+            const overlay = document.getElementById('onboardingModal');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => { 
+                overlay.classList.add('hidden'); 
+                saveToStorage();
+                setTimeout(() => startTour(false), 300);
+            }, 700);
+        }
+
+        // ====== INIT ======
+        window.onload = () => {
+            loadFromStorage();
+            
+            if (!localStorage.getItem('hasSeenOnboarding')) {
+                // Show Onboarding
+                const overlay = document.getElementById('onboardingModal');
+                const s1 = document.getElementById('onb-step1');
+                overlay.classList.remove('hidden');
+                setTimeout(() => { 
+                    s1.classList.remove('scale-95', 'opacity-0'); 
+                    s1.classList.add('scale-100', 'opacity-100'); 
+                }, 50);
+            } else if (!localStorage.getItem('hasSeenTour')) {
+                // Already onboarded but hasn't seen tour
+                setTimeout(() => startTour(false), 800);
+            }
+        };
+
+        // ====== CLEAR DATA ======
+        function clearData() {
+            document.getElementById('clearModal').classList.remove('hidden');
+        }
+        
+        function executeClearData() {
+            localStorage.removeItem('biodataSave');
+            location.reload();
+        }
+    </script>
+</body>
+</html>
