@@ -77,9 +77,44 @@
         /* CV Upload Pulse */
         @keyframes pulse-border { 0%,100% { border-color: #cbd5e1; } 50% { border-color: var(--accent); } }
         .pulse-border { animation: pulse-border 2s ease-in-out infinite; }
+
+        /* Responsive CV Scaling for Mobile */
+        @media screen and (max-width: 768px) {
+            #previewContainer { width: 100%; display: flex; justify-content: center; overflow: hidden; padding-bottom: 20px; }
+            #biodataPaper { transform: scale(0.48); transform-origin: top center; margin-bottom: -150mm !important; }
+        }
+        @media screen and (min-width: 769px) and (max-width: 1024px) {
+            #previewContainer { width: 100%; display: flex; justify-content: center; overflow: hidden; padding-bottom: 20px; }
+            #biodataPaper { transform: scale(0.65); transform-origin: top center; margin-bottom: -100mm !important; }
+        }
     </style>
 </head>
 <body class="bg-gray-100 dark:bg-gray-950 transition-theme min-h-screen p-4 sm:p-8 flex justify-center items-start antialiased text-gray-900">
+
+    <!-- ==================== ONBOARDING ==================== -->
+    <div id="onboardingModal" class="fixed inset-0 z-[100] bg-white/40 dark:bg-black/60 backdrop-blur-xl flex flex-col items-center justify-center p-6 transition-opacity duration-700 hidden">
+        <div id="onb-step1" class="w-full max-w-md bg-white dark:bg-gray-900 rounded-3xl shadow-2xl p-8 transform transition-all duration-500 scale-95 opacity-0 text-center border border-gray-100 dark:border-gray-800">
+            <div class="w-20 h-20 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span class="text-4xl">👋</span>
+            </div>
+            <h2 class="text-2xl font-black text-gray-800 dark:text-white mb-2">Welcome!</h2>
+            <p class="text-gray-500 dark:text-gray-400 font-medium mb-8">Let's build a stunning Biodata. What should we call you?</p>
+            <input type="text" id="onb-name" class="w-full text-center text-xl font-bold p-4 bg-gray-50 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl outline-none focus:border-blue-500 dark:focus:border-blue-500 transition-colors dark:text-white mb-6" placeholder="Your Name">
+            <button onclick="nextOnboarding()" class="w-full py-4 bg-blue-600 text-white font-bold rounded-xl text-lg hover:bg-blue-700 transition shadow-lg transform hover:-translate-y-1">Next Step &rarr;</button>
+        </div>
+
+        <div id="onb-step2" class="w-full max-w-md bg-white dark:bg-gray-900 rounded-3xl shadow-2xl p-8 transform transition-all duration-500 scale-95 opacity-0 hidden text-center border border-gray-100 dark:border-gray-800 absolute">
+            <h2 class="text-2xl font-black text-gray-800 dark:text-white mb-2" id="onb-greeting">Nice to meet you!</h2>
+            <p class="text-gray-500 dark:text-gray-400 font-medium mb-8">Choose your favorite accent color for your CV.</p>
+            <div class="flex flex-wrap justify-center gap-4 mb-8">
+                <button type="button" onclick="finishOnboarding('#2563eb','#dbeafe','#1e40af')" class="w-14 h-14 rounded-full bg-blue-600 border-4 border-white dark:border-gray-800 shadow-lg hover:scale-110 transition-transform"></button>
+                <button type="button" onclick="finishOnboarding('#059669','#d1fae5','#047857')" class="w-14 h-14 rounded-full bg-emerald-600 border-4 border-white dark:border-gray-800 shadow-lg hover:scale-110 transition-transform"></button>
+                <button type="button" onclick="finishOnboarding('#e11d48','#ffe4e6','#be123c')" class="w-14 h-14 rounded-full bg-rose-600 border-4 border-white dark:border-gray-800 shadow-lg hover:scale-110 transition-transform"></button>
+                <button type="button" onclick="finishOnboarding('#d97706','#fef3c7','#b45309')" class="w-14 h-14 rounded-full bg-amber-600 border-4 border-white dark:border-gray-800 shadow-lg hover:scale-110 transition-transform"></button>
+                <button type="button" onclick="finishOnboarding('#7c3aed','#ede9fe','#6d28d9')" class="w-14 h-14 rounded-full bg-violet-600 border-4 border-white dark:border-gray-800 shadow-lg hover:scale-110 transition-transform"></button>
+            </div>
+        </div>
+    </div>
 
     <div id="hdPdfModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden text-center p-6">
@@ -454,8 +489,9 @@
             </div>
         </div>
 
-        <!-- A4 Paper -->
-        <div id="biodataPaper" class="print-exact bg-white w-[210mm] shadow-2xl rounded-xl p-[14mm_18mm] text-gray-900 relative box-border" style="min-height:297mm;">
+        <!-- A4 Paper (Wrapped for responsiveness) -->
+        <div id="previewContainer" class="flex-1">
+            <div id="biodataPaper" class="print-exact bg-white w-[210mm] shadow-2xl rounded-xl p-[14mm_18mm] text-gray-900 relative box-border transition-transform" style="min-height:297mm;">
             
             <!-- Header -->
             <div class="flex justify-between items-start accent-border pb-5 mb-6" style="border-bottom-width: 3px;">
@@ -530,6 +566,7 @@
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </div>
 
@@ -1374,10 +1411,55 @@
             saveToStorage();
         }
 
+        // ====== ONBOARDING LOGIC ======
+        function nextOnboarding() {
+            const nameInput = document.getElementById('onb-name').value.trim();
+            const name = nameInput || 'Awesome Person';
+            
+            document.getElementById('in-name').value = name;
+            document.getElementById('out-name').innerText = name;
+            document.getElementById('onb-greeting').innerText = `Nice to meet you, ${name.split(' ')[0]}!`;
+            
+            const s1 = document.getElementById('onb-step1');
+            const s2 = document.getElementById('onb-step2');
+            s1.classList.remove('scale-100', 'opacity-100');
+            s1.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                s1.classList.add('hidden');
+                s2.classList.remove('hidden');
+                setTimeout(() => { s2.classList.remove('scale-95', 'opacity-0'); s2.classList.add('scale-100', 'opacity-100'); }, 50);
+            }, 500);
+        }
+
+        function finishOnboarding(c, l, d) {
+            setAccent(c, l, d);
+            localStorage.setItem('hasSeenOnboarding', 'true');
+            const overlay = document.getElementById('onboardingModal');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => { 
+                overlay.classList.add('hidden'); 
+                saveToStorage();
+                setTimeout(() => startTour(false), 300);
+            }, 700);
+        }
+
         // ====== INIT ======
         window.onload = () => {
             loadFromStorage();
-            setTimeout(() => startTour(false), 800);
+            
+            if (!localStorage.getItem('hasSeenOnboarding')) {
+                // Show Onboarding
+                const overlay = document.getElementById('onboardingModal');
+                const s1 = document.getElementById('onb-step1');
+                overlay.classList.remove('hidden');
+                setTimeout(() => { 
+                    s1.classList.remove('scale-95', 'opacity-0'); 
+                    s1.classList.add('scale-100', 'opacity-100'); 
+                }, 50);
+            } else if (!localStorage.getItem('hasSeenTour')) {
+                // Already onboarded but hasn't seen tour
+                setTimeout(() => startTour(false), 800);
+            }
         };
     </script>
 </body>
