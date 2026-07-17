@@ -185,6 +185,66 @@
             });
         }
 
+        
+        function setHeaderStyle(style) {
+            document.getElementById('headerStyleSelect').value = style;
+            const header = document.getElementById('cv-header');
+            const role = document.getElementById('out-role');
+            const contactRow = document.getElementById('out-contact-row');
+            if (!header) return;
+            
+            // Reset classes
+            header.className = 'flex justify-between items-start';
+            header.style.background = '';
+            header.style.borderBottomWidth = '';
+            
+            // Base padding/margin depending on style
+            if (style === 'classic') {
+                header.classList.add('accent-border', 'pb-5', 'mb-6');
+                header.style.borderBottomWidth = '3px';
+                header.style.background = 'transparent';
+                header.classList.remove('text-white');
+                role.classList.replace('text-white/80', 'text-gray-500') || role.classList.add('text-gray-500');
+                role.classList.remove('text-gray-400');
+                contactRow.classList.replace('text-white/90', 'text-gray-600') || contactRow.classList.add('text-gray-600');
+                contactRow.classList.remove('text-gray-400');
+            } else {
+                header.classList.add('p-6', 'mb-6', 'rounded-2xl', 'shadow-sm');
+                if (style === 'solid') {
+                    header.style.background = 'var(--accent)';
+                    header.classList.add('text-white');
+                    role.classList.remove('text-gray-500', 'text-gray-400');
+                    role.classList.add('text-white/80');
+                    contactRow.classList.remove('text-gray-600', 'text-gray-400');
+                    contactRow.classList.add('text-white/90');
+                } else if (style === 'gradient') {
+                    header.style.background = 'linear-gradient(135deg, var(--accent), var(--accent-dark))';
+                    header.classList.add('text-white');
+                    role.classList.remove('text-gray-500', 'text-gray-400');
+                    role.classList.add('text-white/80');
+                    contactRow.classList.remove('text-gray-600', 'text-gray-400');
+                    contactRow.classList.add('text-white/90');
+                } else if (style === 'soft') {
+                    header.style.background = 'var(--accent-light)';
+                    header.classList.add('accent-border');
+                    header.style.borderBottomWidth = '3px';
+                    header.classList.remove('text-white');
+                    role.classList.replace('text-white/80', 'text-gray-500') || role.classList.add('text-gray-500');
+                    role.classList.remove('text-gray-400');
+                    contactRow.classList.replace('text-white/90', 'text-gray-600') || contactRow.classList.add('text-gray-600');
+                    contactRow.classList.remove('text-gray-400');
+                } else if (style === 'dark') {
+                    header.classList.add('bg-gray-900', 'text-white', 'accent-border');
+                    header.style.borderBottomWidth = '3px';
+                    role.classList.remove('text-gray-500', 'text-white/80');
+                    role.classList.add('text-gray-400');
+                    contactRow.classList.remove('text-gray-600', 'text-white/90');
+                    contactRow.classList.add('text-gray-400');
+                }
+            }
+            saveToStorage();
+        }
+
         function setFont(font) {
             document.documentElement.style.setProperty('--font-family', font);
             saveToStorage();
@@ -491,6 +551,7 @@
             data.sigDataUrl = sigDataUrl;
             data.isDark = isDark;
             data.font = document.getElementById('fontSelect').value;
+            data.headerStyle = document.getElementById('headerStyleSelect') ? document.getElementById('headerStyleSelect').value : 'classic';
             data.accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
             data.accentLight = getComputedStyle(document.documentElement).getPropertyValue('--accent-light').trim();
             data.accentDark = getComputedStyle(document.documentElement).getPropertyValue('--accent-dark').trim();
@@ -542,6 +603,11 @@
                 if (data.photoDataUrl) { photoDataUrl = data.photoDataUrl; document.getElementById('imagePreview').src = photoDataUrl; document.getElementById('imagePreview').classList.remove('hidden'); document.getElementById('imagePlaceholder').classList.add('hidden'); }
                 if (data.sigDataUrl) { sigDataUrl = data.sigDataUrl; document.getElementById('sigPreview').src = sigDataUrl; document.getElementById('sigPreview').classList.remove('hidden'); }
                 if (data.isDark) toggleDark();
+                if (data.headerStyle) {
+                    const hsInput = document.getElementById('headerStyleSelect');
+                    if (hsInput) hsInput.value = data.headerStyle;
+                    setHeaderStyle(data.headerStyle);
+                }
                 if (data.font) { document.getElementById('fontSelect').value = data.font; setFont(data.font); }
                 if (data.accent) setAccent(data.accent, data.accentLight, data.accentDark);
                 if (data.declaration) document.getElementById('in-declaration').checked = true;

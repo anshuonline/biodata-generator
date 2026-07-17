@@ -289,7 +289,7 @@
             <!-- ====== CUSTOMIZATION: COLOR + FONT ====== -->
             <div class="bg-gray-50 dark:bg-gray-800 p-5 rounded-xl border border-gray-200 dark:border-gray-700 transition-theme">
                 <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 mb-4">Customize Appearance</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                     <!-- Color Swatches -->
                     <div>
                         <label class="block text-sm font-semibold text-gray-600 dark:text-gray-300 mb-2">Accent Color</label>
@@ -320,6 +320,18 @@
                             <option value="'Noto Sans', sans-serif" style="font-family: Noto Sans">Noto Sans — Clean Corporate</option>
                         </select>
                     </div>
+                    <!-- Header Style -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-600 dark:text-gray-300 mb-2">Header Style</label>
+                        <select id="headerStyleSelect" onchange="setHeaderStyle(this.value)" class="w-full p-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium dark:text-gray-200">
+                            <option value="classic">Classic (Transparent)</option>
+                            <option value="solid">Solid Accent</option>
+                            <option value="gradient">Gradient Accent</option>
+                            <option value="soft">Soft Accent</option>
+                            <option value="dark">Dark Slate</option>
+                        </select>
+                    </div>
+
                 </div>
             </div>
 
@@ -707,7 +719,7 @@
             <div id="biodataPaper" class="print-exact bg-white w-[210mm] shadow-2xl rounded-xl p-[14mm_18mm] text-gray-900 relative box-border transition-transform" style="min-height:297mm;">
             
             <!-- Header -->
-            <div class="flex justify-between items-start accent-border pb-5 mb-6" style="border-bottom-width: 3px;">
+            <div id="cv-header" class="flex justify-between items-start accent-border pb-5 mb-6" style="border-bottom-width: 3px;">
                 <div class="flex-1 pr-4">
                     <h1 id="out-name" class="text-[32px] font-extrabold uppercase tracking-tight leading-tight"></h1>
                     <p id="out-role" class="text-base font-medium text-gray-500 mt-1 mb-3"></p>
@@ -861,6 +873,6 @@
     </div>
 
     <!-- ==================== JAVASCRIPT ==================== -->
-    <script src="script.dev.js?v=2.0"></script>
+    <script src="script.dev.js?v=2.1"></script>
 </body>
 </html>
