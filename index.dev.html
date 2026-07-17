@@ -155,6 +155,8 @@
             body:not(.mobile-view-preview) #previewWrapper { display: none !important; }
         }
     </style>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>[x-cloak] { display: none !important; }</style>
 </head>
 <body class="bg-gray-100 dark:bg-gray-950 transition-theme min-h-screen p-4 sm:p-8 flex justify-center items-start antialiased text-gray-900">
 
@@ -210,8 +212,21 @@
             </div>
         </div>
 
-        <form id="biodataForm" onsubmit="generateBiodata(event)" class="p-6 sm:p-8 space-y-8">
+        <form id="biodataForm" onsubmit="generateBiodata(event)" class="p-6 sm:p-8 space-y-8" x-data="{ step: 1, totalSteps: 4 }">
 
+
+            <!-- Stepper UI -->
+            <div class="mb-8" x-show="totalSteps > 1" x-cloak>
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-sm font-bold text-gray-500 uppercase tracking-wider" x-text="`Step ${step} of ${totalSteps}`"></span>
+                    <span class="text-sm font-bold text-blue-600" x-text="step === 1 ? 'Basics & Contact' : step === 2 ? 'Personal & Edu' : step === 3 ? 'Experience & Skills' : 'Extras & Finish'"></span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
+                    <div class="bg-blue-600 h-full transition-all duration-300" :style="`width: ${(step / totalSteps) * 100}%`"></div>
+                </div>
+            </div>
+
+            <div x-show="step === 1" x-transition.opacity.duration.300ms class="space-y-8">
             <!-- ====== CUSTOMIZATION: COLOR + FONT ====== -->
             <div class="bg-gray-50 dark:bg-gray-800 p-5 rounded-xl border border-gray-200 dark:border-gray-700 transition-theme">
                 <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 mb-4">Customize Appearance</h3>
@@ -264,7 +279,7 @@
                             <div class="flex justify-between items-center mb-1">
                                 <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Career Objective / Summary</label>
                                 <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" id="tog-objective" class="sr-only peer form-input" checked onchange="saveToStorage()">
+                                    <input type="checkbox" id="tog-objective" class="sr-only peer" checked onchange="saveToStorage()">
                                     <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                                     <span class="ml-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Show in CV</span>
                                 </label>
@@ -300,6 +315,9 @@
                 </div>
             </div>
 
+            </div>
+
+            <div x-show="step === 2" x-transition.opacity.duration.300ms style="display: none;" class="space-y-8" x-cloak>
             <!-- ====== 3. PERSONAL DETAILS ====== -->
             <div>
                 <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">3. Personal Details</h3>
@@ -324,7 +342,7 @@
                 <div class="flex justify-between items-center border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">
                     <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">4. Education</h3>
                     <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" id="tog-education" class="sr-only peer form-input" checked onchange="saveToStorage()">
+                        <input type="checkbox" id="tog-education" class="sr-only peer" checked onchange="saveToStorage()">
                         <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                         <span class="ml-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Show in CV</span>
                     </label>
@@ -337,12 +355,15 @@
                 </button>
             </div>
 
+            </div>
+
+            <div x-show="step === 3" x-transition.opacity.duration.300ms style="display: none;" class="space-y-8" x-cloak>
             <!-- ====== 5. WORK EXPERIENCE (Dynamic) ====== -->
             <div id="tour-experience">
                 <div class="flex justify-between items-center border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-2">
                     <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">5. Work Experience</h3>
                     <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" id="tog-experience" class="sr-only peer form-input" checked onchange="saveToStorage()">
+                        <input type="checkbox" id="tog-experience" class="sr-only peer" checked onchange="saveToStorage()">
                         <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                         <span class="ml-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Show in CV</span>
                     </label>
@@ -360,7 +381,7 @@
                 <div class="flex justify-between items-center border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-2">
                     <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">6. Skills</h3>
                     <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" id="tog-skills" class="sr-only peer form-input" checked onchange="saveToStorage()">
+                        <input type="checkbox" id="tog-skills" class="sr-only peer" checked onchange="saveToStorage()">
                         <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                         <span class="ml-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Show in CV</span>
                     </label>
@@ -383,12 +404,15 @@
                 <div id="skillsContainer" class="flex flex-wrap gap-2 mt-3"></div>
             </div>
 
+            </div>
+
+            <div x-show="step === 4" x-transition.opacity.duration.300ms style="display: none;" class="space-y-8" x-cloak>
             <!-- ====== 7. PROJECTS ====== -->
             <div>
                 <div class="flex justify-between items-center border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-2">
                     <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">7. Projects</h3>
                     <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" id="tog-projects" class="sr-only peer form-input" checked onchange="saveToStorage()">
+                        <input type="checkbox" id="tog-projects" class="sr-only peer" checked onchange="saveToStorage()">
                         <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                         <span class="ml-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Show in CV</span>
                     </label>
@@ -403,7 +427,7 @@
                 <div class="flex justify-between items-center border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">
                     <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">8. Certifications / Awards</h3>
                     <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" id="tog-certs" class="sr-only peer form-input" checked onchange="saveToStorage()">
+                        <input type="checkbox" id="tog-certs" class="sr-only peer" checked onchange="saveToStorage()">
                         <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                         <span class="ml-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Show in CV</span>
                     </label>
@@ -417,7 +441,7 @@
                 <div class="flex justify-between items-center border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">
                     <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">9. Hobbies & Interests</h3>
                     <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" id="tog-hobbies" class="sr-only peer form-input" checked onchange="saveToStorage()">
+                        <input type="checkbox" id="tog-hobbies" class="sr-only peer" checked onchange="saveToStorage()">
                         <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                         <span class="ml-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Show in CV</span>
                     </label>
@@ -455,7 +479,7 @@
                 <div class="flex justify-between items-center border-b-2 border-gray-100 dark:border-gray-700 pb-2 mb-5">
                     <h3 class="text-base font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">10. References (Optional)</h3>
                     <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" id="tog-references" class="sr-only peer form-input" checked onchange="saveToStorage()">
+                        <input type="checkbox" id="tog-references" class="sr-only peer" checked onchange="saveToStorage()">
                         <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                         <span class="ml-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Show in CV</span>
                     </label>
@@ -521,6 +545,7 @@
                 <p class="text-gray-400 dark:text-gray-500 text-xs mt-1">
                     &copy; Copyright by <a href="https://hypecrews.com" target="_blank" class="hover:underline">hypecrews.com</a>
                 </p>
+                </div>
             </div>
         </form>
     </div>
