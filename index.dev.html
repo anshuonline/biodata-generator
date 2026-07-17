@@ -867,6 +867,11 @@
         // ====== DYNAMIC ENTRIES ======
         let eduCount = 0; let expCount = 0; let refCount = 0; let langCount = 0;
         
+        function escapeAttr(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
         function addLanguage(data = {}) {
             langCount++;
             const id = `lang-${langCount}`;
@@ -874,7 +879,7 @@
             div.className = "flex gap-2 items-center";
             div.id = id;
             div.innerHTML = `
-                <input type="text" class="lang-name form-input flex-1 p-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white text-sm" placeholder="e.g. English" value="${data.name || ''}" oninput="saveToStorage()">
+                <input type="text" class="lang-name form-input flex-1 p-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white text-sm" placeholder="e.g. English" value="${escapeAttr(data.name)}" oninput="saveToStorage()">
                 <select class="lang-prof form-input w-1/3 sm:w-1/4 p-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white text-sm" onchange="saveToStorage()">
                     <option value="" disabled ${!data.prof ? 'selected' : ''}>Proficiency...</option>
                     <option value="Native" ${data.prof === 'Native' ? 'selected' : ''}>Native</option>
@@ -894,11 +899,11 @@
             <div id="edu-${id}" class="p-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl relative transition-theme">
                 <button type="button" onclick="document.getElementById('edu-${id}').remove(); saveToStorage();" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-xl leading-none">&times;</button>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Qualification</label><input type="text" class="edu-qual form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.qual||''}" placeholder="e.g. Class XII (Arts)" oninput="saveToStorage()"></div>
-                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Board / University</label><input type="text" class="edu-board form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.board||''}" oninput="saveToStorage()"></div>
-                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Year</label><input type="text" class="edu-year form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.year||''}" oninput="saveToStorage()"></div>
-                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Marks / Percentage</label><input type="text" class="edu-marks form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.marks||''}" placeholder="e.g. 80% or 8.5 CGPA" oninput="saveToStorage()"></div>
-                    <div class="sm:col-span-2"><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Subjects</label><input type="text" class="edu-subjects form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.subjects||''}" oninput="saveToStorage()"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Qualification</label><input type="text" class="edu-qual form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${escapeAttr(data.qual)}" placeholder="e.g. Class XII (Arts)" oninput="saveToStorage()"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Board / University</label><input type="text" class="edu-board form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${escapeAttr(data.board)}" oninput="saveToStorage()"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Year</label><input type="text" class="edu-year form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${escapeAttr(data.year)}" oninput="saveToStorage()"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Marks / Percentage</label><input type="text" class="edu-marks form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${escapeAttr(data.marks)}" placeholder="e.g. 80% or 8.5 CGPA" oninput="saveToStorage()"></div>
+                    <div class="sm:col-span-2"><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Subjects</label><input type="text" class="edu-subjects form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${escapeAttr(data.subjects)}" oninput="saveToStorage()"></div>
                 </div>
             </div>`;
             document.getElementById('eduContainer').insertAdjacentHTML('beforeend', html);
@@ -911,10 +916,10 @@
             <div id="exp-${id}" class="p-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl relative transition-theme">
                 <button type="button" onclick="document.getElementById('exp-${id}').remove(); saveToStorage();" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-xl leading-none">&times;</button>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Job Title</label><input type="text" class="exp-title form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.title||''}" oninput="saveToStorage()"></div>
-                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Company</label><input type="text" class="exp-company form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.company||''}" oninput="saveToStorage()"></div>
-                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Duration</label><input type="text" class="exp-duration form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.duration||''}" placeholder="e.g. Jan 2022 - Present" oninput="saveToStorage()"></div>
-                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Description</label><input type="text" class="exp-desc form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.desc||''}" oninput="saveToStorage()"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Job Title</label><input type="text" class="exp-title form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${escapeAttr(data.title)}" oninput="saveToStorage()"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Company</label><input type="text" class="exp-company form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${escapeAttr(data.company)}" oninput="saveToStorage()"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Duration</label><input type="text" class="exp-duration form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${escapeAttr(data.duration)}" placeholder="e.g. Jan 2022 - Present" oninput="saveToStorage()"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Description</label><input type="text" class="exp-desc form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${escapeAttr(data.desc)}" oninput="saveToStorage()"></div>
                 </div>
             </div>`;
             document.getElementById('expContainer').insertAdjacentHTML('beforeend', html);
@@ -928,9 +933,9 @@
             <div id="ref-${id}" class="p-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl relative transition-theme">
                 <button type="button" onclick="document.getElementById('ref-${id}').remove(); refCount--; saveToStorage();" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-xl leading-none">&times;</button>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Name</label><input type="text" class="ref-name form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.name||''}" oninput="saveToStorage()"></div>
-                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Designation</label><input type="text" class="ref-desg form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.desg||''}" oninput="saveToStorage()"></div>
-                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Contact</label><input type="text" class="ref-contact form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${data.contact||''}" oninput="saveToStorage()"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Name</label><input type="text" class="ref-name form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${escapeAttr(data.name)}" oninput="saveToStorage()"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Designation</label><input type="text" class="ref-desg form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${escapeAttr(data.desg)}" oninput="saveToStorage()"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Contact</label><input type="text" class="ref-contact form-input w-full p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none dark:text-white" value="${escapeAttr(data.contact)}" oninput="saveToStorage()"></div>
                 </div>
             </div>`;
             document.getElementById('refContainer').insertAdjacentHTML('beforeend', html);
@@ -1031,6 +1036,9 @@
                     updateFontSize(data.fontScale);
                 }
             } catch(e) { console.error(e); addEducation(); addLanguage(); }
+            
+            // Force preview update so that dynamic fields show up immediately on reload
+            setTimeout(updateLivePreview, 100);
         }
 
         function updateFontSize(percent) {
