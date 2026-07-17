@@ -209,7 +209,7 @@
                 contactRow.classList.replace('text-white/90', 'text-gray-600') || contactRow.classList.add('text-gray-600');
                 contactRow.classList.remove('text-gray-400');
             } else {
-                header.classList.add('p-6', 'mb-6', 'rounded-2xl', 'shadow-sm');
+                header.classList.add('pt-6', 'px-6', 'pb-5', '-mt-6', '-mx-6', 'mb-6', 'rounded-2xl', 'shadow-sm');
                 if (style === 'solid') {
                     header.style.background = 'var(--accent)';
                     header.classList.add('text-white');
@@ -609,7 +609,7 @@
                     setHeaderStyle(data.headerStyle);
                 }
                 if (data.font) { document.getElementById('fontSelect').value = data.font; setFont(data.font); }
-                if (data.accent) setAccent(data.accent, data.accentLight, data.accentDark);
+                if (data.accent) setAccent(data.accent, data.accentLight || (data.accent + '20'), data.accentDark || data.accent);
                 if (data.declaration) document.getElementById('in-declaration').checked = true;
                 if (data.langEntries && data.langEntries.length > 0) data.langEntries.forEach(e => addLanguage(e));
                 else addLanguage();
