@@ -1205,9 +1205,18 @@
             const togProj = document.getElementById('tog-projects').checked;
             if (togProj && proj && proj.trim()) { 
                 let escapedProj = proj.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                let linkedProj = escapedProj.replace(/(https?:\/\/[^\s]+)/g, function(url) {
-                    return `<a href="${url}" target="_blank" onclick="return confirm('You are being redirected to:\\n' + this.href)" class="text-blue-600 underline">${url}</a>`;
-                });
+                
+                // Parse standard markdown [Text](URL) and user custom Text[URL]
+                let linkedProj = escapedProj
+                    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, function(match, text, url) {
+                        let fullUrl = url.match(/^https?:\/\//) ? url : 'https://' + url;
+                        return `<a href="${fullUrl}" target="_blank" onclick="return confirm('You are being redirected to:\\n' + this.href)" class="text-blue-600 underline font-semibold">${text}</a>`;
+                    })
+                    .replace(/([^\s\[\]]+)\[([^\]]+)\]/g, function(match, text, url) {
+                        let fullUrl = url.match(/^https?:\/\//) ? url : 'https://' + url;
+                        return `<a href="${fullUrl}" target="_blank" onclick="return confirm('You are being redirected to:\\n' + this.href)" class="text-blue-600 underline font-semibold">${text}</a>`;
+                    });
+
                 document.getElementById('out-projects').innerHTML = linkedProj; 
                 document.getElementById('out-projects-section').classList.remove('hidden'); 
             }
