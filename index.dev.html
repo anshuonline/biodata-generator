@@ -576,7 +576,7 @@
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
                     <span>Share Link</span>
                 </button>
-                <button onclick="window.print()" class="px-5 py-2.5 accent-bg text-white font-bold rounded-lg hover:opacity-90 transition shadow-lg text-sm flex items-center gap-2">
+                <button onclick="printBiodata()" class="px-5 py-2.5 accent-bg text-white font-bold rounded-lg hover:opacity-90 transition shadow-lg text-sm flex items-center gap-2">
                     <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
                     Print / Save PDF
                 </button>
@@ -1346,7 +1346,62 @@
 
         // ====== PRINT / SAVE PDF ======
         function printBiodata() {
-            window.print();
+            const paper = document.getElementById('biodataPaper');
+            if (!paper) return;
+
+            // Collect CSS variables
+            const rs = getComputedStyle(document.documentElement);
+            const font = rs.getPropertyValue('--font-family').trim() || 'Outfit, sans-serif';
+            const accent = rs.getPropertyValue('--accent').trim();
+            const accentLight = rs.getPropertyValue('--accent-light').trim();
+            const accentDark = rs.getPropertyValue('--accent-dark').trim();
+
+            // Collect all stylesheets from the page (Tailwind generated + custom)
+            let allCSS = '';
+            document.querySelectorAll('style').forEach(s => { allCSS += s.innerHTML + '\n'; });
+
+            // Get dynamic font-size styles if any
+            const dynStyle = document.getElementById('dynamic-font-style');
+            const dynCSS = dynStyle ? dynStyle.innerHTML : '';
+
+            // Clone paper HTML
+            const paperHTML = paper.outerHTML;
+
+            // Create a hidden iframe — completely fresh rendering context
+            const fr = document.createElement('iframe');
+            fr.style.cssText = 'position:fixed;width:0;height:0;border:0;left:-9999px;top:-9999px;opacity:0';
+            document.body.appendChild(fr);
+
+            const d = fr.contentDocument;
+            d.open();
+            d.write(`<!DOCTYPE html><html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>${allCSS}</style>
+<style>
+:root{--font-family:${font};--accent:${accent};--accent-light:${accentLight};--accent-dark:${accentDark}}
+@page{size:A4;margin:0}
+*,*::before,*::after{transform:none!important;-webkit-transform:none!important;transition:none!important;-webkit-transition:none!important;animation:none!important;will-change:auto!important;backface-visibility:visible!important;-webkit-backface-visibility:visible!important;perspective:none!important;contain:none!important;isolation:auto!important}
+body{margin:0;padding:0;background:#fff;font-family:var(--font-family),sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+#biodataPaper{width:210mm!important;min-height:297mm!important;padding:12mm 16mm!important;margin:0 auto!important;box-shadow:none!important;border-radius:0!important;overflow:visible!important}
+.no-print{display:none!important}
+.skill-tag-print{background:#f1f5f9!important;border:1px solid #999!important;color:#000!important}
+${dynCSS}
+</style>
+</head><body>${paperHTML}</body></html>`);
+            d.close();
+
+            // Print after a short delay to let styles render
+            setTimeout(() => {
+                try {
+                    fr.contentWindow.focus();
+                    fr.contentWindow.print();
+                } catch(e) {
+                    // Fallback: print the main page directly
+                    window.print();
+                }
+                // Cleanup iframe after print dialog closes
+                setTimeout(() => { try { fr.remove(); } catch(e){} }, 5000);
+            }, 600);
         }
 
         // ====== SHARE LINK ======
