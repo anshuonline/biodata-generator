@@ -6,7 +6,6 @@
     <title>Pro Biodata Generator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>if(window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -418,7 +417,7 @@
     <div id="cropModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
             <div class="p-4 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center">
-                <h3 class="font-bold text-gray-800 dark:text-white">Crop Profile Photo</h3>
+                <h3 class="font-bold text-gray-800 dark:white">Crop Profile Photo</h3>
                 <button type="button" onclick="cancelCrop()" class="text-gray-500 hover:text-red-500">&times;</button>
             </div>
             <div class="flex-1 bg-gray-100 dark:bg-black relative min-h-[300px]">
@@ -467,7 +466,6 @@
                 </div>
                 <div class="flex-shrink-0 flex items-start gap-3">
                     <img id="out-photo" src="" alt="Photo" class="w-[90px] h-[115px] object-cover rounded-md accent-border hidden" style="border-width: 2px;">
-                    <div id="out-qr" class="hidden qr-print"></div>
                 </div>
             </div>
 
@@ -1140,15 +1138,6 @@
                     contactRow.innerHTML += `<span>${c.icon} ${c.val}</span>`;
                 }
             });
-
-            // QR Code
-            const qrDiv = document.getElementById('out-qr');
-            qrDiv.innerHTML = '';
-            const qrUrl = document.getElementById('in-linkedin').value || document.getElementById('in-github').value;
-            if (qrUrl && qrUrl.trim()) {
-                qrDiv.classList.remove('hidden');
-                new QRCode(qrDiv, { text: qrUrl.startsWith('http') ? qrUrl : 'https://' + qrUrl, width: 64, height: 64, colorDark: '#000', colorLight: '#fff' });
-            } else { qrDiv.classList.add('hidden'); }
 
             // Personal details
             const personalList = document.getElementById('out-personal-list');
