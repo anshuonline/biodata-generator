@@ -533,7 +533,7 @@
     <div id="cropModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
             <div class="p-4 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center">
-                <h3 class="font-bold text-gray-800 dark:white">Crop Profile Photo</h3>
+                <h3 id="cropModalTitle" class="font-bold text-gray-800 dark:white">Crop Photo</h3>
                 <button type="button" onclick="cancelCrop()" class="text-gray-500 hover:text-red-500">&times;</button>
             </div>
             <div class="flex-1 bg-gray-100 dark:bg-black relative min-h-[300px]">
@@ -696,7 +696,7 @@
         }
 
         // ====== IMAGE UPLOAD & CROP ======
-        let photoDataUrl = null, sigDataUrl = null, cropper = null;
+        let photoDataUrl = null, sigDataUrl = null, cropper = null, cropTarget = null;
         function previewImage(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -706,6 +706,8 @@
                 return;
             }
             document.getElementById('photoError').classList.remove('show');
+            cropTarget = 'photo';
+            document.getElementById('cropModalTitle').innerText = 'Crop Profile Photo';
             const reader = new FileReader();
             reader.onload = e => {
                 document.getElementById('cropImage').src = e.target.result;
@@ -734,29 +736,53 @@
             document.getElementById('cropModal').classList.add('hidden');
             if (cropper) cropper.destroy();
             cropper = null;
+            cropTarget = null;
         }
 
         function saveCrop() {
             if (!cropper) return;
-            const canvas = cropper.getCroppedCanvas({ width: 360, height: 460, fillColor: '#fff' });
-            photoDataUrl = canvas.toDataURL('image/jpeg', 0.9);
-            document.getElementById('imagePreview').src = photoDataUrl;
-            document.getElementById('imagePreview').classList.remove('hidden');
-            document.getElementById('imagePlaceholder').classList.add('hidden');
+            if (cropTarget === 'photo') {
+                const canvas = cropper.getCroppedCanvas({ width: 360, height: 460, fillColor: '#fff' });
+                photoDataUrl = canvas.toDataURL('image/jpeg', 0.9);
+                document.getElementById('imagePreview').src = photoDataUrl;
+                document.getElementById('imagePreview').classList.remove('hidden');
+                document.getElementById('imagePlaceholder').classList.add('hidden');
+            } else if (cropTarget === 'signature') {
+                const canvas = cropper.getCroppedCanvas({ fillColor: '#fff' });
+                sigDataUrl = canvas.toDataURL('image/jpeg', 0.9);
+                document.getElementById('sigPreview').src = sigDataUrl;
+                document.getElementById('sigPreview').classList.remove('hidden');
+            }
             saveToStorage();
             cancelCrop();
         }
         function previewSignature(event) {
             const file = event.target.files[0];
             if (!file) return;
+            cropTarget = 'signature';
+            document.getElementById('cropModalTitle').innerText = 'Crop Signature';
             const reader = new FileReader();
             reader.onload = e => {
-                sigDataUrl = e.target.result;
-                document.getElementById('sigPreview').src = sigDataUrl;
-                document.getElementById('sigPreview').classList.remove('hidden');
-                saveToStorage();
+                document.getElementById('cropImage').src = e.target.result;
+                document.getElementById('cropModal').classList.remove('hidden');
+                
+                if (cropper) cropper.destroy();
+                cropper = new Cropper(document.getElementById('cropImage'), {
+                    aspectRatio: NaN, // Freeform aspect ratio for signatures
+                    viewMode: 1,
+                    dragMode: 'move',
+                    autoCropArea: 1,
+                    restore: false,
+                    guides: true,
+                    center: true,
+                    highlight: false,
+                    cropBoxMovable: true,
+                    cropBoxResizable: true,
+                    toggleDragModeOnDblclick: false,
+                });
             };
             reader.readAsDataURL(file);
+            event.target.value = '';
         }
 
         // ====== SKILLS SUGGESTIONS DATABASE ======
