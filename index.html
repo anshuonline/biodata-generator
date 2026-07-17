@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pro Biodata Generator</title>
+    <link rel="icon" type="image/png" href="images/biodata-maker-png-logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
@@ -152,9 +153,12 @@
         
         <!-- HEADER -->
         <div class="accent-bg text-white p-6 sm:p-8 flex justify-between items-center">
-            <div>
-                <h1 id="tour-welcome" class="text-2xl sm:text-3xl font-extrabold tracking-tight">Pro Biodata Generator</h1>
-                <p class="text-white/70 text-sm mt-1">Fill details → Generate → Download PDF. It's that simple.</p>
+            <div class="flex items-center gap-4">
+                <img src="images/biodata-maker-png-logo.png" alt="Logo" class="w-12 h-12 sm:w-14 sm:h-14 object-contain drop-shadow-xl bg-white/20 p-2 rounded-xl">
+                <div>
+                    <h1 id="tour-welcome" class="text-2xl sm:text-3xl font-extrabold tracking-tight">Pro Biodata Generator</h1>
+                    <p class="text-white/70 text-sm mt-1">Fill details → Print / Save PDF. It's that simple.</p>
+                </div>
             </div>
             <div class="flex items-center gap-2">
                 <button onclick="startTour(true)" class="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors text-xs font-bold flex items-center gap-1" title="Replay Guide">
