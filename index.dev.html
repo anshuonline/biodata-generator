@@ -1203,7 +1203,14 @@
             // Projects
             const proj = document.getElementById('in-projects').value;
             const togProj = document.getElementById('tog-projects').checked;
-            if (togProj && proj && proj.trim()) { document.getElementById('out-projects').innerText = proj; document.getElementById('out-projects-section').classList.remove('hidden'); }
+            if (togProj && proj && proj.trim()) { 
+                let escapedProj = proj.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                let linkedProj = escapedProj.replace(/(https?:\/\/[^\s]+)/g, function(url) {
+                    return `<a href="${url}" target="_blank" onclick="return confirm('You are being redirected to:\\n' + this.href)" class="text-blue-600 underline">${url}</a>`;
+                });
+                document.getElementById('out-projects').innerHTML = linkedProj; 
+                document.getElementById('out-projects-section').classList.remove('hidden'); 
+            }
             else { document.getElementById('out-projects-section').classList.add('hidden'); }
 
             // Hobbies
