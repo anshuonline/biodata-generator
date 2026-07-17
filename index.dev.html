@@ -320,6 +320,29 @@
                             <option value="'Noto Sans', sans-serif" style="font-family: Noto Sans">Noto Sans — Clean Corporate</option>
                         </select>
                     </div>
+                    <!-- Section Colors -->
+                    <div class="sm:col-span-2 pt-2 border-t border-gray-100 dark:border-gray-700">
+                        <label class="block text-sm font-semibold text-gray-600 dark:text-gray-300 mb-2">Section Background Colors (Optional)</label>
+                        <div class="flex flex-wrap items-center gap-3">
+                            <select id="sectionColorSelect" onchange="loadSectionColor(this.value)" class="flex-1 max-w-xs p-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium dark:text-gray-200 outline-none focus:border-blue-500 transition-colors">
+                                <option value="objective">Career Objective</option>
+                                <option value="edu">Education</option>
+                                <option value="exp">Work Experience</option>
+                                <option value="certs">Certifications</option>
+                                <option value="projects">Projects</option>
+                                <option value="personal">Personal Details</option>
+                                <option value="address">Address</option>
+                                <option value="skills">Skills</option>
+                                <option value="hobbies">Hobbies & Interests</option>
+                                <option value="ref">References</option>
+                            </select>
+                            <div class="relative w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 dark:border-gray-600 shadow-sm overflow-hidden bg-white cursor-pointer hover:border-blue-500 transition-colors">
+                                <input type="color" id="sectionColorPicker" value="#ffffff" onchange="setSectionColor(this.value)" class="absolute -inset-2 w-16 h-16 cursor-pointer opacity-0">
+                                <div id="sectionColorIndicator" class="w-full h-full pointer-events-none" style="background-color: #ffffff;"></div>
+                            </div>
+                            <button type="button" onclick="resetSectionColor()" class="text-xs font-bold text-gray-500 hover:text-red-500 dark:hover:text-red-400 transition-colors px-2 py-1 rounded">Reset</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -848,6 +871,47 @@
             let dark = hex; // We use the same for dark, it works well enough as a fallback
             setAccent(hex, light, dark);
         }
+
+        // Section Background Color Logic
+        let sectionBgColors = {};
+        
+        function loadSectionColor(sectionId) {
+            const color = sectionBgColors[sectionId] || '#ffffff';
+            document.getElementById('sectionColorPicker').value = color;
+            document.getElementById('sectionColorIndicator').style.backgroundColor = color;
+        }
+
+        function setSectionColor(color) {
+            const sectionId = document.getElementById('sectionColorSelect').value;
+            sectionBgColors[sectionId] = color;
+            document.getElementById('sectionColorIndicator').style.backgroundColor = color;
+            saveToStorage(); 
+        }
+
+        function resetSectionColor() {
+            const sectionId = document.getElementById('sectionColorSelect').value;
+            delete sectionBgColors[sectionId];
+            loadSectionColor(sectionId);
+            saveToStorage();
+        }
+
+        function applySectionColors() {
+            const sections = ['objective', 'edu', 'exp', 'certs', 'projects', 'personal', 'address', 'skills', 'hobbies', 'ref'];
+            sections.forEach(sec => {
+                const el = document.getElementById(`out-${sec}-section`);
+                if (el) {
+                    const color = sectionBgColors[sec];
+                    if (color && color !== '#ffffff') {
+                        el.style.backgroundColor = color;
+                        el.classList.add('p-4', 'rounded-xl', 'shadow-sm', 'border', 'border-gray-100', 'dark:border-gray-700');
+                    } else {
+                        el.style.backgroundColor = 'transparent';
+                        el.classList.remove('p-4', 'rounded-xl', 'shadow-sm', 'border', 'border-gray-100', 'dark:border-gray-700');
+                    }
+                }
+            });
+        }
+
         function setFont(font) {
             document.documentElement.style.setProperty('--font-family', font);
             saveToStorage();
@@ -1168,6 +1232,7 @@
             data.refEntries = []; document.querySelectorAll('#refContainer > div').forEach(d => {
                 data.refEntries.push({ name: d.querySelector('.ref-name')?.value, desg: d.querySelector('.ref-desg')?.value, contact: d.querySelector('.ref-contact')?.value });
             });
+            data.sectionBgColors = sectionBgColors;
             localStorage.setItem('biodataSave', JSON.stringify(data));
             
             // Trigger Live Preview Update
@@ -1213,6 +1278,10 @@
                 else addEducation();
                 if (data.expEntries) data.expEntries.forEach(e => addExperience(e));
                 if (data.refEntries) data.refEntries.forEach(e => addReference(e));
+                if (data.sectionBgColors) {
+                    sectionBgColors = data.sectionBgColors;
+                    loadSectionColor(document.getElementById('sectionColorSelect').value);
+                }
 
                 if (data.fontScale) {
                     const fsInput = document.getElementById('fontScale');
@@ -1284,6 +1353,9 @@
 
         // ====== LIVE PREVIEW LOGIC ======
         function updateLivePreview() {
+            // Apply section background colors
+            applySectionColors();
+
             // Name + Role
             const inName = document.getElementById('in-name');
             if (inName) document.getElementById('out-name').innerText = inName.value;
