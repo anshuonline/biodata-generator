@@ -1034,7 +1034,7 @@
                 animate: true,
                 steps: [
                     { element: '#tour-welcome', popover: { title: 'Welcome to Pro Biodata!', description: 'Let\'s build a highly professional, honest, and attractive CV together.', side: "bottom", align: 'start' }},
-                    { element: '#tour-extract', popover: { title: 'Have an old CV?', description: 'Upload your existing PDF or Text resume here. Our tool will instantly extract your details to save you time!', side: "bottom", align: 'start' }},
+
                     { element: '#tour-role', popover: { title: 'Professional Title', description: 'Avoid generic titles. Use exact, targeted roles (e.g. "Junior UI/UX Designer"). It makes a huge difference.', side: "bottom", align: 'start' }},
                     { element: '#tour-skills', popover: { title: 'Add Core Skills', description: 'Honesty is key! Only add skills you can confidently explain in an interview. Use our smart suggestions.', side: "top", align: 'start' }},
                     { element: '#tour-experience', popover: { title: 'Work Experience', description: 'Focus on your achievements and contributions, not just daily tasks.', side: "top", align: 'start' }},
@@ -1365,6 +1365,14 @@
                 setTimeout(() => startTour(false), 800);
             }
         };
+
+        // ====== CLEAR DATA ======
+        function clearData() {
+            if (confirm("🚨 WARNING: Are you sure you want to clear all data? This cannot be undone!")) {
+                localStorage.removeItem('biodataSave');
+                location.reload();
+            }
+        }
     </script>
 </body>
 </html>
