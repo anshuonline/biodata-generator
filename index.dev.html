@@ -250,7 +250,7 @@
             </div>
         </div>
 
-        <form id="biodataForm" onsubmit="generateBiodata(event)" class="p-6 sm:p-8 space-y-8" x-data="{ step: 1, totalSteps: 4 }">
+        <form id="biodataForm" onsubmit="generateBiodata(event)" class="p-6 sm:p-8 space-y-8" x-data="{ step: 1, totalSteps: 4 }" @update-step.window="step = $event.detail.step">
 
 
             <!-- Stepper UI -->
@@ -1214,16 +1214,21 @@
             const hasSeenTour = localStorage.getItem('hasSeenTour');
             if (hasSeenTour && !force) return;
             
+            const goStep = (n) => {
+                window.dispatchEvent(new CustomEvent('update-step', { detail: { step: n } }));
+                // Small delay to let Alpine render before Driver tries to highlight
+                return new Promise(resolve => setTimeout(resolve, 300));
+            };
+
             const driverObj = window.driver.js.driver({
                 showProgress: true,
                 animate: true,
                 steps: [
-                    { element: '#tour-welcome', popover: { title: 'Welcome to Pro Biodata!', description: 'Let\'s build a highly professional, honest, and attractive CV together.', side: "bottom", align: 'start' }},
-
-                    { element: '#tour-role', popover: { title: 'Professional Title', description: 'Avoid generic titles. Use exact, targeted roles (e.g. "Junior UI/UX Designer"). It makes a huge difference.', side: "bottom", align: 'start' }},
-                    { element: '#tour-skills', popover: { title: 'Add Core Skills', description: 'Honesty is key! Only add skills you can confidently explain in an interview. Use our smart suggestions.', side: "top", align: 'start' }},
-                    { element: '#tour-experience', popover: { title: 'Work Experience', description: 'Focus on your achievements and contributions, not just daily tasks.', side: "top", align: 'start' }},
-                    { element: '#tour-generate', popover: { title: 'Generate PDF', description: 'Once everything is truthful and complete, generate your beautiful Pro Biodata here!', side: "top", align: 'start' }}
+                    { element: '#tour-welcome', popover: { title: 'Welcome to Pro Biodata!', description: 'Let\'s build a highly professional, honest, and attractive CV together.', side: "bottom", align: 'start' }, onHighlightStarted: () => goStep(1) },
+                    { element: '#tour-role', popover: { title: 'Professional Title', description: 'Avoid generic titles. Use exact, targeted roles (e.g. "Junior UI/UX Designer"). It makes a huge difference.', side: "bottom", align: 'start' }, onHighlightStarted: () => goStep(1) },
+                    { element: '#tour-skills', popover: { title: 'Add Core Skills', description: 'Honesty is key! Only add skills you can confidently explain in an interview. Use our smart suggestions.', side: "top", align: 'start' }, onHighlightStarted: () => goStep(3) },
+                    { element: '#tour-experience', popover: { title: 'Work Experience', description: 'Focus on your achievements and contributions, not just daily tasks.', side: "top", align: 'start' }, onHighlightStarted: () => goStep(3) },
+                    { element: '#tour-generate', popover: { title: 'Generate PDF', description: 'Once everything is truthful and complete, generate your beautiful Pro Biodata here!', side: "top", align: 'start' }, onHighlightStarted: () => goStep(4) }
                 ],
                 onDestroyStarted: () => {
                     localStorage.setItem('hasSeenTour', 'true');
